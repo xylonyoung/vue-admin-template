@@ -1,6 +1,8 @@
 module.exports = {
-
   title: 'Vue Admin Template',
+
+  // pages need permission or not.
+  needPermission: false,
 
   /**
    * @type {boolean} true | false

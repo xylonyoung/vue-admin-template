@@ -1,19 +1,24 @@
 import { login, logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
+import { needPermission } from '@/settings'
+import asyncRoutes from '@/router/routes'
+import { routerBuilder } from '@/router/router-builder'
 
 const getDefaultState = () => {
   return {
     token: getToken(),
     name: '',
-    avatar: ''
+    avatar: '',
+    info: {},
+    hasPermission: false
   }
 }
 
 const state = getDefaultState()
 
 const mutations = {
-  RESET_STATE: (state) => {
+  RESET_STATE: state => {
     Object.assign(state, getDefaultState())
   },
   SET_TOKEN: (state, token) => {
@@ -32,49 +37,57 @@ const actions = {
   login({ commit }, userInfo) {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(response => {
-        const { data } = response
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
-        resolve()
-      }).catch(error => {
-        reject(error)
-      })
+      login({ username: username.trim(), password: password })
+        .then(response => {
+          const { data } = response
+          commit('SET_TOKEN', data)
+          setToken(data)
+          resolve()
+        })
+        .catch(error => {
+          reject(error)
+        })
     })
   },
 
   // get user info
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
-      getInfo(state.token).then(response => {
-        const { data } = response
+      getInfo(state.token)
+        .then(response => {
+          const { data } = response
 
-        if (!data) {
-          return reject('Verification failed, please Login again.')
-        }
+          if (!data) {
+            return reject('Verification failed, please Login again.')
+          }
 
-        const { name, avatar } = data
+          const { username } = data
+          const avatar = data.profile?.__metadata?.avatarUrl
 
-        commit('SET_NAME', name)
-        commit('SET_AVATAR', avatar)
-        resolve(data)
-      }).catch(error => {
-        reject(error)
-      })
+          commit('SET_NAME', username)
+          commit('SET_AVATAR', avatar)
+          commit('SET_INFO', data)
+          resolve(data)
+        })
+        .catch(error => {
+          reject(error)
+        })
     })
   },
 
   // user logout
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
-      logout(state.token).then(() => {
-        removeToken() // must remove  token  first
-        resetRouter()
-        commit('RESET_STATE')
-        resolve()
-      }).catch(error => {
-        reject(error)
-      })
+      logout(state.token)
+        .then(() => {
+          removeToken() // must remove  token  first
+          resetRouter()
+          commit('RESET_STATE')
+          resolve()
+        })
+        .catch(error => {
+          reject(error)
+        })
     })
   },
 
@@ -85,6 +98,32 @@ const actions = {
       commit('RESET_STATE')
       resolve()
     })
+  },
+
+  generateRoutes({ commit, state }) {
+    return new Promise(resolve => {
+      const accessedRoutes = filterRoutes()
+      commit('SET_HAS_PERMISSION', true)
+      resolve(accessedRoutes)
+    })
+    function filterRoutes() {
+      let routes
+      if (needPermission) {
+        const permissions = state.user?.permissions ?? []
+        routes = asyncRoutes.filter(e => permissions.includes(e.path))
+      } else {
+        routes = asyncRoutes
+      }
+      return [
+        ...routerBuilder(routes),
+        // 404,page,must be placed at the end !!!
+        {
+          path: '*',
+          redirect: '/404',
+          hidden: true
+        }
+      ]
+    }
   }
 }
 
@@ -94,4 +133,3 @@ export default {
   mutations,
   actions
 }
-
