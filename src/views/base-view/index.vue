@@ -1,7 +1,6 @@
 <template>
   <div class="base-container">
-        <el-row>
-
+    <el-row>
       <el-button
         v-if="!disableActions.includes('new')"
         type="primary"
@@ -52,11 +51,11 @@
       />
     </el-row>
     <el-row>
-    <base-table :data="tableData" />
+      <base-table :data="tableData" />
     </el-row>
     <!-- <list-admin
       :key="listKey"
-      v-model="listData"
+      v-model="tableData"
       :entity-conf="entity"
       :list-display="listDisplay"
       :query="listQueryData"
@@ -148,7 +147,7 @@ export default {
     return {
       entity: null,
       listKey: 0,
-      listData: [],
+      tableData: [],
       listDisplay: [],
       listQuery: {},
       disableActions: [],
@@ -277,14 +276,14 @@ export default {
       if (this.hasTodo) this.getTodo()
 
       if (id) {
-        const index = this.listData.findIndex((e) => e.id === id)
+        const index = this.tableData.findIndex((e) => e.id === id)
         if (data) {
-          this.listData.splice(index, 1, data)
+          this.tableData.splice(index, 1, data)
         } else {
-          this.listData.splice(index, 1)
+          this.tableData.splice(index, 1)
         }
       } else {
-        this.listData.unshift(data)
+        this.tableData.unshift(data)
       }
     },
     editForm(id) {

@@ -1,9 +1,6 @@
 import { login, logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
-import { needPermission } from '@/settings'
-import asyncRoutes from '@/router/routes'
-import { routerBuilder } from '@/router/router-builder'
 
 const getDefaultState = () => {
   return {
@@ -98,32 +95,6 @@ const actions = {
       commit('RESET_STATE')
       resolve()
     })
-  },
-
-  generateRoutes({ commit, state }) {
-    return new Promise(resolve => {
-      const accessedRoutes = filterRoutes()
-      commit('SET_HAS_PERMISSION', true)
-      resolve(accessedRoutes)
-    })
-    function filterRoutes() {
-      let routes
-      if (needPermission) {
-        const permissions = state.user?.permissions ?? []
-        routes = asyncRoutes.filter(e => permissions.includes(e.path))
-      } else {
-        routes = asyncRoutes
-      }
-      return [
-        ...routerBuilder(routes),
-        // 404,page,must be placed at the end !!!
-        {
-          path: '*',
-          redirect: '/404',
-          hidden: true
-        }
-      ]
-    }
   }
 }
 
