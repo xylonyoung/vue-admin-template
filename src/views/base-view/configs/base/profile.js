@@ -20,7 +20,7 @@ export default {
     '@order': 'id|DESC'
   },
 
-  listDisplay: [
+  tableConfigs: [
     'id',
     { property: 'avatarUrl', component: ImageRender(true) },
     'nickname',
@@ -28,5 +28,5 @@ export default {
     'user'
   ],
 
-  formFields: ['user', 'nickname', 'phone']
+  formConfigs: ['user', 'nickname', 'phone']
 }

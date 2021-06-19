@@ -5,7 +5,7 @@ export default {
 
   disableActions: ['new', 'delete', 'edit'],
 
-  listDisplay: [
+  tableConfigs: [
     'id',
     'issue',
     'order',

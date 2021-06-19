@@ -20,6 +20,7 @@
     "file-saver": "^2.0.5",
     "js-cookie": "2.2.0",
     "lodash": "^4.17.21",
+    "moment": "^2.29.1",
     "normalize.css": "7.0.0",
     "nprogress": "0.2.0",
     "numbro": "^2.3.2",

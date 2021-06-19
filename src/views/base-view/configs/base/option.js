@@ -1,5 +1,5 @@
 export default {
-  listDisplay: ['id', 'name', 'value', 'readable'],
+  tableConfigs: ['id', 'name', 'value', 'readable'],
 
-  formFields: ['name', 'key', 'value', 'readable']
+  formConfigs: ['name', 'key', 'value', 'readable']
 }

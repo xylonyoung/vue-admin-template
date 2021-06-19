@@ -17,42 +17,34 @@ export default {
     }
   ],
 
-  listDisplay: [
+  tableConfigs: [
     'id',
-    // {
-    //   property: 'type',
-    //   component: {
-    //     props: ['data'],
-    //     render(h) {
-    //       return <span>{providerType[this.data]}</span>
-    //     }
-    //   }
-    // },
+    'createdTime',
     'name',
     'user',
     {
       property: 'phone',
       component: {
-        props: ['record'],
+        props: ['row'],
         render(h) {
-          return <span>{this.record.user?.__metadata?.profile?.phone}</span>
+          return <span>{this.row.user?.__metadata?.profile?.phone}</span>
         }
       }
     },
     'isConstructor',
     'isMarketing',
-    { property: 'regions', component: RegionsList() }
+    // { property: 'regions', component: RegionsList() }
   ],
 
-  formFields: [
+  formConfigs: [
     'name',
     'user',
     'isConstructor',
     'isMarketing',
-    {
-      property: 'regions',
-      component: Regions()
-    }
+    // {
+    //   property: 'regions',
+    //   component: Regions()
+    // }
     // {
     //   property: 'type',
     //   component: {

@@ -1,3 +1,3 @@
 export default {
-  formFields: '__all__'
+  formConfigs: '__all__'
 }

@@ -5,7 +5,7 @@ const roles = [
   { label: '用户', value: 'ROLE_USER' }
 ]
 
-const formFields = [
+const formConfigs = [
   { property: 'username', field_options: { label: '用户名' }},
   'phone',
   { property: 'email', field_options: { label: 'Email' }},
@@ -70,7 +70,7 @@ export default {
     '@filter': 'entity.getWechatOpenId() == null'
   },
 
-  listDisplay: [
+  tableConfigs: [
     'id',
     { property: 'username', label: '用户名' },
     // {
@@ -109,9 +109,9 @@ export default {
     'createdTime'
   ],
 
-  formFields,
+  formConfigs,
 
-  // formFieldsForCreate: [
+  // formConfigsForCreate: [
   //   { property: 'username', field_options: { label: '用户名' } },
   //   {
   //     property: 'email',
@@ -128,7 +128,7 @@ export default {
   //     }
   //   },
   //   'phone',
-  //   ...formFields
+  //   ...formConfigs
   // ],
 
   downloadConfig: {

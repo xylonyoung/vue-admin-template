@@ -1,7 +1,7 @@
 import { Region } from '../components/form/Region'
 
 export default {
-  listDisplay: [
+  tableConfigs: [
     'id',
     'name',
     'phone',
@@ -12,7 +12,7 @@ export default {
     'comment'
   ],
 
-  formFields: [
+  formConfigs: [
     'name',
     'phone',
     'user',

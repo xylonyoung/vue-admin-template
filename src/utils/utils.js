@@ -1,4 +1,10 @@
 import numbro from 'numbro'
+import moment from 'moment'
+
+export function dateFormat(date) {
+  if (!date) return 'error date'
+  return moment(date).format('YYYY/M/D H:m')
+}
 
 export function numberFormat(num) {
   const result = num ?? 0

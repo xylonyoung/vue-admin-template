@@ -2,7 +2,7 @@ import Uploader from '../../components/form/Uploader'
 import ImageRender from '../../components/table/ImageRender'
 
 export default {
-  listDisplay: [
+  tableConfigs: [
     'id',
     { property: 'image', component: ImageRender() },
     'title',
@@ -10,5 +10,5 @@ export default {
     'createTime'
   ],
 
-  formFields: ['title', 'type', { property: 'image', component: Uploader({ dataType: 'string' }) }]
+  formConfigs: ['title', 'type', { property: 'image', component: Uploader({ dataType: 'string' }) }]
 }

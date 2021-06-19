@@ -2,7 +2,7 @@ import Uploader from '../components/form/Uploader'
 import ImageRender from '../components/table/ImageRender'
 
 export default {
-  listDisplay: [
+  tableConfigs: [
     'id',
     'issue',
     'order',
@@ -11,7 +11,7 @@ export default {
     'user'
   ],
 
-  formFields: [
+  formConfigs: [
     'issue',
     'order',
     { property: 'pictures', component: Uploader() },

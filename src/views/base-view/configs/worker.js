@@ -39,7 +39,7 @@ export default {
     }
   ],
 
-  listDisplay: [
+  tableConfigs: [
     'id',
     { property: 'regions', component: RegionsList() },
     'name',
@@ -48,7 +48,7 @@ export default {
     'comment'
   ],
 
-  formFields: [
+  formConfigs: [
     'user',
     'name',
     'phone',

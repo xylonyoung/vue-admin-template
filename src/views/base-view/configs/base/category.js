@@ -10,9 +10,9 @@ export default {
     }
   ],
 
-  listDisplay: ['id', 'type', 'name', 'parent', 'enabled', 'sequence'],
+  tableConfigs: ['id', 'type', 'name', 'parent', 'enabled', 'sequence'],
 
-  formFields: [
+  formConfigs: [
     'name',
     'title',
     'subTitle',

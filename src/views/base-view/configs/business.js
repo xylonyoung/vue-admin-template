@@ -16,7 +16,7 @@ export default {
     }
   ],
 
-  listDisplay: [
+  tableConfigs: [
     'id',
     'address',
     'category',
@@ -28,7 +28,7 @@ export default {
     'user'
   ],
 
-  formFields: [
+  formConfigs: [
     'address',
     'category',
     'description',

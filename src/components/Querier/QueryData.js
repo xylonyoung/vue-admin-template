@@ -16,7 +16,7 @@ export default class QueryData {
 
     for (const key in this.queryData) {
       const value = this.queryData[key]
-      if (value === undefined || value === '') break
+      if (value === undefined || value === '') continue
 
       const config = this.querierConfig.find(e => e.property === key)
       const { type, formatFunc } = config

@@ -1,6 +1,6 @@
 <template>
   <div class="base-container">
-    <el-row>
+    <el-row class="top-menu">
       <el-button
         v-if="!disableActions.includes('new')"
         type="primary"
@@ -51,62 +51,50 @@
       />
     </el-row>
     <el-row>
-      <base-table :data="tableData" />
-    </el-row>
-    <!-- <list-admin
-      :key="listKey"
-      v-model="tableData"
-      :entity-conf="entity"
-      :list-display="listDisplay"
-      :query="listQueryData"
-      :disabled-actions="['new', 'delete', 'edit', ...disableActions]"
-      :table-event="{ 'selection-change': handleSelectionChange }"
-    >
-      <template v-if="selection" #tableSelection>
-        <el-table-column
-          type="selection"
-          width="55"
-          :selectable="selectableFunc"
-        />
-      </template>
-
-      <template
-        v-if="!disableActions.includes('action')"
-        #extraAction="{ data }"
+      <base-table
+        v-loading="tableLoading"
+        :data="tableData"
+        :entity="entityData"
+        :configs="tableConfigs"
+        :props="tableProps"
+        :events="tableEvents"
+        :disable-actions="disableActions.includes('action')"
       >
-        <div class="action">
-          <transition
-            v-if="hasTodo"
-            class="transition"
-            :todo-list="todoList"
-            :item-id="data.id"
-            :api-prefix="apiPrefix"
-            @confirm="listUpdate"
-          />
-          <el-button
-            v-if="!disableActions.includes('edit')"
-            size="small"
-            @click="editForm(data.id)"
-          >
-            修改
-          </el-button>
-          <el-popconfirm
-            v-if="!disableActions.includes('delete')"
-            confirm-button-text="确认"
-            cancel-button-text="取消"
-            icon="el-icon-info"
-            icon-color="red"
-            title="确定删除吗？"
-            style="margin-left: 10px"
-            @onConfirm="handleDelete(data.id)"
-          >
-            <el-button slot="reference" size="small" type="danger">
-              删除
+        <template v-slot="{ row }">
+          <div class="action">
+            <transition
+              v-if="hasTodo"
+              class="transition"
+              :todo-list="todoList"
+              :item-id="row.id"
+              :api-prefix="apiPrefix"
+              @confirm="listUpdate"
+            />
+            <el-button
+              v-if="!disableActions.includes('edit')"
+              size="small"
+              @click="editForm(row.id)"
+            >
+              修改
             </el-button>
-          </el-popconfirm>
-        </div>
-      </template>
-    </list-admin> -->
+            <el-popconfirm
+              v-if="!disableActions.includes('delete')"
+              confirm-button-text="确认"
+              cancel-button-text="取消"
+              icon="el-icon-info"
+              icon-color="red"
+              title="确定删除吗？"
+              style="margin-left: 10px"
+              @onConfirm="handleDelete(row.id)"
+            >
+              <el-button slot="reference" size="small" type="danger">
+                删除
+              </el-button>
+            </el-popconfirm>
+          </div>
+        </template>
+      </base-table>
+    </el-row>
 
     <el-dialog
       :title="formType === 'edit' ? '修改' : '新增'"
@@ -114,47 +102,47 @@
       :close-on-click-modal="false"
       width="800px"
     >
-      <form-admin
-        :id="formId"
-        :key="formKey"
-        v-model="formData"
-        :entity-conf="entity"
-        :fields="formFieldsSwitch"
-      >
-        <template #action="{ submit }">
-          <el-button
-            type="primary"
-            icon="el-icon-edit-outline"
-            @click="submit(formSubmit)"
-          >
-            保存
-          </el-button>
-        </template>
-      </form-admin>
+      <base-form
+        :data.sync="formData"
+        :entity="entityData"
+        :configs="formConfigs"
+        :props="formProps"
+        :events="formEvents"
+      />
     </el-dialog>
   </div>
 </template>
 <script>
-import BaseTable from '@/components/BaseTable'
+import EntityMethods from './utils/EntityMethods'
+import BaseTable from '@/components/BaseComponents/BaseTable'
+import BaseForm from '@/components/BaseComponents/BaseForm'
 import Querier from '@/components/Querier'
 import UploadValidator from '@/components/UploadValidator'
 import Transition from '@/components/Transition'
 import config from './config'
 import pluralize from 'pluralize'
 export default {
-  components: { BaseTable, Querier, UploadValidator, Transition },
+  components: { BaseTable, BaseForm, Querier, UploadValidator, Transition },
   data() {
     return {
       entity: null,
-      listKey: 0,
+      entityData: {},
+      entityMethods: null,
       tableData: [],
+      tableProps: {},
+      tableEvents: {},
+      tableConfigs: [],
+      tableLoading: false,
+      formData: {},
+      formProps: {},
+      formEvents: {},
+      formConfigs: [],
       listDisplay: [],
       listQuery: {},
       disableActions: [],
       dialogVisible: false,
       formId: null,
       formKey: 0,
-      formData: {},
       formFieldsForCreate: null,
       formFields: [],
       formType: '',
@@ -188,10 +176,23 @@ export default {
       return { ...this.listQuery, ...this.mergeQuery() }
     }
   },
-  created() {
+  async created() {
     this.setData()
+    this.entityMethods = new EntityMethods(this.entity)
+    this.entityData = await this.$store.dispatch(
+      'entity/getEntity',
+      this.entity
+    )
+    this.getData()
   },
   methods: {
+    getData() {
+      this.tableLoading = true
+      this.entityMethods.get().then((res) => {
+        this.tableLoading = false
+        this.tableData = res?.data ?? []
+      })
+    },
     getTodo() {
       const path = `${this.apiPrefix}todo`
       this.$api.get(path).then((res) => {
@@ -208,6 +209,11 @@ export default {
       keys.forEach((e) => {
         this[e] = config[lastPath][e]
       })
+
+      this.tableEvents = {
+        ...this.tableEvents,
+        'selection-change': this.handleSelectionChange
+      }
 
       if (this.hasTodo) this.getTodo()
     },
@@ -286,16 +292,16 @@ export default {
         this.tableData.unshift(data)
       }
     },
-    editForm(id) {
+    async editForm(id) {
       if (id) {
-        this.formId = id
+        const res = await this.entityMethods.get(id)
+        this.formData = res?.data ?? {}
         this.formType = 'edit'
       } else {
-        this.formId = null
+        this.formData = {}
         this.formType = 'create'
       }
-      this.formData = {}
-      this.formKey++
+
       this.dialogVisible = true
     }
   }

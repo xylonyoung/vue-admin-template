@@ -34,7 +34,7 @@ export default {
     }
   ],
 
-  listDisplay: [
+  tableConfigs: [
     'id',
     'address',
     'business',
@@ -93,7 +93,7 @@ export default {
     }
   ],
 
-  formFields: [
+  formConfigs: [
     'address',
     'business',
     'comment',
