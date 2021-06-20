@@ -1,3 +1,5 @@
 export default {
-  formConfigs: '__all__'
+  tableConfig: [],
+
+  formConfig: []
 }

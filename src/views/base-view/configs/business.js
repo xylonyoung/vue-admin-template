@@ -1,6 +1,4 @@
 import { Region } from '../components/form/Region'
-import Uploader from '../components/form/Uploader'
-import ImageRender from '../components/table/ImageRender'
 
 export default {
   querierConfig: [
@@ -16,25 +14,25 @@ export default {
     }
   ],
 
-  tableConfigs: [
+  tableConfig: [
     'id',
     'address',
     'category',
     'description',
     'name',
     'phone',
-    { property: 'photo', component: ImageRender() },
+    'photo',
     'region',
     'user'
   ],
 
-  formConfigs: [
+  formConfig: [
     'address',
     'category',
     'description',
     'name',
     'phone',
-    { property: 'photo', component: Uploader({ dataType: 'string' }) },
+    'photo',
     { property: 'region', component: Region() },
     'user'
   ]

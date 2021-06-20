@@ -1,14 +1,11 @@
-import Uploader from '../../components/form/Uploader'
-import ImageRender from '../../components/table/ImageRender'
-
 export default {
-  tableConfigs: [
+  tableConfig: [
     'id',
-    { property: 'image', component: ImageRender() },
+    { property: 'image', type: 'image' },
     'title',
     'type',
     'createTime'
   ],
 
-  formConfigs: ['title', 'type', { property: 'image', component: Uploader({ dataType: 'string' }) }]
+  formConfig: ['title', 'type', { property: 'image', type: 'image' }]
 }

@@ -1,5 +1,3 @@
-import ImageRender from '../../components/table/ImageRender'
-
 export default {
   disableActions: ['delete'],
 
@@ -20,13 +18,13 @@ export default {
     '@order': 'id|DESC'
   },
 
-  tableConfigs: [
+  tableConfig: [
     'id',
-    { property: 'avatarUrl', component: ImageRender(true) },
+    { property: 'avatarUrl', type: 'image' },
     'nickname',
     'phone',
     'user'
   ],
 
-  formConfigs: ['user', 'nickname', 'phone']
+  formConfig: ['user', 'nickname', 'phone']
 }

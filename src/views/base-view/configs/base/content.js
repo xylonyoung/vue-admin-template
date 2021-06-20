@@ -3,7 +3,7 @@ export default {
     '@order': 'id|DESC'
   },
 
-  tableConfigs: [
+  tableConfig: [
     'id',
     { property: 'cover', type: 'image' },
     'category',
@@ -13,7 +13,7 @@ export default {
     'createdTime'
   ],
 
-  formConfigs: [
+  formConfig: [
     'title',
     {
       property: 'category',

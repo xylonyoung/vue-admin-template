@@ -21,7 +21,7 @@ export default {
     }
   ],
 
-  tableConfigs: [
+  tableConfig: [
     'id',
     'address',
     'business',
@@ -47,7 +47,7 @@ export default {
     'user'
   ],
 
-  formConfigs: [
+  formConfig: [
     'address',
     'business',
     'comment',

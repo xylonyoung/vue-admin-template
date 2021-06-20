@@ -31,7 +31,7 @@ export default [
 
 ## 2.配置页面
 
-在 configs 文件夹下创建所有 entities
+在 Config 文件夹下创建所有 entities
 
 - 注意文件名要和 路由的 path 一致并且使用 kebab-case
 
@@ -44,16 +44,16 @@ export default {
     options: ['new', 'delete', 'edit', 'action']
   },
   // 默认表格查询
-  listQuery: {
+  tableQuery: {
     type: Object,
     default: {}
   },
   // 默认表格列表
-  listDisplay: { type: Array, required: true },
+  tableConfig: { type: Array, required: true },
   // 默认表单列表
-  formFields: { type: Array },
+  formConfig: { type: Array },
   // 新建表单列表 （此项存在时，新建表单时会使用此列表）
-  formFieldsForCreate: { type: Array },
+  formConfigForCreate: { type: Array },
   // 表格多选
   selection: { type: Boolean, default: false },
   // 多选中的选项是否可选 （selection为true时有效）
@@ -65,14 +65,12 @@ export default {
 }
 // 基本例子
 export default {
-  listQuery: {
+  tableQuery: {
     '@order': 'createdTime|DESC'
   },
-  listDisplay: ['id', { property: 'username', label: '用户名' }],
-  formFields: ['phone'],
-  formFieldsForCreate: [
-    { property: 'username', field_options: { label: '用户名' } }
-  ]
+  tableConfig: ['id', { property: 'username', label: '用户名' }],
+  formConfig: ['phone'],
+  formConfigForCreate: [{ property: 'name' }]
 }
 ```
 

@@ -1,6 +1,6 @@
 <template>
   <div class="base-container">
-    <el-row class="top-menu">
+    <el-row style="display: flex">
       <el-button
         v-if="!disableActions.includes('new')"
         type="primary"
@@ -36,39 +36,41 @@
         :upload-func="uploadValidator.uploadFunc"
         :download-func="uploadValidator.downloadFunc"
         :component="uploadValidator.component"
-        @success="uploadSuccess"
+        @success="getTableData()"
       />
       <querier
         v-model="queryData"
+        style="margin-left: 10px"
         :querier-config="querierConfig"
-        @confirm="querierChange"
+        @confirm="getTableData()"
       />
       <component
         :is="item"
         v-for="(item, index) in topBarComponents"
         :key="index"
-        @update="formSubmit"
+        @submit="formSubmit"
       />
     </el-row>
+
     <el-row>
       <base-table
         v-loading="tableLoading"
         :data="tableData"
         :entity="entityData"
-        :configs="tableConfigs"
+        :config="tableConfig"
         :props="tableProps"
         :events="tableEvents"
         :disable-actions="disableActions.includes('action')"
       >
         <template v-slot="{ row }">
-          <div class="action">
+          <div style="display: flex">
             <transition
               v-if="hasTodo"
-              class="transition"
+              style="margin-right: 10px"
               :todo-list="todoList"
               :item-id="row.id"
-              :api-prefix="apiPrefix"
-              @confirm="listUpdate"
+              :api-prefix="entityPath"
+              @confirm="tableUpdate"
             />
             <el-button
               v-if="!disableActions.includes('edit')"
@@ -79,12 +81,12 @@
             </el-button>
             <el-popconfirm
               v-if="!disableActions.includes('delete')"
+              style="margin-left: 10px"
               confirm-button-text="确认"
               cancel-button-text="取消"
               icon="el-icon-info"
               icon-color="red"
               title="确定删除吗？"
-              style="margin-left: 10px"
               @onConfirm="handleDelete(row.id)"
             >
               <el-button slot="reference" size="small" type="danger">
@@ -96,6 +98,18 @@
       </base-table>
     </el-row>
 
+    <el-row style="margin-top: 20px">
+      <el-pagination
+        :current-page.sync="tableQuery.page"
+        :page-sizes="[20, 50, 100]"
+        :page-size="tableQuery.limit"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="tableQuery.totalCount"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
+    </el-row>
+
     <el-dialog
       :title="formType === 'edit' ? '修改' : '新增'"
       :visible.sync="dialogVisible"
@@ -105,47 +119,43 @@
       <base-form
         :data.sync="formData"
         :entity="entityData"
-        :configs="formConfigs"
+        :config="formConfig"
         :props="formProps"
         :events="formEvents"
+        @submit="formSubmit"
       />
     </el-dialog>
   </div>
 </template>
 <script>
-import EntityMethods from './utils/EntityMethods'
+import buildEntityPath from '@/components/BaseComponents/buildEntityPath'
 import BaseTable from '@/components/BaseComponents/BaseTable'
 import BaseForm from '@/components/BaseComponents/BaseForm'
-import Querier from '@/components/Querier'
 import UploadValidator from '@/components/UploadValidator'
 import Transition from '@/components/Transition'
+import Querier from '@/components/Querier'
 import config from './config'
-import pluralize from 'pluralize'
 export default {
   components: { BaseTable, BaseForm, Querier, UploadValidator, Transition },
   data() {
     return {
       entity: null,
       entityData: {},
-      entityMethods: null,
       tableData: [],
       tableProps: {},
+      tableQuery: {},
+      tableDefaultQuery: { page: 1, limit: 20 },
       tableEvents: {},
-      tableConfigs: [],
+      tableConfig: [],
       tableLoading: false,
+      formType: '',
       formData: {},
       formProps: {},
       formEvents: {},
-      formConfigs: [],
-      listDisplay: [],
-      listQuery: {},
+      formConfig: [],
       disableActions: [],
       dialogVisible: false,
-      formId: null,
-      formKey: 0,
-      formFieldsForCreate: null,
-      formFields: [],
-      formType: '',
+      formConfigForCreate: null,
       selection: false,
       selectableFunc: () => true,
       hasTodo: false,
@@ -160,47 +170,45 @@ export default {
     }
   },
   computed: {
-    apiPrefix() {
-      const name = this.entity?.name ?? this.entity
-      return `${this.entity?.prefix ?? 'manage'}/${this._.kebabCase(
-        pluralize(name)
-      )}/`
+    entityPath() {
+      return buildEntityPath(this.entity)
     },
-    formFieldsSwitch() {
-      if (this.formType === 'create' && this.formFieldsForCreate) {
-        return this.formFieldsForCreate
+    formConfigSwitch() {
+      if (this.formType === 'create' && this.formConfigForCreate) {
+        return this.formConfigForCreate
       }
-      return this.formFields
+      return this.formConfig
     },
-    listQueryData() {
-      return { ...this.listQuery, ...this.mergeQuery() }
+    tableQueryData() {
+      return { ...this.tableQuery, ...this.mergeQuery() }
     }
   },
   async created() {
     this.setData()
-    this.entityMethods = new EntityMethods(this.entity)
     this.entityData = await this.$store.dispatch(
       'entity/getEntity',
       this.entity
     )
-    this.getData()
+    this.getTableData()
   },
   methods: {
-    getData() {
+    getTableData() {
       this.tableLoading = true
-      this.entityMethods.get().then((res) => {
+      const params = { ...this.tableQuery }
+      this.$api.get(this.entityPath, { params }).then((res) => {
         this.tableLoading = false
-        this.tableData = res?.data ?? []
+        const { data, paginator } = res
+        this.tableData = data ?? []
+        if (paginator) {
+          this.tableQuery.page = paginator.current
+          this.tableQuery.totalCount = paginator.totalCount
+        }
       })
     },
     getTodo() {
-      const path = `${this.apiPrefix}todo`
-      this.$api.get(path).then((res) => {
+      this.$api.get(this.entityPath).then((res) => {
         this.todoList = res.data
       })
-    },
-    uploadSuccess() {
-      this.listKey++
     },
     setData() {
       this.entity = this.$route.meta.entity
@@ -209,13 +217,30 @@ export default {
       keys.forEach((e) => {
         this[e] = config[lastPath][e]
       })
-
       this.tableEvents = {
         ...this.tableEvents,
         'selection-change': this.handleSelectionChange
       }
+      this.tableDefaultQuery = { ...this.tableDefaultQuery, ...this.tableQuery }
+      this.tableQuery = { ...this.tableDefaultQuery, ...this.mergeQuery() }
 
       if (this.hasTodo) this.getTodo()
+    },
+    mergeQuery() {
+      const queryList = []
+      checkAndPush(this.tableDefaultQuery['@filter'])
+      checkAndPush(this.queryData)
+
+      const result = {}
+      if (queryList.length > 0) {
+        result['@filter'] = queryList.join(' && ')
+      }
+
+      return result
+
+      function checkAndPush(string) {
+        if (string) queryList.push(string)
+      }
     },
     async handleDownload() {
       this.downloadLoading = true
@@ -226,6 +251,7 @@ export default {
         this.downloadLoading = false
         return
       }
+
       const filterVal = this.downloadConfig.filterVal
       const data = await this.downloadConfig.formatFunc.call(
         this,
@@ -240,62 +266,81 @@ export default {
       })
       this.downloadLoading = false
     },
-    mergeQuery() {
-      const queryList = []
-      checkAndPush(this.listQuery['@filter'])
-      checkAndPush(this.queryData)
-
-      const result = {}
-      if (queryList.length > 0) {
-        result['@filter'] = queryList.join(' && ')
-      }
-
-      return result
-
-      function checkAndPush(string) {
-        if (string) queryList.push(string)
-      }
+    handleSizeChange(val) {
+      this.tableQuery.limit = val
+      this.getTableData()
+    },
+    handleCurrentChange(val) {
+      this.tableQuery.page = val
+      this.getTableData()
     },
     handleSelectionChange(e) {
       // TODO
       console.log(e)
       this.selected = e
     },
-    querierChange() {
-      this.listKey++
-    },
     handleDelete(id) {
-      const entity = new EntityManage(this.entity)
-      entity.delete(id).then(() => {
-        this.listUpdate({ id })
+      this.$api.delete(this.entityPath + `/${id}`).then(() => {
+        this.tableUpdate('delete', id)
         this.$message.success('删除成功')
       })
     },
-    formSubmit({ data }) {
-      this.$message.success('成功')
-      this.dialogVisible = false
-      const param = { data }
-      if (this.formType === 'edit') param.id = this.formId
-      this.listUpdate(param)
-    },
-    listUpdate({ id, data }) {
+    tableUpdate(type, arg) {
       if (this.hasTodo) this.getTodo()
 
-      if (id) {
-        const index = this.tableData.findIndex((e) => e.id === id)
-        if (data) {
-          this.tableData.splice(index, 1, data)
-        } else {
-          this.tableData.splice(index, 1)
-        }
-      } else {
-        this.tableData.unshift(data)
+      if (type === 'post') {
+        this.tableData.unshift(arg)
       }
+
+      let index
+      if (type === 'put') {
+        index = this.tableData.findIndex((e) => e.id === arg.id)
+        this.tableData.splice(index, 1, arg)
+      }
+
+      if (type === 'delete') {
+        index = this.tableData.findIndex((e) => e.id === arg)
+        this.tableData.splice(index, 1)
+      }
+    },
+    formSubmit() {
+      const data = {}
+      for (const key in this.formData) {
+        const prop = this.formData[key]
+        if (!prop || !this.formConfig.some((e) => e.property ?? e === key)) {
+          continue
+        }
+
+        if (Array.isArray(prop)) {
+          data[key] = prop.map((e) => e.id)
+          continue
+        }
+
+        if (prop.id) {
+          data[key] = prop.id
+          continue
+        }
+
+        data[key] = prop
+      }
+
+      let method = 'post'
+      let url = this.entityPath
+      if (this.formType === 'edit') {
+        method = 'put'
+        url += `/${this.formData.id}`
+      }
+
+      this.$api({ method, url, data }).then((res) => {
+        this.$message.success('成功')
+        this.dialogVisible = false
+        this.tableUpdate(method, res?.data)
+      })
     },
     async editForm(id) {
       if (id) {
-        const res = await this.entityMethods.get(id)
-        this.formData = res?.data ?? {}
+        const res = await this.$api.get(this.entityPath + `/${id}`)
+        this.formData = res.data ?? {}
         this.formType = 'edit'
       } else {
         this.formData = {}

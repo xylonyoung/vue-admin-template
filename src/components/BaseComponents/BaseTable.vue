@@ -4,7 +4,7 @@
       <el-table-column type="selection" width="55" />
 
       <el-table-column
-        v-for="(item, index) in configs"
+        v-for="(item, index) in config"
         :key="index"
         :label="getLabel(item)"
         v-bind="item.props"
@@ -13,6 +13,18 @@
         <template slot-scope="{ row }">
           <div v-if="item.component">
             <component :is="item.component" :row="row" />
+          </div>
+          <div v-else-if="item.type === 'image'">
+            <el-image
+              style="
+                width: 64px;
+                height: 64px;
+                border: 3px white solid;
+                boxshadow: 1px 1px 5px #ccc;
+              "
+              :src="imageUrl(row[propertyName(item)])"
+              :preview-src-list="imageList(row[propertyName(item)])"
+            />
           </div>
           <div v-else-if="dataType(item, 'array')">
             <el-tag
@@ -36,16 +48,7 @@
           <div v-else-if="dataType(item, 'decimal')">
             {{ $numberFormat(getString(row, item)) }}
           </div>
-          <div v-else-if="dataType(item, 'integer')">
-            {{ getString(row, item) }}
-          </div>
-          <div v-else-if="dataType(item, 'ManyToOne')">
-            {{ getString(row, item) }}
-          </div>
-          <div v-else-if="dataType(item, 'OneToOne')">
-            {{ getString(row, item) }}
-          </div>
-          <div v-else-if="dataType(item, 'string')">
+          <div v-else>
             {{ getString(row, item) }}
           </div>
         </template>
@@ -71,20 +74,24 @@ export default {
     return { defaultProps: { stripe: true } }
   },
   methods: {
-    propertyName(item) {
-      return item?.property ?? item
-    },
-    getLabel(item) {
-      const name = this.propertyName(item)
-      return this.entity[name]?.translation ?? name
-    },
-    dataType(item, type) {
-      const name = this.propertyName(item)
-      return this.entity[name]?.metadata?.type === type
-    },
     getString(row, item) {
       const result = row[this.propertyName(item)]
       return result?.__toString ?? result
+    },
+    imageUrl(images) {
+      if (!images) return ''
+
+      const result = Array.isArray(images) ? images[0] : images
+      return this.$getImage(result)
+    },
+    imageList(images) {
+      if (!images) return []
+
+      if (Array.isArray(images)) {
+        return images.map((e) => this.$getImage(e))
+      }
+
+      return [this.$getImage(images)]
     }
   }
 }

@@ -34,7 +34,7 @@ export default {
     }
   ],
 
-  tableConfigs: [
+  tableConfig: [
     'id',
     'address',
     'business',
@@ -93,7 +93,7 @@ export default {
     }
   ],
 
-  formConfigs: [
+  formConfig: [
     'address',
     'business',
     'comment',

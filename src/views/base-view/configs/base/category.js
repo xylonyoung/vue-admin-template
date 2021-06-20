@@ -10,16 +10,16 @@ export default {
     }
   ],
 
-  tableConfigs: ['id', 'type', 'name', 'parent', 'enabled', 'sequence'],
+  tableConfig: ['id', 'type', 'name', 'parent', 'enabled', 'sequence'],
 
-  formConfigs: [
+  formConfig: [
     'name',
     'title',
     'subTitle',
     'type',
     { property: 'parent', required: false },
-    { property: 'enabled', required: false, default_value: true },
-    { property: 'sequence', required: false, default_value: 0 },
+    { property: 'enabled', required: false, default: true },
+    { property: 'sequence', required: false, default: 0 },
     { property: 'icon', required: false, type: 'image' }
   ]
 }

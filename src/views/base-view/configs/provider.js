@@ -17,7 +17,7 @@ export default {
     }
   ],
 
-  tableConfigs: [
+  tableConfig: [
     'id',
     'createdTime',
     'name',
@@ -32,15 +32,15 @@ export default {
       }
     },
     'isConstructor',
-    'isMarketing',
+    'isMarketing'
     // { property: 'regions', component: RegionsList() }
   ],
 
-  formConfigs: [
+  formConfig: [
     'name',
     'user',
     'isConstructor',
-    'isMarketing',
+    'isMarketing'
     // {
     //   property: 'regions',
     //   component: Regions()

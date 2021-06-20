@@ -1,6 +1,6 @@
 const COUPON_TYPE = ['平台代金券', '施工费用抵扣券']
 export default {
-  tableConfigs: [
+  tableConfig: [
     'id',
     'name',
     'condition',
@@ -23,7 +23,7 @@ export default {
     'userLimit'
   ],
 
-  formConfigs: [
+  formConfig: [
     'name',
     'condition',
     'description',

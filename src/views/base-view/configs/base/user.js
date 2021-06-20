@@ -5,21 +5,21 @@ const roles = [
   { label: '用户', value: 'ROLE_USER' }
 ]
 
-const formConfigs = [
-  { property: 'username', field_options: { label: '用户名' }},
+const formConfig = [
+  { property: 'username', label: '用户名' },
   'phone',
-  { property: 'email', field_options: { label: 'Email' }},
+  { property: 'email', label: 'Email' },
   {
     property: 'enabled',
     type: 'boolean',
-    default_value: true,
-    field_options: { label: '是否启用' }
+    default: true,
+    label: '是否启用'
   },
-  { property: 'plainPassword', field_options: { label: '密码' }},
+  { property: 'plainPassword', label: '密码' },
   // {
   //   property: 'permissions',
-  //   default_value: [],
-  //   field_options: { label: '访问权限' },
+  //   default: [],
+  //   label: '访问权限' },
   //   component: {
   //     props: ['form'],
   //     render(h) {
@@ -36,8 +36,8 @@ const formConfigs = [
   // },
   {
     property: 'roles',
-    default_value: [],
-    field_options: { label: '用户权限' },
+    default: [],
+    label: '用户权限',
     component: {
       props: ['form'],
       render(h) {
@@ -70,7 +70,7 @@ export default {
     '@filter': 'entity.getWechatOpenId() == null'
   },
 
-  tableConfigs: [
+  tableConfig: [
     'id',
     { property: 'username', label: '用户名' },
     // {
@@ -109,10 +109,10 @@ export default {
     'createdTime'
   ],
 
-  formConfigs,
+  formConfig,
 
-  // formConfigsForCreate: [
-  //   { property: 'username', field_options: { label: '用户名' } },
+  // formConfigForCreate: [
+  //   { property: 'username', label: '用户名' } },
   //   {
   //     property: 'email',
   //     component: {
@@ -128,7 +128,7 @@ export default {
   //     }
   //   },
   //   'phone',
-  //   ...formConfigs
+  //   ...formConfig
   // ],
 
   downloadConfig: {

@@ -1,5 +1,5 @@
 export default {
-  tableConfigs: ['id', 'name', 'value', 'readable'],
+  tableConfig: ['id', 'name', 'value', 'readable'],
 
-  formConfigs: ['name', 'key', 'value', 'readable']
+  formConfig: ['name', 'key', 'value', 'readable']
 }

@@ -1,6 +1,6 @@
 export default {
   props: {
-    configs: { type: Array, required: true },
+    config: { type: Array, required: true },
     props: { type: Object, default: () => ({}) },
     events: { type: Object, default: () => ({}) },
     entity: { type: Object, default: () => ({}) }
@@ -16,15 +16,13 @@ export default {
     },
     getLabel(item) {
       const name = this.propertyName(item)
-      return this.entity[name]?.translation ?? name
+      return item.label ?? this.entity[name]?.translation ?? name
     },
     dataType(item, type) {
       const name = this.propertyName(item)
+      if (this.entity[name]?.plantext === type) return true
+
       return this.entity[name]?.metadata?.type === type
-    },
-    getString(row, item) {
-      const result = row[this.propertyName(item)]
-      return result?.__toString ?? result
     }
   }
 }

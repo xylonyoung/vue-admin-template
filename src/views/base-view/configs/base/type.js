@@ -1,5 +1,5 @@
 export default {
-  tableConfigs: ['id', 'name', 'slug'],
+  tableConfig: ['id', 'name', 'slug'],
 
-  formConfigs: '__all__'
+  formConfig: ['name', 'slug', 'description']
 }

@@ -1,7 +1,7 @@
 import { Region } from '../components/form/Region'
 
 export default {
-  tableConfigs: [
+  tableConfig: [
     'id',
     'name',
     'phone',
@@ -12,7 +12,7 @@ export default {
     'comment'
   ],
 
-  formConfigs: [
+  formConfig: [
     'name',
     'phone',
     'user',

@@ -51,9 +51,9 @@ export default {
     }
   ],
 
-  tableConfigs: ['id', 'category', 'region', 'price'],
+  tableConfig: ['id', 'category', 'region', 'price'],
 
-  formConfigs: [
+  formConfig: [
     {
       property: 'category',
       component: {

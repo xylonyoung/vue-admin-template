@@ -23,7 +23,10 @@ export function buildFullPath(relativeURL) {
   )
 }
 
-export function getImage(name) {
+export function getImage(image) {
+  const name = image?.__toString ?? image
+  if (/^http/.test(name)) return name
+
   return `${process.env.VUE_APP_BASE_API.replace(
     /\/+$/,
     ''
