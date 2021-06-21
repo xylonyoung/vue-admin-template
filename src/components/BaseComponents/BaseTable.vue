@@ -12,9 +12,9 @@
       >
         <template slot-scope="{ row }">
           <div v-if="item.component">
-            <component :is="item.component" :row="row" />
+            <component :is="item.component" :data="row" />
           </div>
-          <div v-else-if="item.type === 'image'">
+          <div v-else-if="dataType(item, 'image')">
             <el-image
               style="
                 width: 64px;
@@ -54,10 +54,15 @@
         </template>
       </el-table-column>
 
-      <el-table-column v-if="!disableActions" label="操作" fixed="right">
-        <template slot-scope="{ row }">
-          <slot :row="row" />
-        </template>
+      <el-table-column
+        v-if="!disableActions"
+        label="操作"
+        fixed="right"
+        :width="actionsWidth"
+      >
+        <div ref="actions" slot-scope="{ row }">
+          <slot name="actions" :data="row" />
+        </div>
       </el-table-column>
     </el-table>
   </div>
@@ -71,7 +76,11 @@ export default {
     disableActions: { type: Boolean, default: false }
   },
   data() {
-    return { defaultProps: { stripe: true } }
+    return { defaultProps: { stripe: true }, actionsWidth: '' }
+  },
+  updated() {
+    this.actionsWidth =
+      this.$refs.actions?.childNodes?.[0]?.scrollWidth + 24 + 'px'
   },
   methods: {
     getString(row, item) {
@@ -79,13 +88,13 @@ export default {
       return result?.__toString ?? result
     },
     imageUrl(images) {
-      if (!images) return ''
+      if (!images) return
 
       const result = Array.isArray(images) ? images[0] : images
       return this.$getImage(result)
     },
     imageList(images) {
-      if (!images) return []
+      if (!images) return
 
       if (Array.isArray(images)) {
         return images.map((e) => this.$getImage(e))

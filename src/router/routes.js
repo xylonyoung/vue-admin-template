@@ -1,10 +1,12 @@
+import { permissionPrefix } from '@/settings'
+
 const routes = [
-  // {
-  //   path: 'order',
-  //   title: '订单管理',
-  //   icon: 'el-icon-s-order',
-  //   component: import('@/views/order/order')
-  // },
+  {
+    path: 'order',
+    entity: 'Order',
+    title: '订单管理',
+    icon: 'el-icon-s-order'
+  },
   {
     path: 'provider',
     entity: 'Provider',
@@ -72,7 +74,7 @@ const baseRoutes = [
     icon: 'el-icon-user-solid',
     children: [
       { path: '', entity: 'User', title: '用户权限' },
-      { path: 'profile', entity: 'UserProfile', title: '会员资料' }
+      { path: 'profile', entity: 'UserProfile', title: '用户资料' }
     ]
   },
   {
@@ -105,21 +107,26 @@ const baseRoutes = [
   }
 ]
 
-export default [...routes, ...baseRoutes]
+export default mergeRoutes()
 
-// export default addPrefix(routes, 'business')
+function mergeRoutes() {
+  if (permissionPrefix) {
+    return addPrefix(routes, permissionPrefix)
+  }
+  return [...routes, ...baseRoutes]
+}
 
-// function addPrefix(arr, prefix) {
-//   return arr.map(e => {
-//     const result = { ...e }
-//     if (result.children) {
-//       result.children = [...addPrefix(result.children, prefix)]
-//     }
-//     if (result.entity) {
-//       result.entity = result.entity?.name
-//         ? { prefix, ...result.entity }
-//         : { name: result.entity, prefix }
-//     }
-//     return result
-//   })
-// }
+function addPrefix(arr, prefix) {
+  return arr.map(e => {
+    const result = { ...e }
+    if (result.children) {
+      result.children = [...addPrefix(result.children, prefix)]
+    }
+    if (result.entity) {
+      result.entity = result.entity?.name
+        ? { prefix, ...result.entity }
+        : { name: result.entity, prefix }
+    }
+    return result
+  })
+}

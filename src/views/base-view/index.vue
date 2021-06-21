@@ -62,20 +62,20 @@
         :events="tableEvents"
         :disable-actions="disableActions.includes('action')"
       >
-        <template v-slot="{ row }">
+        <template #actions="{ data }">
           <div style="display: flex">
             <transition
               v-if="hasTodo"
               style="margin-right: 10px"
               :todo-list="todoList"
-              :item-id="row.id"
+              :item-id="data.id"
               :api-prefix="entityPath"
               @confirm="tableUpdate"
             />
             <el-button
               v-if="!disableActions.includes('edit')"
               size="small"
-              @click="editForm(row.id)"
+              @click="editForm(data.id)"
             >
               修改
             </el-button>
@@ -87,7 +87,7 @@
               icon="el-icon-info"
               icon-color="red"
               title="确定删除吗？"
-              @onConfirm="handleDelete(row.id)"
+              @onConfirm="handleDelete(data.id)"
             >
               <el-button slot="reference" size="small" type="danger">
                 删除
@@ -100,11 +100,11 @@
 
     <el-row style="margin-top: 20px">
       <el-pagination
-        :current-page.sync="tableQuery.page"
+        :current-page.sync="tableQueryProcessed.page"
         :page-sizes="[20, 50, 100]"
-        :page-size="tableQuery.limit"
+        :page-size="tableQueryProcessed.limit"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="tableQuery.totalCount"
+        :total="tableQueryProcessed.totalCount"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
       />
@@ -119,7 +119,7 @@
       <base-form
         :data.sync="formData"
         :entity="entityData"
-        :config="formConfig"
+        :config="formConfigProcessed"
         :props="formProps"
         :events="formEvents"
         @submit="formSubmit"
@@ -143,8 +143,8 @@ export default {
       entityData: {},
       tableData: [],
       tableProps: {},
-      tableQuery: {},
-      tableDefaultQuery: { page: 1, limit: 20 },
+      tableQuery: { page: 1, limit: 20 },
+      tableQueryProcessed: {},
       tableEvents: {},
       tableConfig: [],
       tableLoading: false,
@@ -153,9 +153,10 @@ export default {
       formProps: {},
       formEvents: {},
       formConfig: [],
+      formConfigForCreate: [],
+      formConfigProcessed: [],
       disableActions: [],
       dialogVisible: false,
-      formConfigForCreate: null,
       selection: false,
       selectableFunc: () => true,
       hasTodo: false,
@@ -172,15 +173,6 @@ export default {
   computed: {
     entityPath() {
       return buildEntityPath(this.entity)
-    },
-    formConfigSwitch() {
-      if (this.formType === 'create' && this.formConfigForCreate) {
-        return this.formConfigForCreate
-      }
-      return this.formConfig
-    },
-    tableQueryData() {
-      return { ...this.tableQuery, ...this.mergeQuery() }
     }
   },
   async created() {
@@ -194,14 +186,14 @@ export default {
   methods: {
     getTableData() {
       this.tableLoading = true
-      const params = { ...this.tableQuery }
+      const params = { ...this.tableQueryProcessed }
       this.$api.get(this.entityPath, { params }).then((res) => {
         this.tableLoading = false
         const { data, paginator } = res
         this.tableData = data ?? []
         if (paginator) {
-          this.tableQuery.page = paginator.current
-          this.tableQuery.totalCount = paginator.totalCount
+          this.tableQueryProcessed.page = paginator.current
+          this.tableQueryProcessed.totalCount = paginator.totalCount
         }
       })
     },
@@ -221,14 +213,13 @@ export default {
         ...this.tableEvents,
         'selection-change': this.handleSelectionChange
       }
-      this.tableDefaultQuery = { ...this.tableDefaultQuery, ...this.tableQuery }
-      this.tableQuery = { ...this.tableDefaultQuery, ...this.mergeQuery() }
+      this.tableQueryProcessed = { ...this.tableQuery, ...this.mergeFilter() }
 
       if (this.hasTodo) this.getTodo()
     },
-    mergeQuery() {
+    mergeFilter() {
       const queryList = []
-      checkAndPush(this.tableDefaultQuery['@filter'])
+      checkAndPush(this.tableQuery['@filter'])
       checkAndPush(this.queryData)
 
       const result = {}
@@ -244,7 +235,7 @@ export default {
     },
     async handleDownload() {
       this.downloadLoading = true
-      const params = this.mergeQuery()
+      const params = this.mergeFilter()
       const res = await this.$api.get(this.downloadConfig.api, { params })
       if (res.data.length === 0) {
         this.$message.warning('暂无数据')
@@ -267,11 +258,11 @@ export default {
       this.downloadLoading = false
     },
     handleSizeChange(val) {
-      this.tableQuery.limit = val
+      this.tableQueryProcessed.limit = val
       this.getTableData()
     },
     handleCurrentChange(val) {
-      this.tableQuery.page = val
+      this.tableQueryProcessed.page = val
       this.getTableData()
     },
     handleSelectionChange(e) {
@@ -338,15 +329,27 @@ export default {
       })
     },
     async editForm(id) {
+      let formData = {}
+      let formConfigProcessed = []
       if (id) {
         const res = await this.$api.get(this.entityPath + `/${id}`)
-        this.formData = res.data ?? {}
+        if (res.data) formData = { ...res.data }
         this.formType = 'edit'
+        formConfigProcessed = [...this.formConfig]
       } else {
-        this.formData = {}
         this.formType = 'create'
+        formConfigProcessed = [...this.formConfigForCreate]
       }
 
+      formConfigProcessed.forEach((e) => {
+        const name = e.property ?? e
+        if (e.default && !formData[name]) {
+          formData[name] = e.default
+        }
+      })
+
+      this.formData = formData
+      this.formConfigProcessed = formConfigProcessed
       this.dialogVisible = true
     }
   }

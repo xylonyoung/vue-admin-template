@@ -24,6 +24,8 @@ export function buildFullPath(relativeURL) {
 }
 
 export function getImage(image) {
+  if (!image) return
+
   const name = image?.__toString ?? image
   if (/^http/.test(name)) return name
 

@@ -2,7 +2,7 @@ import { constantRoutes } from '@/router'
 import { routerBuilder } from '@/router/router-builder'
 import asyncRoutes from '@/router/routes'
 import store from '@/store'
-import { needPermission } from '@/settings'
+import { permissionPrefix } from '@/settings'
 
 const state = {
   routes: []
@@ -18,7 +18,7 @@ const actions = {
     })
     function filterRoutes() {
       let routes
-      if (needPermission) {
+      if (permissionPrefix) {
         const permissions = store.getters.user?.permissions ?? []
         routes = asyncRoutes.filter(e => permissions.includes(e.path))
       } else {

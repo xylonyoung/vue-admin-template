@@ -20,7 +20,7 @@ export default {
     },
     dataType(item, type) {
       const name = this.propertyName(item)
-      if (this.entity[name]?.plantext === type) return true
+      if (item.type === type) return true
 
       return this.entity[name]?.metadata?.type === type
     }

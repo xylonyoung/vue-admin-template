@@ -4,7 +4,7 @@ export default {
   formConfig: [
     'title',
     'type',
-    { property: 'pictures', type: 'image' },
+    { property: 'pictures', type: 'upload' },
     'comment'
   ]
 }

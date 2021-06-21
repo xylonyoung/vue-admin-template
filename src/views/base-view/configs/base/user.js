@@ -1,21 +1,20 @@
-import routes from '@/router/routes'
-const routeList = routes.map(e => ({ label: e.title, value: e.path }))
+// import routes from '@/router/routes'
+// const routeList = routes.map(e => ({ label: e.title, value: e.path }))
 const roles = [
   { label: '管理员', value: 'ROLE_SUPER_ADMIN' },
   { label: '用户', value: 'ROLE_USER' }
 ]
 
 const formConfig = [
-  { property: 'username', label: '用户名' },
+  'username',
   'phone',
-  { property: 'email', label: 'Email' },
+  { property: 'plainPassword', label: '密码' },
   {
     property: 'enabled',
     type: 'boolean',
     default: true,
     label: '是否启用'
   },
-  { property: 'plainPassword', label: '密码' },
   // {
   //   property: 'permissions',
   //   default: [],
@@ -39,11 +38,11 @@ const formConfig = [
     default: [],
     label: '用户权限',
     component: {
-      props: ['form'],
+      props: ['data'],
       render(h) {
-        if (!this.form.roles) return
+        if (!this.data?.roles) return
         return (
-          <el-checkbox-group v-model={this.form.roles}>
+          <el-checkbox-group v-model={this.data.roles}>
             {roles.map(item => {
               return <el-checkbox label={item.value}>{item.label}</el-checkbox>
             })}
@@ -72,7 +71,7 @@ export default {
 
   tableConfig: [
     'id',
-    { property: 'username', label: '用户名' },
+    'username',
     // {
     //   property: 'permissions',
     //   label: '访问权限',
@@ -81,7 +80,7 @@ export default {
     //     render(h) {
     //       return (
     //         <div>
-    //           {this.data.map(item => {
+    //           {this.data?.permissions?.map(item => {
     //             return <div>{routeList.find(e => e.value === item)?.label}</div>
     //           })}
     //         </div>
@@ -97,8 +96,12 @@ export default {
         render(h) {
           return (
             <div>
-              {this.data.map(item => {
-                return <div>{roles.find(e => e.value === item)?.label}</div>
+              {this.data?.roles?.map(item => {
+                return (
+                  <el-tag type='info'>
+                    {roles.find(e => e.value === item)?.label}
+                  </el-tag>
+                )
               })}
             </div>
           )
@@ -109,27 +112,34 @@ export default {
     'createdTime'
   ],
 
-  formConfig,
+  formConfig: [...formConfig, 'email'],
 
-  // formConfigForCreate: [
-  //   { property: 'username', label: '用户名' } },
-  //   {
-  //     property: 'email',
-  //     component: {
-  //       props: ['form'],
-  //       render(h) {
-  //         return <div>{this.form.email}</div>
-  //       },
-  //       watch: {
-  //         'form.username'(val) {
-  //           if (val) this.form.email = `${val}@mail.com`
-  //         }
-  //       }
-  //     }
-  //   },
-  //   'phone',
-  //   ...formConfig
-  // ],
+  formConfigForCreate: [
+    ...formConfig,
+    {
+      property: 'email',
+      component: {
+        props: ['data'],
+        render(h) {
+          return <div>{this.email}</div>
+        },
+        watch: {
+          'data.username'(val) {
+            if (val) {
+              const result = `${val}@mail.com`
+              this.data.email = result
+              this.email = result
+            }
+          }
+        },
+        data() {
+          return {
+            email: ''
+          }
+        }
+      }
+    }
+  ],
 
   downloadConfig: {
     api: '/manage/users',

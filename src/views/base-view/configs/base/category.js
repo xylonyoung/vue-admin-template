@@ -10,16 +10,24 @@ export default {
     }
   ],
 
-  tableConfig: ['id', 'type', 'name', 'parent', 'enabled', 'sequence'],
+  tableConfig: [
+    'id',
+    'type',
+    'name',
+    'parent',
+    'enabled',
+    'sequence',
+    { property: 'icon', type: 'image' }
+  ],
 
   formConfig: [
     'name',
     'title',
     'subTitle',
+    { property: 'icon', type: 'upload', config: { dataType: 'string' }},
     'type',
-    { property: 'parent', required: false },
-    { property: 'enabled', required: false, default: true },
-    { property: 'sequence', required: false, default: 0 },
-    { property: 'icon', required: false, type: 'image' }
+    'parent',
+    { property: 'enabled', default: true },
+    { property: 'sequence', default: 0 }
   ]
 }

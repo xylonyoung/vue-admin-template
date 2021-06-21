@@ -11,7 +11,7 @@ const actions = {
   },
   async getEntities({ commit }) {
     const res = await $api.get('/system/entities')
-    const result = res?.data?.map(e => e.replace(/\\\\/g, '\\')) ?? []
+    const result = res?.data ?? []
     commit('SET_ENTITIES', result)
     sessionStorage.setItem('entities', JSON.stringify(result))
     return result
@@ -27,13 +27,13 @@ const actions = {
   async getEntity({ dispatch, state }, entity) {
     if (state.entities.length === 0) await dispatch('getEntities')
 
-    const entityName = entity?.name ?? entity
-    const fullEntityName = state.entities.find(e => e.includes(entityName))
+    const regex = new RegExp('Entity\\\\' + (entity?.name ?? entity) + '$')
+    const fullEntityName = state.entities.find(e => regex.test(e))
     let result
     if (fullEntityName in state.structures) {
       result = state.structures[fullEntityName]
     } else {
-      result = await dispatch('getStructure', fullEntityName)
+      result = await dispatch('getStructure', fullEntityName.replace(/\\\\/g, '\\'))
     }
 
     return result

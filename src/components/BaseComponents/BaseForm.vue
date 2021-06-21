@@ -15,17 +15,14 @@
       v-on="item.events"
     >
       <template v-if="item.component">
-        <component :is="item.component" />
+        <component :is="item.component" :data="data" />
       </template>
 
-      <template v-else-if="dataType(item, 'Image')">
+      <template v-else-if="dataType(item, 'upload')">
         <component
-          :is="Uploader({ dataType: 'string' })"
+          :is="Uploader(item.config || {})"
           :data="data[propertyName(item)]"
         />
-      </template>
-      <template v-else-if="dataType(item, 'Pictures')">
-        <component :is="Uploader()" :data="data[propertyName(item)]" />
       </template>
       <template v-else-if="dataType(item, 'array')">1</template>
       <template v-else-if="dataType(item, 'boolean')">
@@ -112,31 +109,20 @@ import buildEntityPath from './buildEntityPath'
 export default {
   mixins: [mixin],
   props: {
-    data: { type: Object, default: () => ({}) },
-    rules: { type: Object, default: () => ({}) }
+    data: { type: Object, default: () => ({}) }
   },
   data() {
-    return { defaultProps: { 'label-width': '100px' }, options: {} }
+    return { defaultProps: { 'label-width': '100px' }, options: {}, rules: {}}
   },
-  watch: {
-    entity: {
-      handler() {
-        this.setDefault()
-        this.getOptions()
-      },
-      immediate: true
-    }
+  mounted() {
+    this.setRules()
+    this.getOptions()
   },
   methods: {
     Uploader,
-    setRules() {},
-    setDefault() {
+    setRules() {
       this.config.forEach((e) => {
         const name = this.propertyName(e)
-        if (e.default) {
-          this.data[name] = e.default
-        }
-
         if (e.rule) {
           this.rules[name] = e.rule
         } else if (this.entity[name]?.metadata?.nullable === false) {

@@ -25,9 +25,9 @@ export default {
     {
       property: 'phone',
       component: {
-        props: ['row'],
+        props: ['data'],
         render(h) {
-          return <span>{this.row.user?.__metadata?.profile?.phone}</span>
+          return <span>{this.data.user?.__metadata?.profile?.phone}</span>
         }
       }
     },

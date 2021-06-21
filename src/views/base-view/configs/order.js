@@ -43,7 +43,7 @@ export default {
     'discount',
     {
       property: 'items',
-      component: ItemList([
+      component: ItemList('items', [
         { label: '名称', prop: '__toString' },
         { label: '价格', prop: '__metadata.price' },
         { label: '数量', prop: '__metadata.quantity' },
@@ -60,37 +60,37 @@ export default {
       component: {
         props: ['data'],
         render(h) {
-          return <span>{orderStatus[this.data]}</span>
+          return <span>{orderStatus[this.data.status]}</span>
         }
       }
     },
     'type',
     'wallType',
-    'worker',
-    {
-      property: 'detail',
-      component: DataDetail([
-        { name: 'no' },
-        { name: 'provider' },
-        { name: 'environmentPhoto', type: 'image' },
-        { name: 'evaluation' },
-        { name: 'extraData' },
-        { name: 'fetchInfoAddress' },
-        { name: 'finishPhoto', type: 'image' },
-        { name: 'finishVideo' },
-        { name: 'followingTime' },
-        { name: 'hasFurniture' },
-        { name: 'hasScaling' },
-        { name: 'pickupAddress' },
-        { name: 'pickupCode' },
-        { name: 'user' },
-        { name: 'userCoupon' },
-        { name: 'totalPrice' },
-        { name: 'shippingPrice' },
-        { name: 'specialWall' },
-        { name: 'specialWallPhoto', type: 'image' }
-      ])
-    }
+    'worker'
+    // {
+    //   property: 'detail',
+    //   component: DataDetail([
+    //     { name: 'no' },
+    //     { name: 'provider' },
+    //     { name: 'environmentPhoto', type: 'image' },
+    //     { name: 'evaluation' },
+    //     { name: 'extraData' },
+    //     { name: 'fetchInfoAddress' },
+    //     { name: 'finishPhoto', type: 'image' },
+    //     { name: 'finishVideo' },
+    //     { name: 'followingTime' },
+    //     { name: 'hasFurniture' },
+    //     { name: 'hasScaling' },
+    //     { name: 'pickupAddress' },
+    //     { name: 'pickupCode' },
+    //     { name: 'user' },
+    //     { name: 'userCoupon' },
+    //     { name: 'totalPrice' },
+    //     { name: 'shippingPrice' },
+    //     { name: 'specialWall' },
+    //     { name: 'specialWallPhoto', type: 'image' }
+    //   ])
+    // }
   ],
 
   formConfig: [
@@ -124,10 +124,10 @@ export default {
     {
       property: 'status',
       component: {
-        props: ['form'],
+        props: ['data'],
         render(h) {
           return (
-            <el-select v-model={this.form.status} placeholder='请选择'>
+            <el-select v-model={this.data.status} placeholder='请选择'>
               {orderStatus.map((e, index) => (
                 <el-option label={e} value={index}></el-option>
               ))}

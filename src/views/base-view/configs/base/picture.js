@@ -7,5 +7,9 @@ export default {
     'createTime'
   ],
 
-  formConfig: ['title', 'type', { property: 'image', type: 'image' }]
+  formConfig: [
+    'title',
+    'type',
+    { property: 'image', type: 'upload', config: { dataType: 'string' }}
+  ]
 }
