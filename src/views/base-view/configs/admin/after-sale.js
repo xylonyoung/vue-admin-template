@@ -1,5 +1,5 @@
-import Uploader from '../components/form/Uploader'
-import ImageRender from '../components/table/ImageRender'
+import Uploader from '../../components/form/Uploader'
+import ImageRender from '../../components/table/ImageRender'
 
 export default {
   tableConfig: [

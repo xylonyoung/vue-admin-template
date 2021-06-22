@@ -1,7 +1,8 @@
 export default class QueryData {
-  constructor(queryData, querierConfig) {
+  constructor(queryData, querierConfig, componentData) {
     this.queryData = queryData
     this.querierConfig = querierConfig
+    this.componentData = componentData
   }
 
   dataProcess() {
@@ -26,6 +27,8 @@ export default class QueryData {
 
       result.push(aTempFunc.call(this, key, value, config))
     }
+
+    if (this.componentData) result.push(this.componentData)
 
     return result.join(' && ') || ''
   }

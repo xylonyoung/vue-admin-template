@@ -6,7 +6,12 @@ const config = {}
 files.keys().forEach(key => (config[keyFormat(key)] = files(key).default))
 
 function keyFormat(key) {
-  return key.match(/[^/]+(?=\.js)/)[0]
+  let result = key.match(/[^/]+(?=\.js)/)[0]
+  if (/user\//.test(key)) {
+    result = 'user-' + result
+  }
+
+  return result
 }
 
 export default config

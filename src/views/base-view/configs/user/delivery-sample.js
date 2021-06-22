@@ -1,8 +1,9 @@
-import { Region } from '../components/form/Region'
 
 const deliverySampleStatus = ['未送', '已送']
 
 export default {
+  disabledActions: ['delete'],
+
   querierConfig: [
     {
       type: 'input',
@@ -21,7 +22,7 @@ export default {
     }
   ],
 
-  tableConfig: [
+  listDisplay: [
     'id',
     'address',
     'business',
@@ -47,15 +48,7 @@ export default {
     'user'
   ],
 
-  formConfig: [
-    'address',
-    'business',
-    'comment',
-    'name',
-    'no',
-    'phone',
-    'price',
-    { property: 'region', component: Region() },
+  formFields: [
     {
       property: 'status',
       component: {
@@ -70,7 +63,6 @@ export default {
           )
         }
       }
-    },
-    'user'
+    }
   ]
 }

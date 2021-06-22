@@ -1,6 +1,6 @@
-import { Region } from '../components/form/Region'
-import DataDetail from '../components/table/DataDetail'
-import ItemList from '../components/table/ItemList'
+import { Region } from '../../components/form/Region'
+import DataDetail from '../../components/table/DataDetail'
+import ItemList from '../../components/table/ItemList'
 
 const orderStatus = [
   '待提交',

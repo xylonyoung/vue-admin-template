@@ -11,5 +11,14 @@ export function setToken(token) {
 }
 
 export function removeToken() {
+  Cookies.remove('role')
   return Cookies.remove(TokenKey)
+}
+
+export function getRole() {
+  return Cookies.get('role')
+}
+
+export function setRole(Role) {
+  return Cookies.set('role', Role)
 }

@@ -1,8 +1,8 @@
-import { Regions } from '../components/form/Region'
-import Uploader from '../components/form/Uploader'
-import RegionsList from '../components/table/RegionsList'
+import RegionsList from '../../components/table/RegionsList'
 
 export default {
+  disabledActions: ['delete'],
+
   querierConfig: [
     {
       type: 'input',
@@ -10,8 +10,8 @@ export default {
       props: { placeholder: '请输入名称' }
     },
     {
-      type: 'component',
-      property: 'regions',
+      type: 'input',
+      property: 'region.__toString',
       props: { placeholder: '请输入区域' }
     },
     {
@@ -39,7 +39,7 @@ export default {
     }
   ],
 
-  tableConfig: [
+  listDisplay: [
     'id',
     { property: 'regions', component: RegionsList() },
     'name',
@@ -48,25 +48,5 @@ export default {
     'comment'
   ],
 
-  formConfig: [
-    'user',
-    'name',
-    'phone',
-    'enabled',
-    'habitation',
-    { property: 'regions', component: Regions() },
-    'birthday',
-    'serviceRange',
-    'wallclothExperience',
-    'wallclothMaxCapacityPerDay',
-    'wallclothMinAcceptReward',
-    'wallpaperExperience',
-    'wallpaperMaxCapacityPerDay',
-    'wallpaperMinAcceptReward',
-    'hasCarVehicleLicense',
-    'hasMotoVehicleLicense',
-    'hasVehicle',
-    { property: 'idCardPhotos', component: Uploader() },
-    'comment'
-  ]
+  formFields: ['enabled', 'comment']
 }

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import { subPath } from '@/settings'
 
 Vue.use(Router)
 
@@ -62,7 +63,7 @@ export const constantRoutes = [
 const createRouter = () =>
   new Router({
     mode: 'history', // require service support
-    base: process.env.BASE_URL,
+    base: subPath,
     scrollBehavior: () => ({
       y: 0
     }),

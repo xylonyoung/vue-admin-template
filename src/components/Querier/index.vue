@@ -71,11 +71,11 @@
         :func="setQueryDataValue"
       />
 
-      <template v-else-if="item.type === 'component'">
+      <template v-else-if="item.component">
         <component
           :is="item.component"
-          :data="queryData"
-          :func="setQueryDataValue"
+          :data.sync="componentData"
+          :func="updateQuerierData"
         />
       </template>
     </div>
@@ -94,7 +94,7 @@ export default {
     querierConfig: { type: Array, default: () => [] }
   },
   data() {
-    return { queryData: {} }
+    return { queryData: {}, componentData: '' }
   },
   watch: {
     queryData: {
@@ -202,7 +202,11 @@ export default {
       })
     },
     updateQuerierData() {
-      const result = new QueryData(this.queryData, this.querierConfig)
+      const result = new QueryData(
+        this.queryData,
+        this.querierConfig,
+        this.componentData
+      )
       this.$emit('input', result.dataProcess())
     }
   }

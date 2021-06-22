@@ -1,6 +1,46 @@
-import { permissionPrefix } from '@/settings'
+import { entityPrefix } from '@/settings'
 
-const routes = [
+const userRoutes = [
+  {
+    path: 'region-special-price',
+    entity: 'RegionSpecialPrice',
+    title: '区域价钱管理',
+    icon: 'el-icon-money'
+  },
+  {
+    path: 'business',
+    entity: 'Business',
+    title: '商家管理',
+    icon: 'el-icon-s-shop'
+  },
+  {
+    path: 'delivery-sample',
+    entity: 'DeliverySample',
+    title: '送样管理',
+    icon: 'el-icon-film'
+  },
+  {
+    path: 'worker',
+    entity: 'Worker',
+    title: '工人管理',
+    icon: 'el-icon-user'
+  },
+  {
+    path: 'after-sale',
+    title: '售后',
+    icon: 'el-icon-chat-line-round',
+    children: [
+      { path: '', entity: 'AfterSale', title: '售后记录' },
+      {
+        path: 'after-sale-todo',
+        entity: { name: 'AfterSale', suffix: '/todo' },
+        title: '待处理'
+      }
+    ]
+  }
+]
+
+const adminRoutes = [
   {
     path: 'order',
     entity: 'Order',
@@ -110,23 +150,37 @@ const baseRoutes = [
 export default mergeRoutes()
 
 function mergeRoutes() {
-  if (permissionPrefix) {
-    return addPrefix(routes, permissionPrefix)
+  const resultOne = [...adminRoutes, ...baseRoutes].map(e => ({
+    role: 'admin',
+    ...e
+  }))
+
+  const resultTwo = userRoutes.map(e => ({
+    role: 'user',
+    ...e,
+    path: 'user-' + e.path
+  }))
+
+  if (entityPrefix) {
+    return addPrefix(resultTwo)
   }
-  return [...routes, ...baseRoutes]
+
+  return [...resultOne, ...resultTwo]
 }
 
-function addPrefix(arr, prefix) {
-  return arr.map(e => {
+function addPrefix(arg) {
+  return arg.map(e => {
     const result = { ...e }
     if (result.children) {
-      result.children = [...addPrefix(result.children, prefix)]
+      result.children = [...addPrefix(result.children)]
     }
+
     if (result.entity) {
       result.entity = result.entity?.name
-        ? { prefix, ...result.entity }
-        : { name: result.entity, prefix }
+        ? { entityPrefix, ...result.entity }
+        : { name: result.entity, entityPrefix }
     }
+
     return result
   })
 }

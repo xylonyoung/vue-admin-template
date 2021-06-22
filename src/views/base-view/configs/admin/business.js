@@ -1,4 +1,4 @@
-import { Region } from '../components/form/Region'
+import { Region } from '../../components/form/Region'
 
 export default {
   querierConfig: [

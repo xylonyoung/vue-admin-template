@@ -1,5 +1,5 @@
-import { Regions } from '../components/form/Region'
-import RegionsList from '../components/table/RegionsList'
+import { Regions } from '../../components/form/Region'
+import RegionsList from '../../components/table/RegionsList'
 
 // const providerType = ['施工', '销售']
 

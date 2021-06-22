@@ -29,10 +29,7 @@ export function getImage(image) {
   const name = image?.__toString ?? image
   if (/^http/.test(name)) return name
 
-  return `${process.env.VUE_APP_BASE_API.replace(
-    /\/+$/,
-    ''
-  )}/uploads/images/${name}`
+  return buildFullPath(`/uploads/images/${name}`)
 }
 
 /**

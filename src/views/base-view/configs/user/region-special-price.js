@@ -1,6 +1,8 @@
-import { Region, UploadRegion } from '../components/form/Region'
+import { Region, UploadRegion } from '../../components/form/Region'
 
 export default {
+  disabledActions: ['action'],
+
   querierConfig: [
     {
       type: 'input',
@@ -51,9 +53,9 @@ export default {
     }
   ],
 
-  tableConfig: ['id', 'category', 'region', 'price'],
+  listDisplay: ['id', 'category', 'region', 'price'],
 
-  formConfig: [
+  formFields: [
     {
       property: 'category',
       component: {
@@ -82,7 +84,7 @@ export default {
           const params = {
             '@filter': 'entity.getType().getSlug() == "services"'
           }
-          this.$api.get('/manage/categories', { params }).then(res => {
+          this.$api.get('/api/categories', { params }).then(res => {
             this.categoryList = res.data.map(e => ({
               __toString: e.name,
               ...e
@@ -132,7 +134,7 @@ export default {
       return new Promise((resolve, reject) => {
         const waitPromise = []
         excelData.forEach(e => {
-          waitPromise.push(this.$api.post('/manage/region-special-prices', e))
+          waitPromise.push(this.$api.post('/api/region-special-prices', e))
         })
         Promise.all(waitPromise)
           .then(() => {
@@ -156,8 +158,7 @@ export default {
       const params = {
         '@filter': 'entity.getType().getSlug() == "services"'
       }
-      const res = await this.$api.get('/manage/categories', { params })
-
+      const res = await this.$api.get('/api/categories', { params })
       const resData = res.data.filter(e => e.children.length === 0)
 
       const excel = await import('@/vendor/Export2Excel')

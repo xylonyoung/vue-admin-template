@@ -1,8 +1,14 @@
 module.exports = {
-  title: 'Vue Admin Template',
+  // 
+  entityPrefix: '',
 
   // pages need permission or not.
-  permissionPrefix: null,
+  needPermission: [],
+
+  // set public sub-path
+  subPath: 'admin',
+
+  title: 'Vue Admin Template',
 
   /**
    * @type {boolean} true | false
