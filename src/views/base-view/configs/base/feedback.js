@@ -1,5 +1,5 @@
 export default {
-  tableConfig: [],
+  tableConfig: ['id', 'type', 'content'],
 
   formConfig: []
 }

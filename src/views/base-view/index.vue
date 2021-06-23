@@ -9,6 +9,7 @@
       >
         新增
       </el-button>
+
       <el-button
         v-if="uploadValidator"
         type="primary"
@@ -17,6 +18,7 @@
       >
         上传
       </el-button>
+
       <el-button
         v-if="downloadConfig"
         type="success"
@@ -26,6 +28,7 @@
       >
         下载
       </el-button>
+
       <upload-validator
         v-if="uploadValidator"
         :visible.sync="uploadVisible"
@@ -38,12 +41,14 @@
         :component="uploadValidator.component"
         @success="getTableData()"
       />
+
       <querier
         v-model="queryData"
         style="margin-left: 10px"
         :querier-config="querierConfig"
         @confirm="getTableData()"
       />
+
       <component
         :is="item"
         v-for="(item, index) in topBarComponents"
@@ -62,6 +67,14 @@
         :events="tableEvents"
         :disable-actions="disableActions.includes('action')"
       >
+        <template v-if="selection" #selection>
+          <el-table-column
+            type="selection"
+            width="55"
+            :selectable="selectableFunc"
+          />
+        </template>
+
         <template #actions="{ data }">
           <div style="display: flex">
             <transition
@@ -112,7 +125,7 @@
 
     <el-dialog
       :title="formType === 'edit' ? '修改' : '新增'"
-      :visible.sync="dialogVisible"
+      :visible.sync="formDialogVisible"
       :close-on-click-modal="false"
       width="800px"
     >
@@ -128,9 +141,9 @@
   </div>
 </template>
 <script>
-import buildEntityPath from '@/components/BaseComponents/buildEntityPath'
-import BaseTable from '@/components/BaseComponents/BaseTable'
-import BaseForm from '@/components/BaseComponents/BaseForm'
+import buildEntityPath from '@/components/Base/buildEntityPath'
+import BaseTable from '@/components/Base/table'
+import BaseForm from '@/components/Base/form'
 import UploadValidator from '@/components/UploadValidator'
 import Transition from '@/components/Transition'
 import Querier from '@/components/Querier'
@@ -141,6 +154,11 @@ export default {
     return {
       entity: null,
       entityData: {},
+      hasTodo: false,
+      todoList: [],
+      disableActions: [],
+      queryData: null,
+      querierConfig: [],
       tableData: [],
       tableProps: {},
       tableQuery: { page: 1, limit: 20 },
@@ -155,14 +173,9 @@ export default {
       formConfig: [],
       formConfigForCreate: [],
       formConfigProcessed: [],
-      disableActions: [],
-      dialogVisible: false,
+      formDialogVisible: false,
       selection: false,
       selectableFunc: () => true,
-      hasTodo: false,
-      todoList: [],
-      queryData: null,
-      querierConfig: [],
       downloadLoading: false,
       downloadConfig: null,
       uploadVisible: false,
@@ -187,15 +200,20 @@ export default {
     getTableData() {
       this.tableLoading = true
       const params = { ...this.tableQueryProcessed }
-      this.$api.get(this.entityPath, { params }).then((res) => {
-        this.tableLoading = false
-        const { data, paginator } = res
-        this.tableData = data ?? []
-        if (paginator) {
-          this.tableQueryProcessed.page = paginator.current
-          this.tableQueryProcessed.totalCount = paginator.totalCount
-        }
-      })
+      this.$api
+        .get(this.entityPath, { params })
+        .then((res) => {
+          this.tableLoading = false
+          const { data, paginator } = res
+          this.tableData = data ?? []
+          if (paginator) {
+            this.tableQueryProcessed.page = paginator.current
+            this.tableQueryProcessed.totalCount = paginator.totalCount
+          }
+        })
+        .catch(() => {
+          this.tableLoading = false
+        })
     },
     getTodo() {
       this.$api.get(this.entityPath).then((res) => {
@@ -324,23 +342,25 @@ export default {
 
       this.$api({ method, url, data }).then((res) => {
         this.$message.success('成功')
-        this.dialogVisible = false
+        this.formDialogVisible = false
         this.tableUpdate(method, res?.data)
       })
     },
     async editForm(id) {
       let formData = {}
-      let formConfigProcessed = []
+      let formConfigProcessed = [...this.formConfig]
       if (id) {
+        this.formType = 'edit'
         const res = await this.$api.get(this.entityPath + `/${id}`)
         if (res.data) formData = { ...res.data }
-        this.formType = 'edit'
-        formConfigProcessed = [...this.formConfig]
       } else {
         this.formType = 'create'
-        formConfigProcessed = [...this.formConfigForCreate]
+        if (this.formConfigForCreate.length > 0) {
+          formConfigProcessed = [...this.formConfigForCreate]
+        }
       }
 
+      // set default value of the form
       formConfigProcessed.forEach((e) => {
         const name = e.property ?? e
         if (e.default && !formData[name]) {
@@ -350,7 +370,7 @@ export default {
 
       this.formData = formData
       this.formConfigProcessed = formConfigProcessed
-      this.dialogVisible = true
+      this.formDialogVisible = true
     }
   }
 }

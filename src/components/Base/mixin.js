@@ -20,9 +20,11 @@ export default {
     },
     dataType(item, type) {
       const name = this.propertyName(item)
-      if (item.type === type) return true
-
-      return this.entity[name]?.metadata?.type === type
+      if (item.type) {
+        return item.type === type
+      } else {
+        return this.entity[name]?.metadata?.type === type
+      }
     }
   }
 }

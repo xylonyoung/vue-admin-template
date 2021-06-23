@@ -1,39 +1,19 @@
-import { Region } from '../../components/form/Region'
-
 export default {
-  querierConfig: [
-    {
-      type: 'input',
-      property: 'name',
-      props: { placeholder: '请输入名称' }
-    },
-    {
-      type: 'input',
-      property: 'region.__toString',
-      props: { placeholder: '请输入区域' }
-    }
-  ],
-
-  tableConfig: [
-    'id',
-    'address',
-    'category',
-    'description',
-    'name',
-    'phone',
-    'photo',
-    'region',
-    'user'
-  ],
+  tableConfig: ['id', 'name', 'contact', 'phone', 'beginTime', 'expiredTime'],
 
   formConfig: [
-    'address',
+    'beginTime',
+    'canCancelAppointmentHourBefore',
+    'canMakeAppointmentHourBefore',
+    'canteens',
     'category',
+    'contact',
     'description',
+    'expiredTime',
     'name',
+    'phases',
     'phone',
-    'photo',
-    { property: 'region', component: Region() },
+    'staffs',
     'user'
   ]
 }

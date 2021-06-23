@@ -20,7 +20,7 @@ const actions = {
     function routeFilter() {
       let result = asyncRoutes.filter(e => e.role === getRole())
 
-      if (needPermission.length > 0) {
+      if (needPermission) {
         const permissions = store.getters.user?.permissions ?? []
         result = result.filter(e => permissions.includes(e.path))
       }

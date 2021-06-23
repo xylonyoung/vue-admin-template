@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-table :data="data" v-bind="mixedProps" v-on="events">
-      <el-table-column type="selection" width="55" />
+      <slot name="selection" />
 
       <el-table-column
         v-for="(item, index) in config"
@@ -68,7 +68,7 @@
   </div>
 </template>
 <script>
-import mixin from './mixin'
+import mixin from '../mixin'
 export default {
   mixins: [mixin],
   props: {

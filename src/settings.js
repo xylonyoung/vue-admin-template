@@ -1,11 +1,14 @@
 module.exports = {
-  // 
+  baseURL: 'http://47.106.118.125:8000/',
+
+  // router just return userRoutes width entity prefix.
   entityPrefix: '',
 
   // pages need permission or not.
-  needPermission: [],
+  // user must have permissions property.
+  needPermission: false,
 
-  // set public sub-path
+  // set public sub-path.
   subPath: 'admin',
 
   title: 'Vue Admin Template',

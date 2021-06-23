@@ -1,5 +1,6 @@
 import numbro from 'numbro'
 import moment from 'moment'
+import { baseURL } from '@/settings'
 
 export function dateFormat(date) {
   if (!date) return 'error date'
@@ -16,11 +17,7 @@ export function numberFormat(num) {
 }
 
 export function buildFullPath(relativeURL) {
-  return (
-    process.env.VUE_APP_BASE_API.replace(/\/+$/, '') +
-    '/' +
-    relativeURL.replace(/^\/+/, '')
-  )
+  return baseURL.replace(/\/+$/, '') + '/' + relativeURL.replace(/^\/+/, '')
 }
 
 export function getImage(image) {

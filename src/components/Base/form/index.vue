@@ -57,6 +57,9 @@
           placeholder="请输入"
         />
       </template>
+      <template v-else-if="dataType(item, 'textarea')">
+        <tinymce v-model="data[propertyName(item)]" :height="300" />
+      </template>
       <template
         v-else-if="dataType(item, 'ManyToOne') || dataType(item, 'OneToOne')"
       >
@@ -103,10 +106,13 @@
   </el-form>
 </template>
 <script>
-import mixin from './mixin'
-import Uploader from './Uploader'
-import buildEntityPath from './buildEntityPath'
+import mixin from '../mixin'
+import Uploader from '@/components/Uploader'
+import buildEntityPath from '../buildEntityPath'
+import Tinymce from '@/components/Tinymce'
+
 export default {
+  components: { Tinymce },
   mixins: [mixin],
   props: {
     data: { type: Object, default: () => ({}) }

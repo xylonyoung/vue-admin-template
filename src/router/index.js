@@ -33,11 +33,6 @@ import Layout from '@/layout'
  */
 export const constantRoutes = [
   {
-    path: '/login',
-    component: () => import('@/views/login/index'),
-    hidden: true
-  },
-  {
     path: '/404',
     component: () => import('@/views/error-page/404'),
     hidden: true
@@ -55,6 +50,42 @@ export const constantRoutes = [
           title: '控制台',
           icon: 'dashboard'
         }
+      }
+    ]
+  },
+  {
+    path: '/login',
+    component: () => import('@/views/account'),
+    hidden: true,
+    children: [
+      {
+        path: '',
+        name: 'Login',
+        component: () => import('@/views/account/login')
+      }
+    ]
+  },
+  {
+    path: '/register',
+    component: () => import('@/views/account'),
+    hidden: true,
+    children: [
+      {
+        path: '',
+        name: 'Register',
+        component: () => import('@/views/account/register')
+      }
+    ]
+  },
+  {
+    path: '/forgot',
+    component: () => import('@/views/account'),
+    hidden: true,
+    children: [
+      {
+        path: '',
+        name: 'Forgot',
+        component: () => import('@/views/account/forgot')
       }
     ]
   }

@@ -7,7 +7,6 @@ const roles = [
 
 const formConfig = [
   'username',
-  'phone',
   { property: 'plainPassword', label: '密码' },
   {
     property: 'enabled',
@@ -139,24 +138,24 @@ export default {
         }
       }
     }
-  ],
+  ]
 
-  downloadConfig: {
-    api: '/manage/users',
-    filename: '用户',
-    tHeader: ['Id', '用户名'],
-    filterVal: ['id', 'username'],
-    formatFunc(filterVal, jsonData) {
-      return jsonData.map(v =>
-        filterVal.map(j => {
-          switch (j) {
-            case 'username':
-              return v?.profile?.__toString ?? v[j]
-            default:
-              return v[j]?.__toString ?? v[j]
-          }
-        })
-      )
-    }
-  }
+  // downloadConfig: {
+  //   api: '/manage/users',
+  //   filename: '用户',
+  //   tHeader: ['Id', '用户名'],
+  //   filterVal: ['id', 'username'],
+  //   formatFunc(filterVal, jsonData) {
+  //     return jsonData.map(v =>
+  //       filterVal.map(j => {
+  //         switch (j) {
+  //           case 'username':
+  //             return v?.profile?.__toString ?? v[j]
+  //           default:
+  //             return v[j]?.__toString ?? v[j]
+  //         }
+  //       })
+  //     )
+  //   }
+  // }
 }

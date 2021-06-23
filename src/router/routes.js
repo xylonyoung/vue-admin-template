@@ -1,109 +1,43 @@
 import { entityPrefix } from '@/settings'
 
-const userRoutes = [
-  {
-    path: 'region-special-price',
-    entity: 'RegionSpecialPrice',
-    title: '区域价钱管理',
-    icon: 'el-icon-money'
-  },
-  {
-    path: 'business',
-    entity: 'Business',
-    title: '商家管理',
-    icon: 'el-icon-s-shop'
-  },
-  {
-    path: 'delivery-sample',
-    entity: 'DeliverySample',
-    title: '送样管理',
-    icon: 'el-icon-film'
-  },
-  {
-    path: 'worker',
-    entity: 'Worker',
-    title: '工人管理',
-    icon: 'el-icon-user'
-  },
-  {
-    path: 'after-sale',
-    title: '售后',
-    icon: 'el-icon-chat-line-round',
-    children: [
-      { path: '', entity: 'AfterSale', title: '售后记录' },
-      {
-        path: 'after-sale-todo',
-        entity: { name: 'AfterSale', suffix: '/todo' },
-        title: '待处理'
-      }
-    ]
-  }
-]
+const userRoutes = []
 
 const adminRoutes = [
   {
-    path: 'order',
-    entity: 'Order',
-    title: '订单管理',
-    icon: 'el-icon-s-order'
-  },
-  {
-    path: 'provider',
-    entity: 'Provider',
-    title: '服务商管理',
+    path: 'appointment',
+    entity: 'Appointment',
+    title: 'appointment',
     icon: 'el-icon-s-custom'
-  },
-  {
-    path: 'region-special-price',
-    entity: 'RegionSpecialPrice',
-    title: '区域价钱管理',
-    icon: 'el-icon-money'
-  },
-  {
-    path: 'join',
-    entity: 'Join',
-    title: '服务商申请管理',
-    icon: 'el-icon-document-add'
   },
   {
     path: 'business',
     entity: 'Business',
-    title: '商家管理',
-    icon: 'el-icon-s-shop'
+    title: 'business',
+    icon: 'el-icon-s-custom'
   },
   {
-    path: 'delivery-sample',
-    entity: 'DeliverySample',
-    title: '送样管理',
-    icon: 'el-icon-film'
+    path: 'canteen',
+    entity: 'Canteen',
+    title: 'canteen',
+    icon: 'el-icon-s-custom'
   },
   {
-    path: 'worker',
-    entity: 'Worker',
-    title: '工人管理',
-    icon: 'el-icon-user'
+    path: 'dining',
+    entity: 'Dining',
+    title: 'dining',
+    icon: 'el-icon-s-custom'
   },
   {
-    path: 'coupon',
-    title: '优惠券',
-    icon: 'el-icon-s-ticket',
-    children: [
-      { path: '', entity: 'Coupon', title: '优惠券' },
-      { path: 'user-coupon', entity: 'UserCoupon', title: '用户优惠券' }
-    ]
+    path: 'phase',
+    entity: 'Phase',
+    title: 'phase',
+    icon: 'el-icon-s-custom'
   },
   {
-    path: 'after-sale',
-    title: '售后',
-    icon: 'el-icon-chat-line-round',
-    children: [
-      { path: '', entity: 'AfterSale', title: '售后记录' },
-      {
-        path: 'after-sale-todo',
-        entity: { name: 'AfterSale', suffix: '/todo' },
-        title: '待处理'
-      }
-    ]
+    path: 'staff',
+    entity: 'Staff',
+    title: 'staff',
+    icon: 'el-icon-s-custom'
   }
 ]
 
@@ -117,14 +51,17 @@ const baseRoutes = [
       { path: 'profile', entity: 'UserProfile', title: '用户资料' }
     ]
   },
+  // {
+  //   path: 'feedback',
+  //   entity: 'Feedback',
+  //   title: '反馈管理',
+  //   icon: 'el-icon-document'
+  // },
   {
     path: 'content',
+    entity: 'Content',
     title: '内容管理',
-    icon: 'el-icon-document',
-    children: [
-      { path: '', entity: 'Content', title: '内容' }
-      // { path: 'feedback', entity: 'Feedback', title: '反馈' }
-    ]
+    icon: 'el-icon-document'
   },
   {
     path: 'pictures',
