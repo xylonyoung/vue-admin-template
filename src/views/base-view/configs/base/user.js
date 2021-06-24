@@ -39,7 +39,6 @@ const formConfig = [
     component: {
       props: ['data'],
       render(h) {
-        if (!this.data?.roles) return
         return (
           <el-checkbox-group v-model={this.data.roles}>
             {roles.map(item => {

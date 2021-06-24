@@ -1,12 +1,12 @@
-import regionMixin from '../../mixins/region'
+import regionMixin from './mixin'
 
-export function Region(props) {
+export function Region(property, props) {
   return {
-    props: ['form', 'property'],
+    props: ['data'],
     render(h) {
       return (
         <div>
-          <div>{this.getRegionName(this.form[this.property])}</div>
+          <div>{this.getRegionName(this.data[property])}</div>
           <div v-loading={this.loading}>
             {this.loading || (
               <el-cascader
@@ -36,9 +36,9 @@ export function Region(props) {
   }
 }
 
-export function Regions(props) {
+export function Regions(property, props) {
   return {
-    props: ['form', 'property'],
+    props: ['data'],
     render(h) {
       return (
         <div>
@@ -65,14 +65,14 @@ export function Regions(props) {
             )}
           </div>
           <div>
-            {this.form[this.property]?.map((e, index) => {
+            {this.data[property]?.map((e, index) => {
               const style = index > 0 ? 'margin-left:8px' : ''
               return (
                 <el-tag
                   style={style}
                   closable
                   on-close={() => {
-                    this.form[this.property].splice(index, 1)
+                    this.data[property].splice(index, 1)
                   }}
                 >
                   {this.getRegionName(e)}

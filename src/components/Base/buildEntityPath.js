@@ -12,10 +12,14 @@ export default function(entity) {
     anEntity.name = parseEntityName(entity.name)
   }
 
-  const result = [anEntity.prefix, anEntity.name, anEntity.suffix].filter(e => e)
+  const result = [anEntity.prefix, anEntity.name, anEntity.suffix].filter(
+    e => e
+  )
   return result.join('/')
 
   function parseEntityName(name) {
-    return kebabCase(pluralize(name))
+    // fix staff plural is staffs
+    const result = /staff$/i.test(name) ? name + 's' : pluralize(name)
+    return kebabCase(result)
   }
 }

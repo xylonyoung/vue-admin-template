@@ -6,37 +6,37 @@ const adminRoutes = [
   {
     path: 'appointment',
     entity: 'Appointment',
-    title: 'appointment',
-    icon: 'el-icon-s-custom'
+    title: '报餐管理',
+    icon: 'el-icon-edit-outline'
   },
   {
     path: 'business',
     entity: 'Business',
-    title: 'business',
-    icon: 'el-icon-s-custom'
+    title: '企业管理',
+    icon: 'el-icon-office-building'
   },
   {
     path: 'canteen',
     entity: 'Canteen',
-    title: 'canteen',
-    icon: 'el-icon-s-custom'
+    title: '饭堂管理',
+    icon: 'el-icon-s-shop'
   },
   {
     path: 'dining',
     entity: 'Dining',
-    title: 'dining',
-    icon: 'el-icon-s-custom'
+    title: '就餐管理',
+    icon: 'el-icon-knife-fork'
   },
   {
     path: 'phase',
     entity: 'Phase',
-    title: 'phase',
-    icon: 'el-icon-s-custom'
+    title: '餐类管理',
+    icon: 'el-icon-dish'
   },
   {
     path: 'staff',
     entity: 'Staff',
-    title: 'staff',
+    title: '员工管理',
     icon: 'el-icon-s-custom'
   }
 ]

@@ -24,7 +24,9 @@
           :data="data[propertyName(item)]"
         />
       </template>
-      <template v-else-if="dataType(item, 'array')">1</template>
+      <template v-else-if="dataType(item, 'array')">
+        <dynamic-tags v-model="data[propertyName(item)]" />
+      </template>
       <template v-else-if="dataType(item, 'boolean')">
         <el-switch
           v-model="data[propertyName(item)]"
@@ -110,15 +112,21 @@ import mixin from '../mixin'
 import Uploader from '@/components/Uploader'
 import buildEntityPath from '../buildEntityPath'
 import Tinymce from '@/components/Tinymce'
+import DynamicTags from '@/components/DynamicTags'
 
 export default {
-  components: { Tinymce },
+  components: { Tinymce, DynamicTags },
   mixins: [mixin],
   props: {
     data: { type: Object, default: () => ({}) }
   },
   data() {
-    return { defaultProps: { 'label-width': '100px' }, options: {}, rules: {}}
+    return {
+      defaultProps: { 'label-width': '100px' },
+      options: {},
+      rules: {},
+      tempInputData: ''
+    }
   },
   mounted() {
     this.setRules()
@@ -171,7 +179,7 @@ export default {
         const types = ['ManyToOne', 'ManyToMany', 'OneToMany', 'OneToOne']
         if (!types.includes(this.entity[key]?.metadata?.type)) return false
 
-        if (!this.config.some((e) => e.property ?? e === key)) return false
+        if (!this.config.some((e) => (e.property ?? e) === key)) return false
 
         return true
       }

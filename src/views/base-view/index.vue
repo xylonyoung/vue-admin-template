@@ -316,17 +316,18 @@ export default {
       const data = {}
       for (const key in this.formData) {
         const prop = this.formData[key]
-        if (!prop || !this.formConfig.some((e) => e.property ?? e === key)) {
+        // pass error data
+        if (!prop || !this.formConfig.some((e) => (e.property ?? e) === key)) {
           continue
         }
-
-        if (Array.isArray(prop)) {
-          data[key] = prop.map((e) => e.id)
-          continue
-        }
-
+        // object modify to id only
         if (prop.id) {
           data[key] = prop.id
+          continue
+        }
+        // array modify and filter error data
+        if (Array.isArray(prop)) {
+          data[key] = prop.map((e) => e.id ?? e).filter((e) => e)
           continue
         }
 
