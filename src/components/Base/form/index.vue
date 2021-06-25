@@ -15,23 +15,28 @@
       v-on="item.events"
     >
       <template v-if="item.component">
-        <component :is="item.component" :data="data" />
+        <component :is="item.component" :data="data" :options="options" />
       </template>
 
       <template v-else-if="dataType(item, 'upload')">
-        <component
-          :is="Uploader(item.config || {})"
-          :data="data[propertyName(item)]"
-        />
+        <component :is="Uploader(item.config)" :data="data" />
       </template>
       <template v-else-if="dataType(item, 'array')">
-        <dynamic-tags v-model="data[propertyName(item)]" />
+        <component :is="DynamicTags(propertyName(item))" :data="data" />
       </template>
       <template v-else-if="dataType(item, 'boolean')">
         <el-switch
           v-model="data[propertyName(item)]"
           active-text="是"
           inactive-text="否"
+        />
+      </template>
+      <template v-else-if="dataType(item, 'time')">
+        <el-time-picker
+          v-model="data[propertyName(item)]"
+          format="HH:mm"
+          value-format="HH:mm"
+          placeholder="选择时间"
         />
       </template>
       <template v-else-if="dataType(item, 'date')">
@@ -51,6 +56,14 @@
       <template v-else-if="dataType(item, 'integer')">
         <el-input-number v-model="data[propertyName(item)]" :min="0" />
       </template>
+      <template v-else-if="dataType(item, 'decimal')">
+        <el-input-number
+          v-model="data[propertyName(item)]"
+          :min="0"
+          :precision="2"
+          :step="0.01"
+        />
+      </template>
       <template v-else-if="dataType(item, 'text')">
         <el-input
           v-model="data[propertyName(item)]"
@@ -66,9 +79,10 @@
         v-else-if="dataType(item, 'ManyToOne') || dataType(item, 'OneToOne')"
       >
         <el-select
-          v-model="data[propertyName(item)]"
+          v-model="selectValue[propertyName(item)]"
           v-loading="!options[propertyName(item)]"
           placeholder="请选择"
+          clearable
           filterable
         >
           <el-option
@@ -83,9 +97,10 @@
         v-else-if="dataType(item, 'ManyToMany') || dataType(item, 'OneToMany')"
       >
         <el-select
-          v-model="data[propertyName(item)]"
+          v-model="selectValue[propertyName(item)]"
           v-loading="!options[propertyName(item)]"
           placeholder="请选择"
+          clearable
           filterable
           multiple
         >
@@ -115,7 +130,7 @@ import Tinymce from '@/components/Tinymce'
 import DynamicTags from '@/components/DynamicTags'
 
 export default {
-  components: { Tinymce, DynamicTags },
+  components: { Tinymce },
   mixins: [mixin],
   props: {
     data: { type: Object, default: () => ({}) }
@@ -125,15 +140,26 @@ export default {
       defaultProps: { 'label-width': '100px' },
       options: {},
       rules: {},
-      tempInputData: ''
+      selectValue: {}
     }
   },
   mounted() {
+    this.setSelectValue()
     this.setRules()
     this.getOptions()
   },
   methods: {
     Uploader,
+    DynamicTags,
+    setSelectValue() {
+      for (const key in this.data) {
+        const result = this.data[key]
+        if (result.id) this.selectValue[key] = result.id
+        if (Array.isArray(result)) {
+          this.selectValue[key] = result.map((e) => e?.id ?? e)
+        }
+      }
+    },
     setRules() {
       this.config.forEach((e) => {
         const name = this.propertyName(e)
@@ -151,37 +177,45 @@ export default {
       })
     },
     getOptions() {
-      for (const key in this.entity) {
-        if (needOptions.call(this, key)) {
-          const entity = getEntity.call(this, key)
-          this.$api
-            .get(buildEntityPath(entity), {
-              params: { '@display': 'reduce' }
-            })
-            .then((res) => {
-              const result = res?.data?.map((e) => ({
-                value: e.id,
-                label: e.name ?? e.title ?? e.__toString
-              }))
-              this.$set(this.options, key, result)
-            })
+      this.config.forEach((e) => {
+        const propertyName = this.propertyName(e)
+        if (e.option) {
+          getOptionData.call(this, propertyName, e.option)
         }
+
+        if (needOption.call(this, propertyName)) {
+          getOptionData.call(
+            this,
+            propertyName,
+            getOptionName.call(this, propertyName)
+          )
+        }
+      })
+
+      function getOptionData(propertyName, entity) {
+        this.$api
+          .get(buildEntityPath(entity), {
+            params: { '@display': 'reduce' }
+          })
+          .then((res) => {
+            const result = res?.data?.map((e) => ({
+              value: e.id,
+              label: e.name ?? e.title ?? e.__toString
+            }))
+            this.$set(this.options, propertyName, result)
+          })
       }
 
-      function getEntity(key) {
+      function getOptionName(propertyName) {
         const result = /[^\\\\]\w+$/.exec(
-          this.entity[key]?.metadata?.targetEntity
+          this.entity[propertyName]?.metadata?.targetEntity
         )
         return result[0]
       }
 
-      function needOptions(key) {
+      function needOption(propertyName) {
         const types = ['ManyToOne', 'ManyToMany', 'OneToMany', 'OneToOne']
-        if (!types.includes(this.entity[key]?.metadata?.type)) return false
-
-        if (!this.config.some((e) => (e.property ?? e) === key)) return false
-
-        return true
+        return types.includes(this.entity[propertyName]?.metadata?.type)
       }
     },
     submitForm() {

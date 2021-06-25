@@ -2,17 +2,20 @@ import numbro from 'numbro'
 import moment from 'moment'
 import { baseURL } from '@/settings'
 
-export function dateFormat(date) {
+// https://momentjs.com/docs/#/displaying/format/
+export function dateFormat(date, token) {
   if (!date) return 'error date'
-  return moment(date).format('YYYY/M/D H:m')
+  return moment(date).format(token ?? 'YYYY/M/D H:m')
 }
 
-export function numberFormat(num) {
+// https://numbrojs.com/format.html
+export function numberFormat(num, props) {
   const result = num ?? 0
   return numbro(result).format({
     thousandSeparated: true,
     trimMantissa: true,
-    mantissa: 2
+    mantissa: 2,
+    ...props
   })
 }
 

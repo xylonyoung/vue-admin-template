@@ -142,8 +142,8 @@
 </template>
 <script>
 import buildEntityPath from '@/components/Base/buildEntityPath'
-import BaseTable from '@/components/Base/table'
-import BaseForm from '@/components/Base/form'
+import BaseTable from '@/components/Base/Table'
+import BaseForm from '@/components/Base/Form'
 import UploadValidator from '@/components/UploadValidator'
 import Transition from '@/components/Transition'
 import Querier from '@/components/Querier'

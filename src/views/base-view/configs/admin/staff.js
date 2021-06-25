@@ -1,24 +1,13 @@
 export default {
   tableConfig: [
     'id',
-    'appointments',
     'balance',
     'business',
-    'dinings',
     'name',
     'phone',
-    'status',
+    { property: 'status', type: 'status', status: ['a', 'b', 'c'] },
     'user'
   ],
 
-  formConfig: [
-    'appointments',
-    'balance',
-    'business',
-    'dinings',
-    'name',
-    'phone',
-    'status',
-    'user'
-  ]
+  formConfig: ['balance', 'business', 'name', 'phone', 'status', 'user']
 }

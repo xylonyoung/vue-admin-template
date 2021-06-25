@@ -2,8 +2,8 @@ import kebabCase from 'lodash.kebabcase'
 import pluralize from 'pluralize'
 
 export default function(entity) {
-  let anEntity = {}
-  anEntity.prefix = 'manage'
+  // set default prefix
+  let anEntity = { prefix: 'manage' }
 
   if (typeof entity === 'string') {
     anEntity.name = parseEntityName(entity)

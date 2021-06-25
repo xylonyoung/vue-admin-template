@@ -14,6 +14,7 @@
           <div v-if="item.component">
             <component :is="item.component" :data="row" />
           </div>
+
           <div v-else-if="dataType(item, 'image')">
             <el-image
               style="
@@ -39,14 +40,17 @@
             <el-tag v-if="row[propertyName(item)]" type="success">是</el-tag>
             <el-tag v-else type="danger">否</el-tag>
           </div>
+          <div v-else-if="dataType(item, 'status')">
+            {{ getStatus(row, item) }}
+          </div>
+          <div v-else-if="dataType(item, 'time')">
+            {{ $dateFormat(getString(row, item), 'H:m') }}
+          </div>
           <div v-else-if="dataType(item, 'date')">
-            {{ $dateFormat(getString(row, item)) }}
+            {{ $dateFormat(getString(row, item), 'YYYY/M/D') }}
           </div>
           <div v-else-if="dataType(item, 'datetime')">
             {{ $dateFormat(getString(row, item)) }}
-          </div>
-          <div v-else-if="dataType(item, 'decimal')">
-            {{ $numberFormat(getString(row, item)) }}
           </div>
           <div v-else>
             {{ getString(row, item) }}
@@ -83,6 +87,9 @@ export default {
       this.$refs.actions?.childNodes?.[0]?.scrollWidth + 24 + 'px'
   },
   methods: {
+    getStatus(row, item) {
+      return item.status[row[item.property]]
+    },
     getString(row, item) {
       const result = row[this.propertyName(item)]
       return result?.__toString ?? result
