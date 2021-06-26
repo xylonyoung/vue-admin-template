@@ -54,14 +54,20 @@
         />
       </template>
       <template v-else-if="dataType(item, 'integer')">
+        <el-input-number
+          v-model="data[propertyName(item)]"
+          :min="0"
+          :precision="0"
+        />
+      </template>
+      <template v-else-if="dataType(item, 'float')">
         <el-input-number v-model="data[propertyName(item)]" :min="0" />
       </template>
       <template v-else-if="dataType(item, 'decimal')">
         <el-input-number
           v-model="data[propertyName(item)]"
           :min="0"
-          :precision="2"
-          :step="0.01"
+          :precision="getEntityMetadata('scale') || 2"
         />
       </template>
       <template v-else-if="dataType(item, 'text')">
@@ -143,6 +149,16 @@ export default {
       selectValue: {}
     }
   },
+  watch: {
+    selectValue: {
+      handler(val) {
+        for (const key in val) {
+          this.data[key] = val[key]
+        }
+      },
+      deep: true
+    }
+  },
   mounted() {
     this.setSelectValue()
     this.setRules()
@@ -154,7 +170,7 @@ export default {
     setSelectValue() {
       for (const key in this.data) {
         const result = this.data[key]
-        if (result.id) this.selectValue[key] = result.id
+        if (result?.id) this.selectValue[key] = result.id
         if (Array.isArray(result)) {
           this.selectValue[key] = result.map((e) => e?.id ?? e)
         }

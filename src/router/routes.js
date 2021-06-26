@@ -1,6 +1,43 @@
 import { entityPrefix } from '@/settings'
 
-const userRoutes = []
+const userRoutes = [
+  {
+    path: 'appointment',
+    entity: 'Appointment',
+    title: '报餐管理',
+    icon: 'el-icon-edit-outline'
+  },
+  {
+    path: 'business',
+    entity: 'Business',
+    title: '企业管理',
+    icon: 'el-icon-office-building'
+  },
+  {
+    path: 'canteen',
+    entity: 'Canteen',
+    title: '饭堂管理',
+    icon: 'el-icon-s-shop'
+  },
+  {
+    path: 'dining',
+    entity: 'Dining',
+    title: '就餐管理',
+    icon: 'el-icon-knife-fork'
+  },
+  {
+    path: 'phase',
+    entity: 'Phase',
+    title: '餐类管理',
+    icon: 'el-icon-dish'
+  },
+  {
+    path: 'staff',
+    entity: 'Staff',
+    title: '员工管理',
+    icon: 'el-icon-s-custom'
+  }
+]
 
 const adminRoutes = [
   {
@@ -87,26 +124,28 @@ const baseRoutes = [
 export default mergeRoutes()
 
 function mergeRoutes() {
-  const resultOne = [...adminRoutes, ...baseRoutes].map(e => ({
+  const result = [...adminRoutes, ...baseRoutes].map(e => ({
     role: 'admin',
     ...e
   }))
 
-  const resultTwo = userRoutes.map(e => ({
+  return [...result, ...mixUserRoutes()]
+}
+
+function mixUserRoutes() {
+  const result = userRoutes.map(e => ({
     role: 'user',
     ...e,
     path: 'user-' + e.path
   }))
 
-  if (entityPrefix) {
-    return addPrefix(resultTwo)
-  }
-
-  return [...resultOne, ...resultTwo]
+  return addPrefix(result)
 }
 
-function addPrefix(arg) {
-  return arg.map(e => {
+function addPrefix(arr) {
+  const prefix = entityPrefix || 'api'
+
+  return arr.map(e => {
     const result = { ...e }
     if (result.children) {
       result.children = [...addPrefix(result.children)]
@@ -114,8 +153,8 @@ function addPrefix(arg) {
 
     if (result.entity) {
       result.entity = result.entity?.name
-        ? { entityPrefix, ...result.entity }
-        : { name: result.entity, entityPrefix }
+        ? { prefix, ...result.entity }
+        : { name: result.entity, prefix }
     }
 
     return result

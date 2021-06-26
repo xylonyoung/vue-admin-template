@@ -18,6 +18,10 @@ export default {
       const name = this.propertyName(item)
       return item.label ?? this.entity[name]?.translation ?? name
     },
+    getEntityMetadata(item, property) {
+      const name = this.propertyName(item)
+      return this.entity[name]?.metadata?.[property]
+    },
     dataType(item, type) {
       const name = this.propertyName(item)
       if (item.type) {

@@ -1,30 +1,25 @@
 <template>
   <div class="dashboard-container">
-    <div class="dashboard-text">name: {{ name }}</div>
+    <admin v-if="role === 'admin'" />
+    <user v-else />
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import Admin from './admin.vue'
+import User from './user.vue'
+import { getRole } from '@/utils/auth'
 
 export default {
   name: 'Dashboard',
-  computed: {
-    ...mapGetters([
-      'name'
-    ])
+  components: { Admin, User },
+  data() {
+    return {
+      role: getRole()
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.dashboard {
-  &-container {
-    margin: 30px;
-  }
-  &-text {
-    font-size: 30px;
-    line-height: 46px;
-  }
-}
 </style>

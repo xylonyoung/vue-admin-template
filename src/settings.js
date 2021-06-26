@@ -2,7 +2,8 @@ module.exports = {
   baseURL: 'http://47.106.118.125:8000/',
 
   // router just return userRoutes width entity prefix.
-  entityPrefix: '',
+  // default 'api'
+  entityPrefix: 'business',
 
   // pages need permission or not.
   // user must have permissions property.
