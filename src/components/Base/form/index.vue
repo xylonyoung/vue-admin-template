@@ -157,24 +157,42 @@ export default {
         }
       },
       deep: true
+    },
+    data: {
+      handler(val) {
+        if (Object.keys(val).length === 0) {
+          this.selectValue = {}
+        } else {
+          this.setSelectValue()
+        }
+      },
+      immediate: true
     }
   },
   mounted() {
-    this.setSelectValue()
     this.setRules()
     this.getOptions()
   },
+  beforeUpdate() {},
   methods: {
     Uploader,
     DynamicTags,
     setSelectValue() {
-      for (const key in this.data) {
-        const result = this.data[key]
-        if (result?.id) this.selectValue[key] = result.id
-        if (Array.isArray(result)) {
-          this.selectValue[key] = result.map((e) => e?.id ?? e)
+      this.config.forEach((e) => {
+        const property = this.propertyName(e)
+        const result = this.data[property]
+        if (result?.id) {
+          this.$set(this.selectValue, property, result.id)
+        } else if (Array.isArray(result)) {
+          this.$set(
+            this.selectValue,
+            property,
+            result.map((e) => e?.id ?? e)
+          )
+        } else {
+          this.$delete(this.selectValue, property)
         }
-      }
+      })
     },
     setRules() {
       this.config.forEach((e) => {

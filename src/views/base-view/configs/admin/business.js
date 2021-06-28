@@ -7,8 +7,11 @@ export default {
     'canMakeAppointmentHourBefore',
     'category',
     'contact',
+    'cover',
+    'departments',
     'description',
     'expiredTime',
+    'groups',
     'name',
     'phone',
     'user'

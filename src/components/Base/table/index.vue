@@ -83,10 +83,20 @@ export default {
     return { defaultProps: { stripe: true }, actionsWidth: '' }
   },
   updated() {
-    this.actionsWidth =
-      this.$refs.actions?.childNodes?.[0]?.scrollWidth + 24 + 'px'
+    this.calculateActionsWidth()
   },
   methods: {
+    calculateActionsWidth() {
+      const refs = { ...this.$refs.actions?.children?.[0]?.children }
+      const result = Object.keys(refs).reduce((acc, cur, index) => {
+        if (index) {
+          return acc + refs[cur].offsetWidth + 10
+        } else {
+          return acc + refs[cur].offsetWidth
+        }
+      }, 20)
+      this.actionsWidth = result + 'px'
+    },
     getStatus(row, item) {
       return item.status[row[item.property]]
     },
