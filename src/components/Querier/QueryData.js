@@ -28,7 +28,9 @@ export default class QueryData {
       result.push(aTempFunc.call(this, key, value, config))
     }
 
-    if (this.componentData) result.push(this.componentData)
+    for (const key in this.componentData) {
+      if (this.componentData[key]) result.push(this.componentData[key])
+    }
 
     return result.join(' && ') || ''
   }

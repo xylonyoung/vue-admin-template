@@ -54,21 +54,29 @@
             property: 'user.name'
           },
           {
-            type: 'component',
-            property: 'year',
             component: {
               props: ['data'],
               render(h) {
                 return (
                   <el-date-picker
                     style='width:100px'
-                    v-model={this.data.year}
-                    clearable
+                    v-model={this.year}
                     type='year'
                     value-format='yyyy'
                     placeholder='年份'
+                    onChange={}
                   ></el-date-picker>
                 )
+              },
+              data() {
+                return {
+                  year: ''
+                }
+              },
+              methods: {
+                onChange() {
+                  this.$emit('update:data', { ...this.data, year: this.year })
+                }
               }
             }
           }
@@ -85,14 +93,14 @@
 </script>
 ```
 
-## querierConfig item 参数
+## querierConfig item 参数配置
 
 ```js
 // 类型 input, comparison, switch, select, date, range, slot and component
 type: { type: String, required:true },
 
-// 搜索数据格式化函数 fuzzySearch, equalSearch, multiSearch, comparisonSearch
-// rangeSearch and dateSearch
+// 选择格式化函数 fuzzySearch, equalSearch, multiSearch, comparisonSearch
+// rangeSearch and dateSearch.  详见./QueryData.js
 formatFunc: { type: String},
 
 // 查询字段 just like Object syntax (e.g., object.key.key)
@@ -107,9 +115,14 @@ props: { type: Object },
 // select 选项 (type 为 select 必填)
 options: { type: Array },
 
-// 获取选项，并配置选项 
+// 获取选项，并配置选项
 // for select option (e.g., {api:'user', params, label:'name', value:'id'})
 getOptions: { type: Object },
+
+// 组件化 data双向绑定，而且不再使用 formatFunc 进行格式化
+component: { type: Object , props:['data'] },
+
+// 插槽 slot 的 func 是不使用 formatFunc 进行格式化
 ```
 
 ## 参考链接

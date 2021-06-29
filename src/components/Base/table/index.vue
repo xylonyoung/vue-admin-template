@@ -89,6 +89,7 @@ export default {
     calculateActionsWidth() {
       const refs = { ...this.$refs.actions?.children?.[0]?.children }
       const result = Object.keys(refs).reduce((acc, cur, index) => {
+        // set margin-left 10
         if (index) {
           return acc + refs[cur].offsetWidth + 10
         } else {

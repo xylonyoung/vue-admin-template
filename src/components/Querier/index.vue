@@ -68,15 +68,11 @@
         v-else-if="item.type === 'slot'"
         :name="item.property"
         :slotData="queryData"
-        :func="setQueryDataValue"
+        :func="setComponentData"
       />
 
       <template v-else-if="item.component">
-        <component
-          :is="item.component"
-          :data.sync="componentData"
-          :func="updateQuerierData"
-        />
+        <component :is="item.component" :data.sync="componentData" />
       </template>
     </div>
 
@@ -94,10 +90,17 @@ export default {
     querierConfig: { type: Array, default: () => [] }
   },
   data() {
-    return { queryData: {}, componentData: '' }
+    return { queryData: {}, componentData: {}}
   },
   watch: {
     queryData: {
+      handler() {
+        this.updateQuerierData()
+      },
+      deep: true,
+      immediate: true
+    },
+    componentData: {
       handler() {
         this.updateQuerierData()
       },
@@ -109,8 +112,8 @@ export default {
     this.checkConfig()
   },
   methods: {
-    setQueryDataValue(property, val) {
-      this.$set(this.queryData, property, val)
+    setComponentData(property, val) {
+      this.$set(this.componentData, property, val)
     },
     checkConfig() {
       let haveDefault = false

@@ -13,7 +13,7 @@ export function Region(property, props) {
                 style='width:60%'
                 v-model={this.region}
                 clearable
-                on-change={this.regionChange}
+                onChange={this.regionChange}
                 props={{
                   props: {
                     lazy: true,
@@ -48,7 +48,7 @@ export function Regions(property, props) {
                 style='width:60%'
                 v-model={this.region}
                 clearable
-                on-change={this.regionsChange}
+                onChange={this.regionsChange}
                 props={{
                   props: {
                     lazy: true,
@@ -71,7 +71,7 @@ export function Regions(property, props) {
                 <el-tag
                   style={style}
                   closable
-                  on-close={() => {
+                  onClose={() => {
                     this.data[property].splice(index, 1)
                   }}
                 >
@@ -101,7 +101,7 @@ export function UploadRegion(props) {
               style='width:60%'
               v-model={this.data.region}
               clearable
-              on-change={this.regionChange}
+              onChange={this.regionChange}
               props={{
                 props: {
                   lazy: true,
