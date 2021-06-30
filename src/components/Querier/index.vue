@@ -1,12 +1,13 @@
 <template>
   <div class="querier-container">
     <div v-for="(item, index) in querierConfig" :key="index" class="query-item">
-      <el-input
-        v-if="item.type === 'input'"
+      <el-checkbox
+        v-if="item.type === 'checkbox'"
         v-model="queryData[item.property]"
         v-bind="bindProps(item)"
-        @keyup.enter.native="confirm"
-      />
+      >
+        {{ item.label }}
+      </el-checkbox>
 
       <el-input
         v-else-if="item.type === 'comparison'"
@@ -24,6 +25,19 @@
         </el-select>
       </el-input>
 
+      <el-date-picker
+        v-else-if="item.type === 'date'"
+        v-model="queryData[item.property]"
+        v-bind="bindProps(item)"
+      />
+
+      <el-input
+        v-if="item.type === 'input'"
+        v-model="queryData[item.property]"
+        v-bind="bindProps(item)"
+        @keyup.enter.native="confirm"
+      />
+
       <div v-else-if="item.type === 'range'" class="rangeInput">
         <el-input
           v-model="queryData[item.property][0]"
@@ -37,12 +51,6 @@
           @keyup.enter.native="confirm"
         />
       </div>
-
-      <el-switch
-        v-else-if="item.type === 'switch'"
-        v-model="queryData[item.property]"
-        v-bind="bindProps(item)"
-      />
 
       <el-select
         v-else-if="item.type === 'select'"
@@ -58,8 +66,8 @@
         />
       </el-select>
 
-      <el-date-picker
-        v-else-if="item.type === 'date'"
+      <el-switch
+        v-else-if="item.type === 'switch'"
         v-model="queryData[item.property]"
         v-bind="bindProps(item)"
       />

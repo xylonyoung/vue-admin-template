@@ -3,17 +3,16 @@ export default class QueryData {
     this.queryData = queryData
     this.querierConfig = querierConfig
     this.componentData = componentData
+    this.typeFunc = {
+      comparison: 'comparisonSearch',
+      date: 'dateSearch',
+      input: 'fuzzySearch',
+      range: 'rangeSearch'
+    }
   }
 
   dataProcess() {
     const result = []
-
-    const typeFunc = {
-      input: 'fuzzySearch',
-      comparison: 'comparisonSearch',
-      range: 'rangeSearch',
-      date: 'dateSearch'
-    }
 
     for (const key in this.queryData) {
       const value = this.queryData[key]
@@ -23,7 +22,7 @@ export default class QueryData {
       const { type, formatFunc } = config
       const aTempFunc = formatFunc
         ? this[formatFunc]
-        : this[typeFunc[type]] ?? this.equalSearch
+        : this[this.typeFunc[type]] ?? this.equalSearch
 
       result.push(aTempFunc.call(this, key, value, config))
     }

@@ -53,6 +53,7 @@
         :is="item"
         v-for="(item, index) in topBarComponents"
         :key="index"
+        :data="tableData"
         @submit="formSubmit"
       />
     </el-row>
@@ -294,21 +295,21 @@ export default {
         this.$message.success('删除成功')
       })
     },
-    tableUpdate(type, arg) {
+    tableUpdate(type, param) {
       if (this.hasTodo) this.getTodo()
 
       if (type === 'post') {
-        this.tableData.unshift(arg)
+        this.tableData.unshift(param)
       }
 
       let index
       if (type === 'put') {
-        index = this.tableData.findIndex((e) => e.id === arg.id)
-        this.tableData.splice(index, 1, arg)
+        index = this.tableData.findIndex((e) => e.id === param.id)
+        this.tableData.splice(index, 1, param)
       }
 
       if (type === 'delete') {
-        index = this.tableData.findIndex((e) => e.id === arg)
+        index = this.tableData.findIndex((e) => e.id === param)
         this.tableData.splice(index, 1)
       }
     },
@@ -317,7 +318,7 @@ export default {
       for (const key in this.formData) {
         const prop = this.formData[key]
         // pass error data
-        if (!prop || !this.formConfig.some((e) => (e.property ?? e) === key)) {
+        if (prop ?? !this.formConfig.some((e) => (e.property ?? e) === key)) {
           continue
         }
         // object modify to id only

@@ -7,17 +7,15 @@ const roles = [
 
 const formConfig = [
   'username',
-  { property: 'plainPassword', label: '密码' },
+  'plainPassword',
   {
     property: 'enabled',
     type: 'boolean',
-    default: true,
-    label: '是否启用'
+    default: true
   },
   // {
   //   property: 'permissions',
   //   default: [],
-  //   label: '访问权限' },
   //   component: {
   //     props: ['form'],
   //     render(h) {
@@ -35,7 +33,6 @@ const formConfig = [
   {
     property: 'roles',
     default: [],
-    label: '用户权限',
     component: {
       props: ['data'],
       render(h) {
@@ -72,7 +69,6 @@ export default {
     'username',
     // {
     //   property: 'permissions',
-    //   label: '访问权限',
     //   component: {
     //     props: ['data'],
     //     render(h) {
@@ -88,7 +84,6 @@ export default {
     // },
     {
       property: 'roles',
-      label: '用户权限',
       component: {
         props: ['data'],
         render(h) {
@@ -106,7 +101,7 @@ export default {
         }
       }
     },
-    { property: 'enabled', type: 'boolean', label: '是否启用' },
+    { property: 'enabled', type: 'boolean' },
     'createdTime'
   ],
 

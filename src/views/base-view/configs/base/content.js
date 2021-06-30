@@ -8,7 +8,7 @@ export default {
     { property: 'cover', type: 'image' },
     'category',
     'title',
-    { property: 'enabled', label: '是否启用', type: 'boolean' },
+    { property: 'enabled', type: 'boolean' },
     'createdTime'
   ],
 
@@ -18,7 +18,6 @@ export default {
     { property: 'cover', type: 'image' },
     {
       property: 'enabled',
-      label: '是否启用',
       type: 'boolean'
     },
     { property: 'content', type: 'textarea' }

@@ -1,7 +1,15 @@
 import Select from '../../components/Select'
+import { CANTEEN_STATUS, constantForSelect } from '../../constants'
 
 export default {
-  tableConfig: ['id', 'name', 'no', 'contact', 'phone', 'status'],
+  tableConfig: [
+    'id',
+    'name',
+    'no',
+    'contact',
+    'phone',
+    { property: 'status', type: 'status', status: CANTEEN_STATUS }
+  ],
 
   formConfig: [
     'business',
@@ -12,10 +20,14 @@ export default {
     {
       property: 'phases',
       option: 'phases',
-      component: Select('phases', 'phases', { multiple: true })
+      component: Select({ props: { multiple: true }})
     },
     'phone',
-    'status',
+    {
+      property: 'status',
+      options: constantForSelect(CANTEEN_STATUS),
+      component: Select()
+    },
     'user'
   ]
 }

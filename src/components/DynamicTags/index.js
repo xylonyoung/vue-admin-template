@@ -1,7 +1,8 @@
-export default function(property) {
+export default function(param) {
   return {
-    props: ['data'],
+    props: ['data', 'property'],
     render(h) {
+      this.property = param?.property ?? this.property
       return (
         <div>
           {this.inputVisible ? (
@@ -50,12 +51,12 @@ export default function(property) {
     },
     watch: {
       dynamicTags(val) {
-        this.data[property] = val
+        this.data[this.property] = val
       }
     },
     created() {
-      if (this.data[property]) {
-        this.dynamicTags = [...this.data[property]]
+      if (this.data[this.property]) {
+        this.dynamicTags = [...this.data[this.property]]
       }
     },
     methods: {

@@ -1,3 +1,6 @@
+import { STAFF_STATUS, constantForSelect } from '../../constants'
+import Select from '../../components/Select'
+
 export default {
   tableConfig: [
     'id',
@@ -5,9 +8,20 @@ export default {
     'business',
     'name',
     'phone',
-    { property: 'status', type: 'status', status: ['状态0', '状态1', '状态2'] },
+    { property: 'status', type: 'status', status: STAFF_STATUS },
     'user'
   ],
 
-  formConfig: ['balance', 'business', 'name', 'phone', 'status', 'user']
+  formConfig: [
+    'balance',
+    'business',
+    'name',
+    'phone',
+    {
+      property: 'status',
+      options: constantForSelect(STAFF_STATUS),
+      component: Select()
+    },
+    'user'
+  ]
 }

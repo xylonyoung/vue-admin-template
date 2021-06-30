@@ -10,9 +10,15 @@
         v-bind="item.props"
         v-on="item.events"
       >
-        <template slot-scope="{ row }">
+        <template slot-scope="{ row, $index }">
           <div v-if="item.component">
-            <component :is="item.component" :data="row" />
+            <component
+              :is="item.component"
+              :data="row"
+              :index="$index"
+              :table-data="data"
+              :property="item.property"
+            />
           </div>
 
           <div v-else-if="dataType(item, 'image')">

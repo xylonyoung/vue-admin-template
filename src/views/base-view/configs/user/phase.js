@@ -1,5 +1,5 @@
 export default {
-  tableConfig: ['id', 'business', 'name', 'startTime', 'endTime'],
+  tableConfig: ['id', 'name', 'startTime', 'endTime'],
 
-  formConfig: ['business', 'name', 'startTime', 'endTime']
+  formConfig: ['name', 'startTime', 'endTime']
 }

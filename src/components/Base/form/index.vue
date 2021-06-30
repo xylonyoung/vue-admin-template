@@ -5,6 +5,7 @@
     :rules="rules"
     v-bind="mixedProps"
     v-on="events"
+    @submit.native.prevent
   >
     <el-form-item
       v-for="(item, index) in config"
@@ -15,14 +16,20 @@
       v-on="item.events"
     >
       <template v-if="item.component">
-        <component :is="item.component" :data="data" :options="options" />
+        <component
+          :is="item.component"
+          :data="data"
+          :options="options"
+          :property="item.property"
+        />
       </template>
 
       <template v-else-if="dataType(item, 'upload')">
+        <!-- TODO -->
         <component :is="Uploader(item.config)" :data="data" />
       </template>
       <template v-else-if="dataType(item, 'array')">
-        <component :is="DynamicTags(propertyName(item))" :data="data" />
+        <component :is="DynamicTags()" :data="data" :property="propertyName(item)" />
       </template>
       <template v-else-if="dataType(item, 'boolean')">
         <el-switch
@@ -43,6 +50,7 @@
         <el-date-picker
           v-model="data[propertyName(item)]"
           type="date"
+          value-format="yyyy-MM-dd"
           placeholder="选择日期"
         />
       </template>
@@ -50,6 +58,7 @@
         <el-date-picker
           v-model="data[propertyName(item)]"
           type="datetime"
+          value-format="yyyy-MM-dd HH:mm"
           placeholder="选择日期时间"
         />
       </template>
@@ -134,6 +143,8 @@ import Uploader from '@/components/Uploader'
 import buildEntityPath from '../buildEntityPath'
 import Tinymce from '@/components/Tinymce'
 import DynamicTags from '@/components/DynamicTags'
+import { entityPrefix } from '@/settings'
+import { getRole } from '@/utils/auth'
 
 export default {
   components: { Tinymce },
@@ -149,29 +160,30 @@ export default {
       selectValue: {}
     }
   },
-  watch: {
-    selectValue: {
-      handler(val) {
-        for (const key in val) {
-          this.data[key] = val[key]
-        }
-      },
-      deep: true
-    },
-    data: {
-      handler(val) {
-        if (Object.keys(val).length === 0) {
-          this.selectValue = {}
-        } else {
-          this.setSelectValue()
-        }
-      },
-      immediate: true
-    }
-  },
-  mounted() {
+  // watch: {
+  //   selectValue: {
+  //     handler(val) {
+  //       for (const key in val) {
+  //         this.data[key] = val[key]
+  //       }
+  //     },
+  //     deep: true
+  //   },
+  //   data: {
+  //     handler(val) {
+  //       if (Object.keys(val).length === 0) {
+  //         this.selectValue = {}
+  //       } else {
+  //         this.setSelectValue()
+  //       }
+  //     },
+  //     immediate: true
+  //   }
+  // },
+  created() {
     this.setRules()
     this.getOptions()
+    this.setSelectValue()
   },
   beforeUpdate() {},
   methods: {
@@ -213,8 +225,14 @@ export default {
     getOptions() {
       this.config.forEach((e) => {
         const propertyName = this.propertyName(e)
+        if (e.options) {
+          this.$set(this.options, propertyName, e.options)
+          return
+        }
+
         if (e.option) {
           getOptionData.call(this, propertyName, e.option)
+          return
         }
 
         if (needOption.call(this, propertyName)) {
@@ -227,8 +245,13 @@ export default {
       })
 
       function getOptionData(propertyName, entity) {
+        const anEntity = { name: entity }
+        if (getRole() !== 'admin' && entityPrefix) {
+          anEntity.prefix = entityPrefix
+        }
+
         this.$api
-          .get(buildEntityPath(entity), {
+          .get(buildEntityPath(anEntity), {
             params: { '@display': 'reduce' }
           })
           .then((res) => {
@@ -255,6 +278,12 @@ export default {
     submitForm() {
       this.$refs.form.validate((valid) => {
         if (valid) {
+          // merge selectValue to data
+          for (const key in this.selectValue) {
+            if (this.selectValue[key]) {
+              this.data[key] = this.selectValue[key]
+            }
+          }
           this.$emit('submit')
         } else {
           this.$message.error('表单输入有误！')

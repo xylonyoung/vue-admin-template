@@ -161,7 +161,7 @@ export default {
       }
 
       const waitPromise = []
-      postList.forEach(async (e) => {
+      postList.forEach(async(e) => {
         waitPromise.push(
           await this.$api.post(`${this.apiPrefix + e}/do/${transition}`, data)
         )

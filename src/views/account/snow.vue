@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <div v-for="item in 200" :key="item" class="snow" />
+    <div v-for="item in 88" :key="item" class="snow" />
   </div>
 </template>
 <style lang="scss" scoped>
@@ -23,7 +23,7 @@
 }
 
 .snow {
-  $total: 200; //max div to create
+  $total: 256; //max div to create
   position: absolute;
   width: 10px;
   height: 10px;

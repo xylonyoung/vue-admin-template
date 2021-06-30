@@ -1,44 +1,5 @@
 import { entityPrefix } from '@/settings'
 
-const userRoutes = [
-  {
-    path: 'appointment',
-    entity: 'Appointment',
-    title: '报餐管理',
-    icon: 'el-icon-edit-outline'
-  },
-  {
-    path: 'business',
-    entity: 'Business',
-    title: '企业管理',
-    icon: 'el-icon-office-building'
-  },
-  {
-    path: 'canteen',
-    entity: 'Canteen',
-    title: '饭堂管理',
-    icon: 'el-icon-s-shop'
-  },
-  {
-    path: 'dining',
-    entity: 'Dining',
-    title: '就餐管理',
-    icon: 'el-icon-knife-fork'
-  },
-  {
-    path: 'phase',
-    entity: 'Phase',
-    title: '餐类管理',
-    icon: 'el-icon-dish'
-  },
-  {
-    path: 'staff',
-    entity: 'Staff',
-    title: '员工管理',
-    icon: 'el-icon-s-custom'
-  }
-]
-
 const adminRoutes = [
   {
     path: 'appointment',
@@ -115,24 +76,63 @@ const baseRoutes = [
     icon: 'el-icon-setting',
     children: [
       { path: 'type', entity: 'Type', title: '类型' },
-      { path: 'category', entity: 'Category', title: '分类' },
-      { path: 'option', entity: 'Option', title: '配置' }
+      { path: 'category', entity: 'Category', title: '分类' }
+      // ,{ path: 'option', entity: 'Option', title: '配置' }
     ]
+  }
+]
+
+const userRoutes = [
+  {
+    path: 'appointment',
+    entity: 'Appointment',
+    title: '报餐管理',
+    icon: 'el-icon-edit-outline'
+  },
+  {
+    path: 'business',
+    component: import('@/views/business'),
+    title: '企业管理',
+    icon: 'el-icon-office-building'
+  },
+  {
+    path: 'canteen',
+    entity: 'Canteen',
+    title: '饭堂管理',
+    icon: 'el-icon-s-shop'
+  },
+  {
+    path: 'dining',
+    entity: 'Dining',
+    title: '就餐管理',
+    icon: 'el-icon-knife-fork'
+  },
+  {
+    path: 'phase',
+    entity: 'Phase',
+    title: '餐类管理',
+    icon: 'el-icon-dish'
+  },
+  {
+    path: 'staff',
+    entity: 'Staff',
+    title: '员工管理',
+    icon: 'el-icon-s-custom'
   }
 ]
 
 export default mergeRoutes()
 
 function mergeRoutes() {
-  const result = [...adminRoutes, ...baseRoutes].map(e => ({
+  const adminRoutesModify = [...adminRoutes, ...baseRoutes].map(e => ({
     role: 'admin',
     ...e
   }))
 
-  return [...result, ...mixUserRoutes()]
+  return [...adminRoutesModify, ...userRoutesModify()]
 }
 
-function mixUserRoutes() {
+function userRoutesModify() {
   const result = userRoutes.map(e => ({
     role: 'user',
     ...e,

@@ -35,16 +35,16 @@ export function getImage(image) {
 /**
  * get the value in Object or Array
  * key include "." to separate
- * @param {Object | Array} arg
+ * @param {Object | Array} param
  * @param {String} key
  * @returns {String | null}
  */
-export function getValue(arg, prop) {
-  if (typeof arg !== 'object' || typeof prop !== 'string') return null
+export function getValue(param, prop) {
+  if (typeof param !== 'object' || typeof prop !== 'string') return null
 
   const keys = prop.split('.')
 
-  let result = arg
+  let result = param
 
   for (const key of keys) {
     result = result?.[key]
