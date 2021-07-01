@@ -14,9 +14,9 @@
           <div v-if="item.component">
             <component
               :is="item.component"
-              :data="row"
+              :row="row"
               :index="$index"
-              :table-data="data"
+              :data.sync="data"
               :property="item.property"
             />
           </div>
@@ -94,14 +94,16 @@ export default {
   methods: {
     calculateActionsWidth() {
       const refs = { ...this.$refs.actions?.children?.[0]?.children }
-      const result = Object.keys(refs).reduce((acc, cur, index) => {
+      const keys = Object.keys(refs)
+      const defaultPadding = keys.length === 0 ? 50 : 20
+      const result = keys.reduce((acc, cur, index) => {
         // set margin-left 10
         if (index) {
           return acc + refs[cur].offsetWidth + 10
         } else {
           return acc + refs[cur].offsetWidth
         }
-      }, 20)
+      }, defaultPadding)
       this.actionsWidth = result + 'px'
     },
     getStatus(row, item) {

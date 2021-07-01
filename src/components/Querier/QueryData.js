@@ -13,7 +13,6 @@ export default class QueryData {
 
   dataProcess() {
     const result = []
-
     for (const key in this.queryData) {
       const value = this.queryData[key]
       if (value === undefined || value === '') continue

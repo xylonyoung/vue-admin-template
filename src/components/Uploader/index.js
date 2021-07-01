@@ -1,13 +1,13 @@
 import { buildFullPath } from '@/utils/utils'
 import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
 
-export default function(params) {
+export default function(param) {
   /**
    * @param {string} [dataType = 'array'] value array or string
    * @param {string} [fileType = 'image'] value see below fileType
    * @param {number} [limit = 0] file limit
    */
-  const config = { dataType: 'array', fileType: 'image', limit: 0, ...params }
+  const config = { dataType: 'array', fileType: 'image', limit: 0, ...param }
 
   const FILE_TYPE_NAME = {
     image: 'jpg / png',
@@ -36,7 +36,7 @@ export default function(params) {
   }
 
   return {
-    props: ['data'],
+    props: ['value'],
     components: { ElImageViewer },
     render(h) {
       return (
@@ -78,15 +78,15 @@ export default function(params) {
     },
     computed: {
       fileList() {
-        if (!this.data) return []
+        if (!this.value) return []
 
         const result = []
         if (config.dataType === 'array') {
-          this.data.forEach(e => {
+          this.value.forEach(e => {
             result.push(this.aImageUrl(e))
           })
         } else {
-          result.push(this.aImageUrl(this.data))
+          result.push(this.aImageUrl(this.value))
         }
 
         return result
@@ -122,22 +122,22 @@ export default function(params) {
       onRemove(file, fileList) {
         if (config.dataType === 'array') {
           this.$emit(
-            'update:data',
+            'input',
             fileList.map(e => e.name)
           )
         } else {
-          this.$emit('update:data', '')
+          this.$emit('input', '')
         }
       },
       onSuccess(response) {
         if (config.dataType === 'array') {
-          if (this.data) {
-            this.$emit('update:data', [...this.data, response.data[0]])
+          if (this.value) {
+            this.$emit('input', [...this.value, response.data[0]])
           } else {
-            this.$emit('update:data', [response.data[0]])
+            this.$emit('input', [response.data[0]])
           }
         } else {
-          this.$emit('update:data', response.data[0])
+          this.$emit('input', response.data[0])
         }
       },
       beforeUpload(file) {

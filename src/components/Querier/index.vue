@@ -98,24 +98,24 @@ export default {
     querierConfig: { type: Array, default: () => [] }
   },
   data() {
-    return { queryData: {}, componentData: {}}
+    return { queryData: {}, componentData: {} }
   },
-  watch: {
-    queryData: {
-      handler() {
-        this.updateQuerierData()
-      },
-      deep: true,
-      immediate: true
-    },
-    componentData: {
-      handler() {
-        this.updateQuerierData()
-      },
-      deep: true,
-      immediate: true
-    }
-  },
+  // watch: {
+  //   queryData: {
+  //     handler() {
+  //       this.updateQuerierData()
+  //     },
+  //     deep: true,
+  //     immediate: true
+  //   },
+  //   componentData: {
+  //     handler() {
+  //       this.updateQuerierData()
+  //     },
+  //     deep: true,
+  //     immediate: true
+  //   }
+  // },
   created() {
     this.checkConfig()
   },
@@ -135,16 +135,15 @@ export default {
           const { getOptions } = e
           const params = getOptions.params ?? ''
           this.$api(getOptions.api, { params }).then((res) => {
-            this.$set(
-              this.querierConfig[index],
-              'options',
-              res.data.map((i) => {
-                return {
-                  label: i[getOptions.label],
-                  value: i[getOptions.value]
-                }
-              })
-            )
+            const result = getOptions.formatFunc
+              ? getOptions.formatFunc(res.data)
+              : res.data.map((i) => {
+                  return {
+                    label: i[getOptions.label],
+                    value: i[getOptions.value]
+                  }
+                })
+            this.$set(this.querierConfig[index], 'options', result)
           })
         }
         if (e.type === 'comparison') {
@@ -208,9 +207,8 @@ export default {
       }
     },
     confirm() {
-      this.$nextTick(() => {
-        this.$emit('confirm')
-      })
+      this.updateQuerierData()
+      this.$emit('confirm')
     },
     updateQuerierData() {
       const result = new QueryData(

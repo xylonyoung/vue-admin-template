@@ -5,21 +5,18 @@ export default {
 
   tableConfig: [
     'id',
-    { property: 'cover', type: 'image' },
-    'category',
     'title',
     { property: 'enabled', type: 'boolean' },
-    'createdTime'
+    'content'
   ],
 
   formConfig: [
     'title',
-    'category',
-    { property: 'cover', type: 'upload' },
     {
       property: 'enabled',
-      type: 'boolean'
+      type: 'boolean',
+      default: true
     },
-    { property: 'content', type: 'textarea' }
+    'content'
   ]
 }

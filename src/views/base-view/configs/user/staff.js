@@ -1,9 +1,26 @@
 import { STAFF_STATUS, constantForSelect } from '../../constants'
 import Select from '../../components/Select'
+import querierConfigs from '../../utils/querier-configs'
 
 export default {
+  querierConfig: [
+    {
+      type: 'input',
+      property: 'phone',
+      props: { placeholder: '请输入电话号码' }
+    },
+    {
+      type: 'input',
+      property: 'name',
+      props: { placeholder: '请输入员工名字' }
+    },
+    ...querierConfigs
+  ],
+
   tableConfig: [
     'id',
+    'department',
+    'group',
     'balance',
     'name',
     'phone',
@@ -12,7 +29,7 @@ export default {
     {
       label: '解绑用户',
       component: {
-        props: ['tableData', 'data', 'index'],
+        props: ['data', 'row', 'index'],
         render(h) {
           return (
             <el-popconfirm
@@ -32,9 +49,9 @@ export default {
         methods: {
           unbindUser() {
             this.$api
-              .put(`/business/staffs/${this.data.id}`, { user: null })
+              .put(`/business/staffs/${this.row.id}`, { user: null })
               .then(res => {
-                this.$set(this.tableData, this.index, res.data)
+                this.$set(this.data, this.index, res.data)
               })
           }
         }
@@ -43,6 +60,14 @@ export default {
   ],
 
   formConfig: [
+    {
+      property: 'department',
+      component: businessSelect()
+    },
+    {
+      property: 'group',
+      component: businessSelect()
+    },
     'balance',
     'name',
     'phone',
@@ -52,4 +77,43 @@ export default {
       component: Select()
     }
   ]
+}
+
+function businessSelect() {
+  return {
+    props: ['data', 'property'],
+    render(h) {
+      return (
+        <el-select
+          v-model={this.data[this.property]}
+          v-loading={this.loading}
+          props={{
+            placeholder: '请选择',
+            clearable: true,
+            filterable: true
+          }}
+        >
+          {this.options?.map(e => (
+            <el-option label={e.label} value={e.value} />
+          ))}
+        </el-select>
+      )
+    },
+    data() {
+      return {
+        options: [],
+        loading: true
+      }
+    },
+    created() {
+      this.$api.get('/business/businesses').then(res => {
+        this.loading = false
+        const property = this.property + 's'
+        this.options = res?.data?.[property]?.map(e => ({
+          label: e,
+          value: e
+        }))
+      })
+    }
+  }
 }

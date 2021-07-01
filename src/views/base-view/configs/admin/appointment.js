@@ -1,5 +1,5 @@
 export default {
-  tableConfig: ['id', 'date', 'canteen', 'phase', 'staff'],
+  tableConfig: ['id', 'canteen', 'date', 'phase', 'staff'],
 
   formConfig: ['canteen', 'date', 'phase', 'staff']
 }

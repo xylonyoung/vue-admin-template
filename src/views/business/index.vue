@@ -15,8 +15,10 @@ export default {
     return {
       formData: {},
       formConfig: [
-        { property: 'departments', label: '部门', type: 'array' },
-        { property: 'groups', label: '组别', type: 'array' }
+        'canCancelAppointmentHourBefore',
+        'canMakeAppointmentHourBefore',
+        { property: 'departments', type: 'array' },
+        { property: 'groups', type: 'array' }
       ]
     }
   },
@@ -43,7 +45,8 @@ export default {
 }
 </script>
 <style lang='scss' scoped>
-.business-container{
+.business-container {
+  width: 640px;
   padding: 48px;
 }
 </style>

@@ -39,21 +39,21 @@
         :upload-func="uploadValidator.uploadFunc"
         :download-func="uploadValidator.downloadFunc"
         :component="uploadValidator.component"
-        @success="getTableData()"
+        @success="resetTableData()"
       />
 
       <querier
         v-model="queryData"
         style="margin-left: 10px"
         :querier-config="querierConfig"
-        @confirm="getTableData()"
+        @confirm="resetTableData()"
       />
 
       <component
         :is="item"
         v-for="(item, index) in topBarComponents"
         :key="index"
-        :data="tableData"
+        v-model="tableData"
         @submit="formSubmit"
       />
     </el-row>
@@ -61,7 +61,7 @@
     <el-row>
       <base-table
         v-loading="tableLoading"
-        :data="tableData"
+        :data.sync="tableData"
         :entity="entityData"
         :config="tableConfig"
         :props="tableProps"
@@ -195,9 +195,12 @@ export default {
       'entity/getEntity',
       this.entity
     )
-    this.getTableData()
   },
   methods: {
+    resetTableData() {
+      this.tableQueryProcessed = { ...this.tableQuery, ...this.mergeFilter() }
+      this.getTableData()
+    },
     getTableData() {
       this.tableLoading = true
       const params = { ...this.tableQueryProcessed }
@@ -232,9 +235,10 @@ export default {
         ...this.tableEvents,
         'selection-change': this.handleSelectionChange
       }
-      this.tableQueryProcessed = { ...this.tableQuery, ...this.mergeFilter() }
 
       if (this.hasTodo) this.getTodo()
+
+      this.resetTableData()
     },
     mergeFilter() {
       const queryList = []
@@ -317,18 +321,11 @@ export default {
       const data = {}
       for (const key in this.formData) {
         const prop = this.formData[key]
-        // pass error data
-        if (prop ?? !this.formConfig.some((e) => (e.property ?? e) === key)) {
-          continue
-        }
-        // object modify to id only
-        if (prop.id) {
-          data[key] = prop.id
-          continue
-        }
-        // array modify and filter error data
-        if (Array.isArray(prop)) {
-          data[key] = prop.map((e) => e.id ?? e).filter((e) => e)
+        // skip the property which is not in the config
+        if (
+          prop === undefined ||
+          !this.formConfig.some((e) => (e.property ?? e) === key)
+        ) {
           continue
         }
 
@@ -361,14 +358,6 @@ export default {
           formConfigProcessed = [...this.formConfigForCreate]
         }
       }
-
-      // set default value of the form
-      formConfigProcessed.forEach((e) => {
-        const name = e.property ?? e
-        if (e.default && !formData[name]) {
-          formData[name] = e.default
-        }
-      })
 
       this.formData = formData
       this.formConfigProcessed = formConfigProcessed

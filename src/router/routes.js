@@ -92,7 +92,7 @@ const userRoutes = [
   {
     path: 'business',
     component: import('@/views/business'),
-    title: '企业管理',
+    title: '企业设置',
     icon: 'el-icon-office-building'
   },
   {
@@ -118,6 +118,18 @@ const userRoutes = [
     entity: 'Staff',
     title: '员工管理',
     icon: 'el-icon-s-custom'
+  },
+  {
+    path: 'content',
+    entity: 'Content',
+    title: '内容管理',
+    icon: 'el-icon-document'
+  },
+  {
+    path: 'album',
+    entity: 'Album',
+    title: '相册管理',
+    icon: 'el-icon-picture'
   }
 ]
 

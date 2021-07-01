@@ -19,7 +19,7 @@ export default {
     {
       property: 'phases',
       option: 'phases',
-      component: Select({ props: { multiple: true } })
+      component: Select({ props: { multiple: true }})
     },
     'phone',
     {

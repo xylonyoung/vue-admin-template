@@ -18,18 +18,21 @@
       <template v-if="item.component">
         <component
           :is="item.component"
-          :data="data"
+          v-model="data[propertyName(item)]"
+          :data.sync="data"
           :options="options"
           :property="item.property"
         />
       </template>
 
       <template v-else-if="dataType(item, 'upload')">
-        <!-- TODO -->
-        <component :is="Uploader(item.config)" :data="data" />
+        <component
+          :is="Uploader(item.config)"
+          v-model="data[propertyName(item)]"
+        />
       </template>
       <template v-else-if="dataType(item, 'array')">
-        <component :is="DynamicTags()" :data="data" :property="propertyName(item)" />
+        <component :is="DynamicTags()" v-model="data[propertyName(item)]" />
       </template>
       <template v-else-if="dataType(item, 'boolean')">
         <el-switch
@@ -160,65 +163,42 @@ export default {
       selectValue: {}
     }
   },
-  // watch: {
-  //   selectValue: {
-  //     handler(val) {
-  //       for (const key in val) {
-  //         this.data[key] = val[key]
-  //       }
-  //     },
-  //     deep: true
-  //   },
-  //   data: {
-  //     handler(val) {
-  //       if (Object.keys(val).length === 0) {
-  //         this.selectValue = {}
-  //       } else {
-  //         this.setSelectValue()
-  //       }
-  //     },
-  //     immediate: true
-  //   }
-  // },
   created() {
-    this.setRules()
+    this.setConfig()
     this.getOptions()
-    this.setSelectValue()
   },
-  beforeUpdate() {},
   methods: {
     Uploader,
     DynamicTags,
-    setSelectValue() {
+    setConfig() {
       this.config.forEach((e) => {
         const property = this.propertyName(e)
-        const result = this.data[property]
-        if (result?.id) {
-          this.$set(this.selectValue, property, result.id)
-        } else if (Array.isArray(result)) {
+        const value = this.data[property]
+        // set selectValue
+        if (value?.id) {
+          this.$set(this.selectValue, property, value.id)
+        } else if (Array.isArray(value)) {
           this.$set(
             this.selectValue,
             property,
-            result.map((e) => e?.id ?? e)
+            value.map((e) => e?.id ?? e)
           )
-        } else {
-          this.$delete(this.selectValue, property)
         }
-      })
-    },
-    setRules() {
-      this.config.forEach((e) => {
-        const name = this.propertyName(e)
+        // set rules
         if (e.rule) {
-          this.rules[name] = e.rule
-        } else if (this.entity[name]?.metadata?.nullable === false) {
-          this.rules[name] = [
+          this.rules[property] = e.rule
+        } else if (this.entity[property]?.metadata?.nullable === false) {
+          this.rules[property] = [
             {
               required: true,
               message: '请输入此项',
               trigger: ['blur', 'change']
             }
           ]
+        }
+        // set default
+        if (e.default) {
+          this.data[property] ??= e.default
         }
       })
     },

@@ -1,8 +1,7 @@
 export default function(param) {
   return {
-    props: ['data', 'property'],
+    props: ['value'],
     render(h) {
-      this.property = param?.property ?? this.property
       return (
         <div>
           {this.inputVisible ? (
@@ -49,33 +48,33 @@ export default function(param) {
         inputValue: ''
       }
     },
-    watch: {
-      dynamicTags(val) {
-        this.data[this.property] = val
-      }
-    },
     created() {
-      if (this.data[this.property]) {
-        this.dynamicTags = [...this.data[this.property]]
+      if (this.value) {
+        this.dynamicTags = [...this.value]
       }
     },
     methods: {
+      updateValue() {
+        this.$emit('input', this.dynamicTags)
+      },
       handleClose(index) {
         this.dynamicTags.splice(index, 1)
+        this.updateValue()
+      },
+      handleInputConfirm() {
+        const inputValue = this.inputValue
+        if (inputValue) {
+          this.dynamicTags.push(inputValue)
+          this.updateValue()
+        }
+        this.inputVisible = false
+        this.inputValue = ''
       },
       showInput() {
         this.inputVisible = true
         this.$nextTick(() => {
           this.$refs.saveTagInput.$refs.input.focus()
         })
-      },
-      handleInputConfirm() {
-        const inputValue = this.inputValue
-        if (inputValue) {
-          this.dynamicTags.push(inputValue)
-        }
-        this.inputVisible = false
-        this.inputValue = ''
       }
     }
   }
