@@ -38,6 +38,7 @@
         :rules="uploadValidator.rules"
         :upload-func="uploadValidator.uploadFunc"
         :download-func="uploadValidator.downloadFunc"
+        :created-func="uploadValidator.createdFunc"
         :component="uploadValidator.component"
         @success="resetTableData()"
       />
@@ -51,7 +52,7 @@
 
       <component
         :is="item"
-        v-for="(item, index) in topBarComponents"
+        v-for="(item, index) in components"
         :key="index"
         v-model="tableData"
         @submit="formSubmit"
@@ -181,7 +182,7 @@ export default {
       downloadConfig: null,
       uploadVisible: false,
       uploadValidator: null,
-      topBarComponents: []
+      components: []
     }
   },
   computed: {

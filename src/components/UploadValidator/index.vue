@@ -75,6 +75,7 @@ export default {
     rules: { type: Object, default: () => ({}) },
     uploadFunc: { type: Function, required: true },
     downloadFunc: { type: Function, default: undefined },
+    createdFunc: { type: Function, default: undefined },
     component: { type: Object, default: undefined }
   },
   data() {
@@ -108,6 +109,11 @@ export default {
         })
       }
       return errorTableData
+    }
+  },
+  created() {
+    if (this.createdFunc) {
+      this.createdFunc()
     }
   },
   methods: {
@@ -166,12 +172,13 @@ export default {
             this.$emit('success')
             this.handleClose()
           })
-          .catch(() => {
+          .catch((error) => {
             this.$message.error({
               showClose: true,
               message: '导入失败, 请重新上传!',
               duration: 0
             })
+            console.error(error)
           })
         this.uploadLoading = false
       }

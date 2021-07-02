@@ -61,7 +61,7 @@ export default {
   // 使用代办列表
   hasTodo: { type: Boolean, default: false },
   // 顶部组件
-  topBarComponents: { type: Array }
+  components: { type: Array }
 }
 // 基本例子
 export default {
@@ -149,8 +149,8 @@ export default {
           .then(() => {
             resolve()
           })
-          .catch(() => {
-            reject()
+          .catch((error) => {
+            reject(error)
           })
       })
     }

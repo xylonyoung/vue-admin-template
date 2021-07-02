@@ -1,6 +1,7 @@
 import { STAFF_STATUS, constantForSelect } from '../../constants'
 import Select from '../../components/Select'
 import querierConfigs from '../../utils/querier-configs'
+import { forIn } from 'lodash'
 
 export default {
   querierConfig: [
@@ -76,7 +77,135 @@ export default {
       options: constantForSelect(STAFF_STATUS),
       component: Select()
     }
-  ]
+  ],
+
+  downloadConfig: {
+    api: '/business/staffs',
+    filename: '员工',
+    tHeader: ['ID', '部门', '组别', '资金', '名称', '电话', '状态', '用户'],
+    filterVal: [
+      'id',
+      'department',
+      'group',
+      'balance',
+      'name',
+      'phone',
+      'status',
+      'user'
+    ],
+    formatFunc(filterVal, jsonData) {
+      return jsonData.map(v =>
+        filterVal.map(j => {
+          switch (j) {
+            case 'status':
+              return STAFF_STATUS[v[j]]
+            default:
+              return v[j]?.__toString ?? v[j]
+          }
+        })
+      )
+    }
+  },
+
+  uploadValidator: {
+    title: '导入员工',
+    filename: '员工模板',
+    fields: {
+      id: 'ID',
+      department: '部门',
+      group: '组别',
+      balance: '资金',
+      name: '名称',
+      phone: '电话',
+      status: '状态',
+      user: '用户'
+    },
+    rules: {
+      id: [
+        { type: 'number', message: 'ID必须为数字' },
+        {
+          validator: (rule, value, callback) => {
+            if (value >= 0 && Number.isInteger(value)) {
+              callback()
+            } else {
+              callback(new Error('ID必须为正整数'))
+            }
+          }
+        }
+      ],
+      department: {
+        validator(rule, value, callback) {
+          if (this.departments.some(e => e === value) || !value) {
+            callback()
+          } else {
+            callback(new Error('部门有错'))
+          }
+        }
+      },
+      group: {
+        validator(rule, value, callback) {
+          if (this.groups.some(e => e === value) || !value) {
+            callback()
+          } else {
+            callback(new Error('组别有错'))
+          }
+        }
+      },
+      balance: [
+        {
+          validator: (rule, value, callback) => {
+            if (value >= 0) {
+              callback()
+            } else {
+              callback(new Error('资金必须为正数'))
+            }
+          }
+        }
+      ],
+      name: [{ required: true, message: '名称必须填写' }]
+    },
+    createdFunc() {
+      this.$api.get('/business/businesses').then(res => {
+        const { data } = res
+        this.rules.department.departments = data?.departments ?? []
+        this.rules.group.groups = data?.groups ?? []
+      })
+    },
+    uploadFunc(excelData) {
+      return new Promise((resolve, reject) => {
+        const waitPromise = []
+        excelData.forEach(e => {
+          const status = STAFF_STATUS.indexOf(e.status)
+          const id = e.id
+          const result = {}
+
+          for (const key in e) {
+            if (key === 'user' || key === 'id') continue
+
+            if (key === 'status') {
+              result[key] = status === -1 ? 0 : status
+              continue
+            }
+
+            result[key] = e[key]
+          }
+
+          if (id) {
+            waitPromise.push(this.$api.put(`/business/staffs/${id}`, result))
+          } else {
+            waitPromise.push(this.$api.post('/business/staffs', result))
+          }
+        })
+        Promise.all(waitPromise)
+          .then(() => {
+            resolve()
+          })
+          .catch(error => {
+            reject(error)
+          })
+      })
+    }
+  }
 }
 
 function businessSelect() {

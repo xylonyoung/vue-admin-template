@@ -6,17 +6,17 @@ export default {
   tableConfig: [
     'id',
     'title',
-    { property: 'enabled', type: 'boolean' },
+    // { property: 'enabled', type: 'boolean' },
     'content'
   ],
 
   formConfig: [
     'title',
-    {
-      property: 'enabled',
-      type: 'boolean',
-      default: true
-    },
+    // {
+    //   property: 'enabled',
+    //   type: 'boolean',
+    //   default: true
+    // },
     'content'
   ]
 }

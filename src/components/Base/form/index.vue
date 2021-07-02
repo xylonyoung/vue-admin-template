@@ -136,7 +136,7 @@
     </el-form-item>
 
     <el-form-item>
-      <el-button type="primary" @click="submitForm()">确定</el-button>
+      <el-button type="primary" @click="submitForm()">保存</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -177,7 +177,7 @@ export default {
         // set selectValue
         if (value?.id) {
           this.$set(this.selectValue, property, value.id)
-        } else if (Array.isArray(value)) {
+        } else if (Array.isArray(value) && value.length > 0) {
           this.$set(
             this.selectValue,
             property,
@@ -198,7 +198,12 @@ export default {
         }
         // set default
         if (e.default) {
-          this.data[property] ??= e.default
+          // merge same type
+          if (typeof e.default === typeof this.data[property]) {
+            this.data[property] ??= e.default
+          } else {
+            this.data[property] = e.default
+          }
         }
       })
     },

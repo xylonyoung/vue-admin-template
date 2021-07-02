@@ -50,7 +50,16 @@
                 }
               }
             }
-          ]
+          ],
+          department: {
+            validator(rule, value, callback) {
+              if (this.departments.some(e => e === value) || !value) {
+                callback()
+              } else {
+                callback(new Error('部门有错'))
+              }
+            }
+          }
         },
         visible: false
       }
@@ -58,6 +67,12 @@
     methods: {
       uploadSuccess() {
         //上传成功回调
+      },
+      createdFunc() {
+        this.$api.get('/business/businesses').then(res => {
+          const { data } = res
+          this.rules.department.departments = data?.departments ?? []
+        })
       },
       uploadFunc(excelData) {
         return new Promise((resolve, reject) => {
@@ -117,26 +132,38 @@
 ## Props 参数
 
 ```js
-// 弹窗标题
-title: { type: String, default: '表格导入' },
-// 弹窗开关
-visible: { type: Boolean, required: true },
-// 弹窗宽度
-dialogWidth: { type: String, default: '80%' },
-// 文件大小限制
-maxSize: { type: Number, default: Infinity },
-// 字段
-// 假如数据库中是`name`字段, 而Excel模板列是`名字`, 就需要写成 name: '名字'
-fields: { type: Object, required: true },
-// 参数校检, 和 element-ui 中 form表单中传递的rules一样, 都是使用的 async-validator 库
-// https://element.eleme.cn/#/zh-CN/component/form#biao-dan-yan-zheng
-rules: { type: Object, default: () => ({}) },
-// uploadFunc 需要返回一个Promise对象
-uploadFunc: { type: Function, required: true },
-// downloadFunc 自定义模板下载
-downloadFunc:{ type: Boolean, default: undefined },
-// component 自定义组件
-component:{ type: Boolean, default: undefined },
+const props = {
+  // 弹窗标题
+  title: { type: String, default: '表格导入' },
+
+  // 弹窗开关
+  visible: { type: Boolean, required: true },
+
+  // 弹窗宽度
+  dialogWidth: { type: String, default: '80%' },
+
+  // 文件大小限制
+  maxSize: { type: Number, default: Infinity },
+
+  // 字段 假如数据库中是`name`字段, 而Excel模板列是`名字`, 就需要写成 name: '名字'
+  fields: { type: Object, required: true },
+
+  // 参数校检, 和 element-ui 中 form表单中传递的rules一样, 都是使用的 async-validator 库
+  // https://element.eleme.cn/#/zh-CN/component/form#biao-dan-yan-zheng
+  rules: { type: Object, default: () => ({}) },
+
+  // 上传函数需要返回一个Promise对象
+  uploadFunc: { type: Function, required: true },
+
+  // 自定义下载模板
+  downloadFunc: { type: Boolean, default: undefined },
+
+  // 生命周期 created 执行的函数
+  createdFunc: { type: Boolean, default: undefined },
+
+  // 自定义组件
+  component: { type: Boolean, default: undefined }
+}
 ```
 
 ## 参考链接

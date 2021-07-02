@@ -122,12 +122,12 @@ const userRoutes = [
   {
     path: 'content',
     entity: 'Content',
-    title: '内容管理',
+    title: '饭堂公告',
     icon: 'el-icon-document'
   },
   {
     path: 'album',
-    entity: 'Album',
+    component: import('@/views/business/album'),
     title: '相册管理',
     icon: 'el-icon-picture'
   }
