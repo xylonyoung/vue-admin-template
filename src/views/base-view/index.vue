@@ -318,21 +318,8 @@ export default {
         this.tableData.splice(index, 1)
       }
     },
-    formSubmit() {
-      const data = {}
-      for (const key in this.formData) {
-        const prop = this.formData[key]
-        // skip the property which is not in the config
-        if (
-          prop === undefined ||
-          !this.formConfig.some((e) => (e.property ?? e) === key)
-        ) {
-          continue
-        }
-
-        data[key] = prop
-      }
-
+    formSubmit(formData) {
+      const data = { ...formData }
       let method = 'post'
       let url = this.entityPath
       if (this.formType === 'edit') {

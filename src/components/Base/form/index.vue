@@ -1,7 +1,7 @@
 <template>
   <el-form
     ref="form"
-    :model="data"
+    :model="formData"
     :rules="rules"
     v-bind="mixedProps"
     v-on="events"
@@ -18,8 +18,9 @@
       <template v-if="item.component">
         <component
           :is="item.component"
-          v-model="data[propertyName(item)]"
-          :data.sync="data"
+          v-model="formData[propertyName(item)]"
+          :raw-data="data"
+          :data.sync="formData"
           :options="options"
           :property="item.property"
         />
@@ -28,7 +29,7 @@
       <template v-else-if="dataType(item, 'upload')">
         <component
           :is="Uploader(item.config)"
-          v-model="data[propertyName(item)]"
+          v-model="formData[propertyName(item)]"
         />
       </template>
       <template v-else-if="dataType(item, 'array')">
@@ -36,14 +37,14 @@
       </template>
       <template v-else-if="dataType(item, 'boolean')">
         <el-switch
-          v-model="data[propertyName(item)]"
+          v-model="formData[propertyName(item)]"
           active-text="是"
           inactive-text="否"
         />
       </template>
       <template v-else-if="dataType(item, 'time')">
         <el-time-picker
-          v-model="data[propertyName(item)]"
+          v-model="formData[propertyName(item)]"
           format="HH:mm"
           value-format="HH:mm"
           placeholder="选择时间"
@@ -51,7 +52,7 @@
       </template>
       <template v-else-if="dataType(item, 'date')">
         <el-date-picker
-          v-model="data[propertyName(item)]"
+          v-model="formData[propertyName(item)]"
           type="date"
           value-format="yyyy-MM-dd"
           placeholder="选择日期"
@@ -59,7 +60,7 @@
       </template>
       <template v-else-if="dataType(item, 'datetime')">
         <el-date-picker
-          v-model="data[propertyName(item)]"
+          v-model="formData[propertyName(item)]"
           type="datetime"
           value-format="yyyy-MM-dd HH:mm"
           placeholder="选择日期时间"
@@ -67,7 +68,7 @@
       </template>
       <template v-else-if="dataType(item, 'integer')">
         <el-input-number
-          v-model="data[propertyName(item)]"
+          v-model="formData[propertyName(item)]"
           :min="0"
           :precision="0"
         />
@@ -77,27 +78,27 @@
       </template>
       <template v-else-if="dataType(item, 'decimal')">
         <el-input-number
-          v-model="data[propertyName(item)]"
+          v-model="formData[propertyName(item)]"
           :min="0"
           :precision="getEntityMetadata('scale') || 2"
         />
       </template>
       <template v-else-if="dataType(item, 'text')">
         <el-input
-          v-model="data[propertyName(item)]"
+          v-model="formData[propertyName(item)]"
           type="textarea"
           :autosize="{ minRows: 2, maxRows: 6 }"
           placeholder="请输入"
         />
       </template>
       <template v-else-if="dataType(item, 'textarea')">
-        <tinymce v-model="data[propertyName(item)]" :height="300" />
+        <tinymce v-model="formData[propertyName(item)]" :height="300" />
       </template>
       <template
         v-else-if="dataType(item, 'ManyToOne') || dataType(item, 'OneToOne')"
       >
         <el-select
-          v-model="selectValue[propertyName(item)]"
+          v-model="formData[propertyName(item)]"
           v-loading="!options[propertyName(item)]"
           placeholder="请选择"
           clearable
@@ -115,7 +116,7 @@
         v-else-if="dataType(item, 'ManyToMany') || dataType(item, 'OneToMany')"
       >
         <el-select
-          v-model="selectValue[propertyName(item)]"
+          v-model="formData[propertyName(item)]"
           v-loading="!options[propertyName(item)]"
           placeholder="请选择"
           clearable
@@ -131,7 +132,7 @@
         </el-select>
       </template>
       <template v-else>
-        <el-input v-model="data[propertyName(item)]" placeholder="请输入" />
+        <el-input v-model="formData[propertyName(item)]" placeholder="请输入" />
       </template>
     </el-form-item>
 
@@ -160,7 +161,7 @@ export default {
       defaultProps: { 'label-width': '100px' },
       options: {},
       rules: {},
-      selectValue: {}
+      formData: {}
     }
   },
   created() {
@@ -174,16 +175,30 @@ export default {
       this.config.forEach((e) => {
         const property = this.propertyName(e)
         const value = this.data[property]
-        // set selectValue
+
+        // set formData has id
         if (value?.id) {
-          this.$set(this.selectValue, property, value.id)
+          this.$set(this.formData, property, value.id)
         } else if (Array.isArray(value) && value.length > 0) {
           this.$set(
-            this.selectValue,
+            this.formData,
             property,
             value.map((e) => e?.id ?? e)
           )
         }
+
+        this.$set(this.formData, property, value)
+
+        // check and set default
+        if (e.default) {
+          // merge same type
+          if (typeof e.default === typeof value) {
+            this.formData[property] ??= e.default
+          } else {
+            this.formData[property] = e.default
+          }
+        }
+
         // set rules
         if (e.rule) {
           this.rules[property] = e.rule
@@ -195,15 +210,6 @@ export default {
               trigger: ['blur', 'change']
             }
           ]
-        }
-        // set default
-        if (e.default) {
-          // merge same type
-          if (typeof e.default === typeof this.data[property]) {
-            this.data[property] ??= e.default
-          } else {
-            this.data[property] = e.default
-          }
         }
       })
     },
@@ -263,13 +269,7 @@ export default {
     submitForm() {
       this.$refs.form.validate((valid) => {
         if (valid) {
-          // merge selectValue to data
-          for (const key in this.selectValue) {
-            if (this.selectValue[key]) {
-              this.data[key] = this.selectValue[key]
-            }
-          }
-          this.$emit('submit')
+          this.$emit('submit', this.formData)
         } else {
           this.$message.error('表单输入有误！')
           return false

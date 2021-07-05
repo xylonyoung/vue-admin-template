@@ -1,7 +1,7 @@
 <template>
   <div>
-    <!-- <div class="today" />
-    <div class="yesterday" /> -->
+    <div class="today" />
+    <div class="yesterday" />
   </div>
 </template>
 <script>
