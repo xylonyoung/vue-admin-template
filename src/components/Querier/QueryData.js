@@ -60,32 +60,40 @@ export default class QueryData {
   }
 
   dateSearch(key, value, config) {
-    if (!value) return
-
     if (config?.props?.['value-format']) {
       return `${this.keyProcess(key)} == ${value}`
     }
 
-    let beginDate = value
-    let endDate = value
-    if (config?.props?.type === 'daterange') {
+    let beginDate
+    let endDate
+    const type = config?.props?.type
+    if (type === 'daterange') {
+      beginDate = value[0]
+      endDate = this.getTomorrow(value[1])
+    } else if (type === 'datetimerange') {
       beginDate = value[0]
       endDate = value[1]
+    } else {
+      beginDate = value
+      endDate = this.getTomorrow(value)
     }
-    return `${this.keyProcess(key)} >= datetime.get('${this.dateFormat(
-      beginDate
-    )}') && ${this.keyProcess(key)} <= datetime.get('${this.dateFormat(
-      this.getTomorrow(endDate)
-    )}')`
+
+    if (['datetime', 'datetimerange'].includes(type)) {
+      beginDate = beginDate.toISOString()
+      endDate = `<= datetime.get('${endDate.toISOString()}')`
+    } else {
+      beginDate = beginDate.toISOString()
+      endDate = `< datetime.get('${endDate.toISOString()}')`
+    }
+
+    return `${this.keyProcess(
+      key
+    )} >= datetime.get('${beginDate}') && ${this.keyProcess(key)} ${endDate}`
   }
 
   getTomorrow(date) {
     const today = new Date(date)
     return new Date(today.setDate(today.getDate() + 1))
-  }
-
-  dateFormat(date) {
-    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
   }
 
   keyProcess(key) {

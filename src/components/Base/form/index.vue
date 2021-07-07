@@ -19,8 +19,8 @@
         <component
           :is="item.component"
           v-model="formData[propertyName(item)]"
-          :raw-data="data"
-          :data.sync="formData"
+          :data="value"
+          :form-data.sync="formData"
           :options="options"
           :property="item.property"
         />
@@ -33,7 +33,7 @@
         />
       </template>
       <template v-else-if="dataType(item, 'array')">
-        <component :is="DynamicTags()" v-model="data[propertyName(item)]" />
+        <component :is="DynamicTags()" v-model="formData[propertyName(item)]" />
       </template>
       <template v-else-if="dataType(item, 'boolean')">
         <el-switch
@@ -74,7 +74,7 @@
         />
       </template>
       <template v-else-if="dataType(item, 'float')">
-        <el-input-number v-model="data[propertyName(item)]" :min="0" />
+        <el-input-number v-model="formData[propertyName(item)]" :min="0" />
       </template>
       <template v-else-if="dataType(item, 'decimal')">
         <el-input-number
@@ -154,7 +154,7 @@ export default {
   components: { Tinymce },
   mixins: [mixin],
   props: {
-    data: { type: Object, default: () => ({}) }
+    value: { type: Object, default: () => ({}) }
   },
   data() {
     return {
@@ -164,9 +164,10 @@ export default {
       formData: {}
     }
   },
-  created() {
-    this.setConfig()
-    this.getOptions()
+  watch: {
+    value() {
+      this.setConfig()
+    }
   },
   methods: {
     Uploader,
@@ -174,9 +175,9 @@ export default {
     setConfig() {
       this.config.forEach((e) => {
         const property = this.propertyName(e)
-        const value = this.data[property]
+        const value = this.value[property]
 
-        // set formData has id
+        // set formData
         if (value?.id) {
           this.$set(this.formData, property, value.id)
         } else if (Array.isArray(value) && value.length > 0) {
@@ -185,9 +186,9 @@ export default {
             property,
             value.map((e) => e?.id ?? e)
           )
+        } else {
+          this.$set(this.formData, property, value)
         }
-
-        this.$set(this.formData, property, value)
 
         // check and set default
         if (e.default) {
@@ -202,7 +203,7 @@ export default {
         // set rules
         if (e.rule) {
           this.rules[property] = e.rule
-        } else if (this.entity[property]?.metadata?.nullable === false) {
+        } else if (this.anEntity[property]?.metadata?.nullable === false) {
           this.rules[property] = [
             {
               required: true,
@@ -256,14 +257,14 @@ export default {
 
       function getOptionName(propertyName) {
         const result = /[^\\\\]\w+$/.exec(
-          this.entity[propertyName]?.metadata?.targetEntity
+          this.anEntity[propertyName]?.metadata?.targetEntity
         )
         return result[0]
       }
 
       function needOption(propertyName) {
         const types = ['ManyToOne', 'ManyToMany', 'OneToMany', 'OneToOne']
-        return types.includes(this.entity[propertyName]?.metadata?.type)
+        return types.includes(this.anEntity[propertyName]?.metadata?.type)
       }
     },
     submitForm() {

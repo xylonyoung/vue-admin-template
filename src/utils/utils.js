@@ -5,18 +5,20 @@ import { baseURL } from '@/settings'
 // https://momentjs.com/docs/#/displaying/format/
 export function dateFormat(date, token) {
   if (!date) return 'error date'
-  return moment(date).format(token ?? 'YYYY/M/D H:m')
+  return moment(date).format(token ?? 'YYYY-M-D H:m')
 }
 
 // https://numbrojs.com/format.html
-export function numberFormat(num, props) {
-  const result = num ?? 0
-  return numbro(result).format({
+export function numberFormat(num, option) {
+  if (isNaN(num) || !num) return 0
+
+  const options = {
     thousandSeparated: true,
     trimMantissa: true,
     mantissa: 2,
-    ...props
-  })
+    ...option
+  }
+  return numbro(num).format(options)
 }
 
 export function buildFullPath(relativeURL) {

@@ -3,7 +3,7 @@
     <div class="tips">提示：请上传1000x400尺寸图片</div>
     <base-form
       :data.sync="formData"
-      :entity="entityData"
+      :entity="entity"
       :config="formConfig"
       @submit="formSubmit"
     />
@@ -15,13 +15,12 @@ export default {
   components: { BaseForm },
   data() {
     return {
-      entityData: {},
+      entity: 'Business',
       formData: {},
       formConfig: [{ property: 'pictures', type: 'upload' }]
     }
   },
-  async created() {
-    this.entityData = await this.$store.dispatch('entity/getEntity', 'Business')
+  mounted() {
     this.getBusiness()
   },
   methods: {

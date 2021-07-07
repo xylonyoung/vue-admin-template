@@ -3,7 +3,7 @@
     <base-form
       v-if="showForm"
       :data.sync="formData"
-      :entity="entityData"
+      :entity="entity"
       :config="formConfig"
       :props="{ 'label-width': '200px' }"
       @submit="formSubmit"
@@ -17,7 +17,7 @@ export default {
   data() {
     return {
       showForm: false,
-      entityData: {},
+      entity: 'Business',
       formData: {},
       formConfig: [
         'canCancelAppointmentHourBefore',
@@ -56,8 +56,7 @@ export default {
       ]
     }
   },
-  async created() {
-    this.entityData = await this.$store.dispatch('entity/getEntity', 'Business')
+  mounted() {
     this.getBusiness()
   },
   methods: {

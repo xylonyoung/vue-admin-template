@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-table :data="data" v-bind="mixedProps" v-on="events">
+    <el-table :data="value" v-bind="mixedProps" v-on="events">
       <slot name="selection" />
 
       <el-table-column
@@ -14,9 +14,9 @@
           <div v-if="item.component">
             <component
               :is="item.component"
+              v-model="value"
               :row="row"
               :index="$index"
-              :data.sync="data"
               :property="item.property"
             />
           </div>
@@ -82,7 +82,7 @@ import mixin from '../mixin'
 export default {
   mixins: [mixin],
   props: {
-    data: { type: Array, default: () => [] },
+    value: { type: Array, default: () => [] },
     disableActions: { type: Boolean, default: false }
   },
   data() {

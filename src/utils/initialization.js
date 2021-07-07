@@ -1,9 +1,8 @@
 import Vue from 'vue'
 import request from '@/utils/request'
-import lodash from 'lodash'
-import { dateFormat, numberFormat, getImage, getValue } from './utils';
+import { dateFormat, numberFormat, getImage, getValue } from './utils'
 
-(async function initialization() {
+;(async function initialization() {
   vueUse()
 
   console?.log('%c🌈🌻🌼', 'font-size:48px;')
@@ -20,7 +19,6 @@ function vueUse() {
       Vue.prototype.$getImage = getImage
       Vue.prototype.$dateFormat = dateFormat
       Vue.prototype.$numberFormat = numberFormat
-      Vue.prototype.$_ = lodash
     }
   })
 }

@@ -61,9 +61,9 @@
 
     <el-row>
       <base-table
+        v-model="tableData"
         v-loading="tableLoading"
-        :data.sync="tableData"
-        :entity="entityData"
+        :entity="entity"
         :config="tableConfig"
         :props="tableProps"
         :events="tableEvents"
@@ -132,8 +132,8 @@
       width="800px"
     >
       <base-form
-        :data.sync="formData"
-        :entity="entityData"
+        v-model="formData"
+        :entity="entity"
         :config="formConfigProcessed"
         :props="formProps"
         :events="formEvents"
@@ -155,7 +155,6 @@ export default {
   data() {
     return {
       entity: null,
-      entityData: {},
       hasTodo: false,
       todoList: [],
       disableActions: [],
@@ -190,12 +189,8 @@ export default {
       return buildEntityPath(this.entity)
     }
   },
-  async created() {
+  created() {
     this.setData()
-    this.entityData = await this.$store.dispatch(
-      'entity/getEntity',
-      this.entity
-    )
   },
   methods: {
     resetTableData() {
