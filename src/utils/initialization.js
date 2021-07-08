@@ -1,6 +1,6 @@
 import Vue from 'vue'
-import request from '@/utils/request'
-import { dateFormat, numberFormat, getImage, getValue } from './utils'
+import request from './request'
+import { dateFormat, numberFormat, getImage, getValue } from './index'
 
 ;(async function initialization() {
   vueUse()

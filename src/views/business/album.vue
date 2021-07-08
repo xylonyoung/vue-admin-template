@@ -2,6 +2,7 @@
   <div class="business-container">
     <div class="tips">提示：请上传1000x400尺寸图片</div>
     <base-form
+      save
       :data.sync="formData"
       :entity="entity"
       :config="formConfig"

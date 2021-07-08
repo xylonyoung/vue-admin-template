@@ -136,13 +136,13 @@
       </template>
     </el-form-item>
 
-    <el-form-item>
+    <el-form-item v-if="save">
       <el-button type="primary" @click="submitForm()">保存</el-button>
     </el-form-item>
   </el-form>
 </template>
 <script>
-import mixin from '../mixin'
+import mixin from '../Mixin'
 import Uploader from '@/components/Uploader'
 import buildEntityPath from '../buildEntityPath'
 import Tinymce from '@/components/Tinymce'
@@ -154,7 +154,8 @@ export default {
   components: { Tinymce },
   mixins: [mixin],
   props: {
-    value: { type: Object, default: () => ({}) }
+    value: { type: Object, default: () => ({}) },
+    save: { type: Boolean, default: false }
   },
   data() {
     return {

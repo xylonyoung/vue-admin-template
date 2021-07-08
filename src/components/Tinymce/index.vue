@@ -24,7 +24,7 @@ import editorImage from './components/EditorImage'
 import plugins from './plugins'
 import toolbar from './toolbar'
 import load from './dynamicLoadScript'
-import { buildFullPath } from '@/utils/utils'
+import { buildFullPath } from '@/utils'
 
 // why use this cdn, detail see https://github.com/PanJiaChen/tinymce-all-in-one
 const tinymceCDN =

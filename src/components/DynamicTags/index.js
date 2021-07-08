@@ -1,4 +1,4 @@
-export default function(param) {
+export default function() {
   return {
     props: ['value'],
     render(h) {

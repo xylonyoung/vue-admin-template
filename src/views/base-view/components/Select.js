@@ -1,4 +1,9 @@
 export default function(param) {
+  /**
+   * @param {Object} param
+   * @param {string} param.property - formData property
+   * @param {Object} param.props - https://element.eleme.cn/#/zh-CN/component/select#select-attributes
+   */
   return {
     props: ['formData', 'options', 'property'],
     render(h) {

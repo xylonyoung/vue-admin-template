@@ -1,10 +1,13 @@
-export default function(property, list) {
+export default function(list) {
+  /**
+   * @param {{label:String, prop:String}[]} list
+   */
   return {
-    props: ['data'],
+    props: ['row', 'property'],
     render(h) {
       return (
         <el-popover placement='left' width='600' trigger='click'>
-          <el-table data={this.data[property]}>
+          <el-table data={this.row[this.property]}>
             {list.map(e => {
               return (
                 <el-table-column

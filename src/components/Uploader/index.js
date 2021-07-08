@@ -1,11 +1,12 @@
-import { buildFullPath } from '@/utils/utils'
+import { buildFullPath } from '@/utils'
 import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
 
 export default function(param) {
   /**
-   * @param {string} [dataType = 'array'] value array or string
-   * @param {string} [fileType = 'image'] value see below fileType
-   * @param {number} [limit = 0] file limit
+   * @param {Object} param
+   * @param {string} [param.dataType = 'array'] - array or string
+   * @param {string} [param.fileType = 'image'] - see below fileType
+   * @param {number} [param.limit = 0] - file limit
    */
   const config = { dataType: 'array', fileType: 'image', limit: 0, ...param }
 

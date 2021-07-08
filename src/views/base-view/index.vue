@@ -133,6 +133,7 @@
     >
       <base-form
         v-model="formData"
+        save
         :entity="entity"
         :config="formConfigProcessed"
         :props="formProps"

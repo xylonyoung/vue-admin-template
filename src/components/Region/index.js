@@ -1,4 +1,4 @@
-import regionMixin from './mixin'
+import regionMixin from './Mixin'
 
 export function Region(property, props) {
   return {

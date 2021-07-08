@@ -2,6 +2,7 @@
   <div class="business-container">
     <base-form
       v-if="showForm"
+      save
       :data.sync="formData"
       :entity="entity"
       :config="formConfig"

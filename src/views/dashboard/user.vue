@@ -35,21 +35,30 @@ export default {
         '@filter': `entity.getDate() >= datetime.get('${today}') && entity.getDate() < datetime.get('${tomorrow}')`
       }
 
-      const { data } = await this.$api.get('/business/phases')
-
-      const yesterdayRes = await this.$api.get('/business/dinings', {
-        params: yesterdayParams
+      const promiseAll = []
+      promiseAll.push(this.$api.get('/business/phases'))
+      promiseAll.push(
+        this.$api.get('/business/dinings', {
+          params: yesterdayParams
+        })
+      )
+      promiseAll.push(
+        this.$api.get('/business/dinings', {
+          params: todayParams
+        })
+      )
+      Promise.all(promiseAll).then((res) => {
+        const phaseList = res[0]?.data
+        this.initChart(
+          getTotal(phaseList, res[1].data),
+          getTotal(phaseList, res[2].data)
+        )
       })
-      const todayRes = await this.$api.get('/business/dinings', {
-        params: todayParams
-      })
 
-      this.initChart(getTotal(yesterdayRes.data), getTotal(todayRes.data))
-
-      function getTotal(list) {
-        return data.map((e) => {
+      function getTotal(list, data) {
+        return list.map((e) => {
           const result = { name: e.name }
-          result.value = list.reduce(
+          result.value = data.reduce(
             (acc, cur) => (e.id === cur.phase.id ? acc + 1 : acc),
             0
           )
@@ -125,7 +134,7 @@ export default {
   display: flex;
 }
 .chart {
-  width: 1200px;
+  width: calc(100vw - 210px);
   height: calc(100vh - 98px);
 }
 </style>

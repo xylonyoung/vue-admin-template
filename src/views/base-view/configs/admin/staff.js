@@ -1,4 +1,4 @@
-import { STAFF_STATUS, constantForSelect } from '../../constants'
+import { STAFF_STATUS, constantForSelect } from '@/constants'
 import Select from '../../components/Select'
 
 export default {

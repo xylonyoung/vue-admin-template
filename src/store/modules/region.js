@@ -1,22 +1,22 @@
 import $api from '@/utils/request'
 
 const state = {
-  regionList: [],
-  isLoadingRegionList: false
+  list: [],
+  isLoadingList: false
 }
 
 const actions = {
   async getRegionList({ commit, state }) {
-    if (state.isLoadingRegionList) return
-    commit('SET_IS_LOADING_REGION_LIST', true)
+    if (state.isLoadingList) return
+    commit('SET_IS_LOADING_LIST', true)
     const { data } = await $api.get('/manage/uni-regions')
     const result = data ?? []
-    commit('SET_REGION_LIST', result)
+    commit('SET_LIST', result)
     return result
   },
   getRegions({ state }, { node, resolve }) {
     const { level, value } = node
-    const result = state.regionList.filter(checkout).map(e => ({
+    const result = state.list.filter(checkout).map(e => ({
       leaf: level >= 2,
       value: e.id,
       label: e.name

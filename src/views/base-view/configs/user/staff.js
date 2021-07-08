@@ -1,7 +1,6 @@
-import { STAFF_STATUS, constantForSelect } from '../../constants'
+import { STAFF_STATUS, constantForSelect } from '@/constants'
 import Select from '../../components/Select'
 import querierConfigs from '../../utils/querier-configs'
-import { forIn } from 'lodash'
 
 export default {
   querierConfig: [

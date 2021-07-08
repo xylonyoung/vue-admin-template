@@ -78,7 +78,7 @@
   </div>
 </template>
 <script>
-import mixin from '../mixin'
+import mixin from '../Mixin'
 export default {
   mixins: [mixin],
   props: {

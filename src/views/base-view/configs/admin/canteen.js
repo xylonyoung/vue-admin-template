@@ -1,5 +1,5 @@
 import Select from '../../components/Select'
-import { CANTEEN_STATUS, constantForSelect } from '../../constants'
+import { CANTEEN_STATUS, constantForSelect } from '@/constants'
 
 export default {
   tableConfig: [

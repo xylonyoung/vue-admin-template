@@ -1,19 +1,7 @@
-const yearInput = {
+export const yearInput = {
   property: 'year',
   component: {
-    props: ['form'],
-    data() {
-      return {
-        value: ''
-      }
-    },
-    watch: {
-      'form.year': {
-        handler(val) {
-          if (val) this.value = new Date(val.toString())
-        }
-      }
-    },
+    props: ['value'],
     render(h) {
       return (
         <el-date-picker
@@ -23,31 +11,16 @@ const yearInput = {
           type='year'
           value-format='yyyy'
           placeholder='年份'
-          on-change={val => {
-            this.form.year = val
-          }}
         ></el-date-picker>
       )
     }
   }
 }
 
-const monthInput = {
+export const monthInput = {
   property: 'month',
   component: {
-    props: ['form'],
-    data() {
-      return {
-        value: ''
-      }
-    },
-    watch: {
-      'form.month': {
-        handler(val) {
-          if (val) this.value = new Date(val.toString())
-        }
-      }
-    },
+    props: ['value'],
     render(h) {
       return (
         <el-date-picker
@@ -58,13 +31,8 @@ const monthInput = {
           format='M'
           value-format='M'
           placeholder='月份'
-          on-change={val => {
-            this.form.month = val
-          }}
         ></el-date-picker>
       )
     }
   }
 }
-
-export { yearInput, monthInput }
