@@ -8,7 +8,7 @@
     @close="handleClose"
   >
     <template v-if="component">
-      <component :is="component" :data="componentData" />
+      <component :is="component" v-model="componentData" />
     </template>
 
     <input

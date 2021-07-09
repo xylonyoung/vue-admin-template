@@ -1,9 +1,9 @@
 module.exports = {
-  baseURL: 'http://47.106.118.125:8000/',
+  baseURL: 'http://worker.jgj-qrcode.cn/',
 
   // router just return userRoutes width entity prefix.
   // default 'api'
-  entityPrefix: 'business',
+  entityPrefix: 'provider',
 
   // pages need permission or not.
   // user must have permissions property.

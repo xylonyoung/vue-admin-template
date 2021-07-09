@@ -35,18 +35,25 @@ export default {
     },
     regionChange(e) {
       if (e.length > 0) {
-        this.form[this.property] = e[e.length - 1]
+        this.$emit('input', e[e.length - 1])
       } else {
-        this.form[this.property] = null
+        this.$emit('input', null)
       }
     },
     regionsChange(val) {
-      // push the right value and form.regions don't have
-      const value = val[val.length - 1]
-      if (value && !this.form[this.property]?.some(e => e === value)) {
-        this.form[this.property] ??= []
-        this.form[this.property].push(value)
+      const region = val[val.length - 1]
+      // same value not to change
+      if (region && !this.value?.some(e => e === region)) {
+        const result = this.value ? [...this.value] : []
+        result.push(region)
+        this.$emit('input', result)
       }
+    },
+    regionRemove(region) {
+      this.$emit(
+        'input',
+        this.value.filter(e => e !== region)
+      )
     }
   }
 }

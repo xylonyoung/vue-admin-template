@@ -2,40 +2,68 @@ import { entityPrefix } from '@/settings'
 
 const adminRoutes = [
   {
-    path: 'appointment',
-    entity: 'Appointment',
-    title: '报餐管理',
-    icon: 'el-icon-edit-outline'
+    path: 'order',
+    title: '订单管理',
+    icon: 'el-icon-s-order',
+    component: import('@/views/order')
+  },
+  {
+    path: 'provider',
+    entity: 'Provider',
+    title: '服务商管理',
+    icon: 'el-icon-s-custom'
+  },
+  {
+    path: 'region-special-price',
+    entity: 'RegionSpecialPrice',
+    title: '区域价钱管理',
+    icon: 'el-icon-money'
+  },
+  {
+    path: 'join',
+    entity: 'Join',
+    title: '服务商申请管理',
+    icon: 'el-icon-document-add'
   },
   {
     path: 'business',
     entity: 'Business',
-    title: '企业管理',
-    icon: 'el-icon-office-building'
-  },
-  {
-    path: 'canteen',
-    entity: 'Canteen',
-    title: '饭堂管理',
+    title: '商家管理',
     icon: 'el-icon-s-shop'
   },
   {
-    path: 'dining',
-    entity: 'Dining',
-    title: '就餐管理',
-    icon: 'el-icon-knife-fork'
+    path: 'delivery-sample',
+    entity: 'DeliverySample',
+    title: '送样管理',
+    icon: 'el-icon-film'
   },
   {
-    path: 'phase',
-    entity: 'Phase',
-    title: '餐类管理',
-    icon: 'el-icon-dish'
+    path: 'worker',
+    entity: 'Worker',
+    title: '工人管理',
+    icon: 'el-icon-user'
   },
   {
-    path: 'staff',
-    entity: 'Staff',
-    title: '员工管理',
-    icon: 'el-icon-s-custom'
+    path: 'coupon',
+    title: '优惠券',
+    icon: 'el-icon-s-ticket',
+    children: [
+      { path: '', entity: 'Coupon', title: '优惠券' },
+      { path: 'user-coupon', entity: 'UserCoupon', title: '用户优惠券' }
+    ]
+  },
+  {
+    path: 'after-sale',
+    title: '售后',
+    icon: 'el-icon-chat-line-round',
+    children: [
+      { path: '', entity: 'AfterSale', title: '售后记录' },
+      {
+        path: 'after-sale-todo',
+        entity: { name: 'AfterSale', suffix: '/todo' },
+        title: '待处理'
+      }
+    ]
   }
 ]
 
@@ -84,52 +112,41 @@ const baseRoutes = [
 
 const userRoutes = [
   {
-    path: 'appointment',
-    entity: 'Appointment',
-    title: '报餐管理',
-    icon: 'el-icon-edit-outline'
+    path: 'region-special-price',
+    entity: 'RegionSpecialPrice',
+    title: '区域价钱管理',
+    icon: 'el-icon-money'
   },
   {
     path: 'business',
-    component: import('@/views/business'),
-    title: '企业设置',
-    icon: 'el-icon-office-building'
-  },
-  {
-    path: 'canteen',
-    entity: 'Canteen',
-    title: '饭堂管理',
+    entity: 'Business',
+    title: '商家管理',
     icon: 'el-icon-s-shop'
   },
   {
-    path: 'dining',
-    entity: 'Dining',
-    title: '就餐管理',
-    icon: 'el-icon-knife-fork'
+    path: 'delivery-sample',
+    entity: 'DeliverySample',
+    title: '送样管理',
+    icon: 'el-icon-film'
   },
   {
-    path: 'phase',
-    entity: 'Phase',
-    title: '餐类管理',
-    icon: 'el-icon-dish'
+    path: 'worker',
+    entity: 'Worker',
+    title: '工人管理',
+    icon: 'el-icon-user'
   },
   {
-    path: 'staff',
-    entity: 'Staff',
-    title: '员工管理',
-    icon: 'el-icon-s-custom'
-  },
-  {
-    path: 'content',
-    entity: 'Content',
-    title: '饭堂公告',
-    icon: 'el-icon-document'
-  },
-  {
-    path: 'album',
-    component: import('@/views/business/album'),
-    title: '相册管理',
-    icon: 'el-icon-picture'
+    path: 'after-sale',
+    title: '售后',
+    icon: 'el-icon-chat-line-round',
+    children: [
+      { path: '', entity: 'AfterSale', title: '售后记录' },
+      {
+        path: 'after-sale-todo',
+        entity: { name: 'AfterSale', suffix: '/todo' },
+        title: '待处理'
+      }
+    ]
   }
 ]
 

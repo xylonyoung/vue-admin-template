@@ -1,12 +1,29 @@
-import regionMixin from './Mixin'
+import Mixin from './Mixin'
 
-export function Region(property, props) {
+export function RegionList() {
   return {
-    props: ['data'],
+    mixins: [Mixin],
+    props: ['row', 'property'],
+    render(h) {
+      return (
+        <div v-loading={this.loading} style='min-height:40px'>
+          {this.row[this.property].map(e => {
+            return <div>{this.getRegionName(e)}</div>
+          })}
+        </div>
+      )
+    }
+  }
+}
+
+export function Region(props) {
+  return {
+    mixins: [Mixin],
+    props: ['value'],
     render(h) {
       return (
         <div>
-          <div>{this.getRegionName(this.data[property])}</div>
+          <div>{this.getRegionName(this.value)}</div>
           <div v-loading={this.loading}>
             {this.loading || (
               <el-cascader
@@ -31,14 +48,14 @@ export function Region(property, props) {
           </div>
         </div>
       )
-    },
-    ...regionMixin
+    }
   }
 }
 
-export function Regions(property, props) {
+export function Regions(props) {
   return {
-    props: ['data'],
+    mixins: [Mixin],
+    props: ['value'],
     render(h) {
       return (
         <div>
@@ -65,14 +82,14 @@ export function Regions(property, props) {
             )}
           </div>
           <div>
-            {this.data[property]?.map((e, index) => {
+            {this.value?.map((e, index) => {
               const style = index > 0 ? 'margin-left:8px' : ''
               return (
                 <el-tag
                   style={style}
                   closable
                   onClose={() => {
-                    this.data[property].splice(index, 1)
+                    this.regionRemove(e)
                   }}
                 >
                   {this.getRegionName(e)}
@@ -82,14 +99,14 @@ export function Regions(property, props) {
           </div>
         </div>
       )
-    },
-    ...regionMixin
+    }
   }
 }
 
-export function UploadRegion(props) {
+export function RegionUpload(props) {
   return {
-    props: ['data'],
+    mixins: [Mixin],
+    props: ['value'],
     render(h) {
       return (
         <div
@@ -99,7 +116,7 @@ export function UploadRegion(props) {
           {this.loading || (
             <el-cascader
               style='width:60%'
-              v-model={this.data.region}
+              v-model={this.value.region}
               clearable
               onChange={this.regionChange}
               props={{
@@ -119,13 +136,12 @@ export function UploadRegion(props) {
         </div>
       )
     },
-    ...regionMixin,
     methods: {
       regionChange(e) {
         if (e.length > 0) {
-          this.data.region = e[e.length - 1]
+          this.value.region = e[e.length - 1]
         } else {
-          this.data.region = null
+          this.value.region = null
         }
       }
     }

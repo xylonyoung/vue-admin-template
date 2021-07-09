@@ -2,7 +2,7 @@
   <div class="account-container">
     <div class="top">
       <el-image
-        src="https://s02.mifile.cn/assets/static/image/logo-mi2.png"
+        :src="require('@/assets/logo.svg')"
         fit="contain"
         @click="$router.push('/')"
       />

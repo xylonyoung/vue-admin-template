@@ -80,7 +80,11 @@
       />
 
       <template v-else-if="item.component">
-        <component :is="item.component" :data.sync="componentData" />
+        <component
+          :is="item.component"
+          v-model="queryData[item.property]"
+          :func="setComponentData"
+        />
       </template>
     </div>
 
@@ -98,24 +102,8 @@ export default {
     querierConfig: { type: Array, default: () => [] }
   },
   data() {
-    return { queryData: {}, componentData: {} }
+    return { queryData: {}, componentData: {}}
   },
-  // watch: {
-  //   queryData: {
-  //     handler() {
-  //       this.updateQuerierData()
-  //     },
-  //     deep: true,
-  //     immediate: true
-  //   },
-  //   componentData: {
-  //     handler() {
-  //       this.updateQuerierData()
-  //     },
-  //     deep: true,
-  //     immediate: true
-  //   }
-  // },
   created() {
     this.checkConfig()
   },
@@ -138,11 +126,11 @@ export default {
             const result = getOptions.formatFunc
               ? getOptions.formatFunc(res.data)
               : res.data.map((i) => {
-                  return {
-                    label: i[getOptions.label],
-                    value: i[getOptions.value]
-                  }
-                })
+                return {
+                  label: i[getOptions.label],
+                  value: i[getOptions.value]
+                }
+              })
             this.$set(this.querierConfig[index], 'options', result)
           })
         }
