@@ -3,7 +3,7 @@
     ref="form"
     :model="formData"
     :rules="rules"
-    v-bind="mixedProps"
+    v-bind="configProps"
     v-on="events"
     @submit.native.prevent
   >
@@ -20,7 +20,7 @@
           :is="item.component"
           v-model="formData[propertyName(item)]"
           :data="value"
-          :form-data.sync="formData"
+          :form.sync="formData"
           :options="options"
           :property="item.property"
         />
@@ -31,6 +31,26 @@
           :is="Uploader(item.config)"
           v-model="formData[propertyName(item)]"
         />
+      </template>
+
+      <!-- data type -->
+      <!-- select first so other data type can use it as component -->
+      <template v-else-if="isRelational(item)">
+        <el-select
+          v-model="formData[propertyName(item)]"
+          v-loading="!options[propertyName(item)]"
+          placeholder="请选择"
+          clearable
+          filterable
+          :multiple="isToMany(item)"
+        >
+          <el-option
+            v-for="(option, optionIndex) in options[propertyName(item)]"
+            :key="optionIndex"
+            :label="option.label"
+            :value="option.value"
+          />
+        </el-select>
       </template>
       <template v-else-if="dataType(item, 'array')">
         <component :is="DynamicTags()" v-model="formData[propertyName(item)]" />
@@ -94,43 +114,7 @@
       <template v-else-if="dataType(item, 'textarea')">
         <tinymce v-model="formData[propertyName(item)]" :height="300" />
       </template>
-      <template
-        v-else-if="dataType(item, 'ManyToOne') || dataType(item, 'OneToOne')"
-      >
-        <el-select
-          v-model="formData[propertyName(item)]"
-          v-loading="!options[propertyName(item)]"
-          placeholder="请选择"
-          clearable
-          filterable
-        >
-          <el-option
-            v-for="(option, optionIndex) in options[propertyName(item)]"
-            :key="optionIndex"
-            :label="option.label"
-            :value="option.value"
-          />
-        </el-select>
-      </template>
-      <template
-        v-else-if="dataType(item, 'ManyToMany') || dataType(item, 'OneToMany')"
-      >
-        <el-select
-          v-model="formData[propertyName(item)]"
-          v-loading="!options[propertyName(item)]"
-          placeholder="请选择"
-          clearable
-          filterable
-          multiple
-        >
-          <el-option
-            v-for="(option, optionIndex) in options[propertyName(item)]"
-            :key="optionIndex"
-            :label="option.label"
-            :value="option.value"
-          />
-        </el-select>
-      </template>
+
       <template v-else>
         <el-input v-model="formData[propertyName(item)]" placeholder="请输入" />
       </template>
@@ -173,6 +157,18 @@ export default {
   methods: {
     Uploader,
     DynamicTags,
+    isRelational(item) {
+      return (
+        this.dataType(item, 'ManyToOne') ||
+        this.dataType(item, 'OneToOne') ||
+        this.isToMany(item)
+      )
+    },
+    isToMany(item) {
+      return (
+        this.dataType(item, 'ManyToMany') || this.dataType(item, 'OneToMany')
+      )
+    },
     setConfig() {
       this.config.forEach((e) => {
         const property = this.propertyName(e)
@@ -223,44 +219,31 @@ export default {
           return
         }
 
-        if (e.option) {
-          getOptionData.call(this, propertyName, e.option)
-          return
-        }
-
-        if (needOption.call(this, propertyName)) {
-          getOptionData.call(
-            this,
-            propertyName,
-            getOptionName.call(this, propertyName)
-          )
+        if (e.filter || needOption.call(this, propertyName)) {
+          getOptionData.call(this, propertyName, e.filter)
         }
       })
 
-      function getOptionData(propertyName, entity) {
-        const anEntity = { name: entity }
+      function getOptionData(propertyName, filter) {
+        const optionName = /[^\\\\]\w+$/.exec(
+          this.anEntity[propertyName]?.metadata?.targetEntity
+        )[0]
+        const anEntity = { name: optionName }
+        let params = { '@display': 'reduce' }
+
         if (getRole() !== 'admin' && entityPrefix) {
           anEntity.prefix = entityPrefix
         }
 
-        this.$api
-          .get(buildEntityPath(anEntity), {
-            params: { '@display': 'reduce' }
-          })
-          .then((res) => {
-            const result = res?.data?.map((e) => ({
-              value: e.id,
-              label: e.name ?? e.title ?? e.__toString
-            }))
-            this.$set(this.options, propertyName, result)
-          })
-      }
+        if (filter) params = { ...params, ...filter }
 
-      function getOptionName(propertyName) {
-        const result = /[^\\\\]\w+$/.exec(
-          this.anEntity[propertyName]?.metadata?.targetEntity
-        )
-        return result[0]
+        this.$api.get(buildEntityPath(anEntity), { params }).then((res) => {
+          const result = res?.data?.map((e) => ({
+            value: e.id,
+            label: e.name ?? e.title ?? e.__toString
+          }))
+          this.$set(this.options, propertyName, result)
+        })
       }
 
       function needOption(propertyName) {

@@ -1,3 +1,4 @@
+import { Region, Regions, RegionList } from '@/components/Region'
 
 export default {
   querierConfig: [
@@ -9,7 +10,7 @@ export default {
     {
       type: 'component',
       property: 'regions',
-      props: { placeholder: '请输入区域' }
+      component: Region({ checkStrictly: true })
     },
     {
       type: 'input',
@@ -38,7 +39,7 @@ export default {
 
   tableConfig: [
     'id',
-    { property: 'regions', component: RegionsList() },
+    { property: 'regions', component: RegionList() },
     'name',
     'phone',
     'enabled',
@@ -63,7 +64,7 @@ export default {
     'hasCarVehicleLicense',
     'hasMotoVehicleLicense',
     'hasVehicle',
-    { property: 'idCardPhotos', component: Uploader() },
+    { property: 'idCardPhotos', type: 'upload' },
     'comment'
   ]
 }

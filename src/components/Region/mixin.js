@@ -24,7 +24,7 @@ export default {
   },
   methods: {
     getRegionName(id) {
-      const region = this.regionList.find(e => e.id === id)
+      const region = this.regionList.find(e => e.id === Number(id))
       if (!region) return
 
       let result = region.name
@@ -37,7 +37,7 @@ export default {
       if (e.length > 0) {
         this.$emit('input', e[e.length - 1])
       } else {
-        this.$emit('input', null)
+        this.$emit('input', '')
       }
     },
     regionsChange(val) {

@@ -74,8 +74,8 @@
 
       <slot
         v-else-if="item.type === 'slot'"
-        :name="item.property"
         :slotData="queryData"
+        :property="item.property"
         :func="setComponentData"
       />
 
@@ -83,6 +83,7 @@
         <component
           :is="item.component"
           v-model="queryData[item.property]"
+          :property="item.property"
           :func="setComponentData"
         />
       </template>

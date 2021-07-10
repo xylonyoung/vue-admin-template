@@ -1,4 +1,5 @@
-import { COUPON_TYPE } from '@/constants'
+import { COUPON_TYPE, getConstantOptions } from '@/constants'
+
 export default {
   tableConfig: [
     'id',
@@ -14,9 +15,9 @@ export default {
     {
       property: 'type',
       component: {
-        props: ['data'],
+        props: ['value'],
         render(h) {
-          return <span>{COUPON_TYPE[this.data]}</span>
+          return <span>{COUPON_TYPE[this.value]}</span>
         }
       }
     },
@@ -37,18 +38,8 @@ export default {
     'threshold',
     {
       property: 'type',
-      component: {
-        props: ['form'],
-        render(h) {
-          return (
-            <el-select v-model={this.form.type} placeholder='请选择'>
-              {COUPON_TYPE.map((e, index) => (
-                <el-option label={e} value={index.toString()}></el-option>
-              ))}
-            </el-select>
-          )
-        }
-      }
+      type: 'OneToOne',
+      options: getConstantOptions(COUPON_TYPE)
     },
     'userLimit'
   ]

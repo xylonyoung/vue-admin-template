@@ -48,7 +48,7 @@
       <el-table :data="orders" stripe>
         <el-table-column label="下单时间" width="180px">
           <template slot-scope="scope">
-            {{ parseTime(new Date(scope.row.createdTime)) }}
+            {{ $dateFormat(scope.row.createdTime) }}
           </template>
         </el-table-column>
         <el-table-column label="地区" width="160px">
@@ -197,7 +197,7 @@
       <div>
         <p>施工类型：{{ type[choosedOrder.type] }}</p>
         <p>订单状态： {{ getStatus(choosedOrder.status) }}</p>
-        <p>下单时间：{{ parseTime(new Date(choosedOrder.createdTime)) }}</p>
+        <p>下单时间：{{ $dateFormat(choosedOrder.createdTime) }}</p>
         <p>施工地区：{{ choosedOrder.region.__toString }}</p>
         <p>详细地址：{{ choosedOrder.address }}</p>
         <p>联系人：{{ choosedOrder.contact }}</p>
@@ -281,7 +281,6 @@
 </template>
 
 <script>
-import { parseTime } from '@/utils'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -361,7 +360,6 @@ export default {
     this.getOrders()
   },
   methods: {
-    parseTime,
     getStatus(value) {
       const result = this.statusList.find((e) => e.value === +value)
       return result?.label ?? '未知状态'

@@ -1,99 +1,14 @@
+import { RegionUpload } from '@/components/Region'
+import { querierConfig, formConfig } from '../admin/region-special-price'
+
 export default {
   disabledActions: ['action'],
 
-  querierConfig: [
-    {
-      type: 'input',
-      property: 'region.__toString',
-      props: { placeholder: '请输入区域' }
-    },
-    {
-      type: 'component',
-      property: 'category.id',
-      component: {
-        props: ['func'],
-        render(h) {
-          return (
-            <el-cascader
-              placeholder='请选分类'
-              options={this.categoryList}
-              props={{
-                props: {
-                  value: 'id',
-                  label: '__toString',
-                  checkStrictly: true
-                }
-              }}
-              on-change={e => {
-                this.func('category.id', e[e.length - 1])
-              }}
-              filterable
-            ></el-cascader>
-          )
-        },
-        data() {
-          return {
-            categoryList: []
-          }
-        },
-        created() {
-          const params = {
-            '@filter': 'entity.getType().getSlug() == "services"'
-          }
-          this.$api.get('/api/categories', { params }).then(res => {
-            this.categoryList = res.data.map(e => ({
-              __toString: e.name,
-              ...e
-            }))
-          })
-        }
-      }
-    }
-  ],
+  querierConfig,
 
   tableConfig: ['id', 'category', 'region', 'price'],
 
-  formConfig: [
-    {
-      property: 'category',
-      component: {
-        props: ['form'],
-        render(h) {
-          return (
-            <el-cascader
-              placeholder='搜索'
-              options={this.categoryList}
-              props={{
-                props: { value: 'id', label: '__toString', checkStrictly: true }
-              }}
-              on-change={e => {
-                this.form.category = e[e.length - 1]
-              }}
-              filterable
-            ></el-cascader>
-          )
-        },
-        data() {
-          return {
-            categoryList: []
-          }
-        },
-        created() {
-          const params = {
-            '@filter': 'entity.getType().getSlug() == "services"'
-          }
-          this.$api.get('/api/categories', { params }).then(res => {
-            this.categoryList = res.data.map(e => ({
-              __toString: e.name,
-              ...e
-            }))
-          })
-        }
-      }
-    },
-    { property: 'region', component: Region() },
-    'price'
-  ],
+  formConfig,
 
   uploadValidator: {
     title: '导入区域价钱',
@@ -189,6 +104,6 @@ export default {
         )
       }
     },
-    component: UploadRegion({ checkStrictly: true })
+    component: RegionUpload({ checkStrictly: true })
   }
 }

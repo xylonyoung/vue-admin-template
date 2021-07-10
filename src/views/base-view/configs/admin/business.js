@@ -1,3 +1,4 @@
+import { Region } from '@/components/Region'
 
 export default {
   querierConfig: [
@@ -32,7 +33,10 @@ export default {
     'name',
     'phone',
     { property: 'photo', type: 'upload', config: { dataType: 'string' }},
-    'region',
+    {
+      property: 'region',
+      component: Region()
+    },
     'user'
   ]
 }

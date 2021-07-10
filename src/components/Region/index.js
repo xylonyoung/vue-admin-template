@@ -3,11 +3,11 @@ import Mixin from './Mixin'
 export function RegionList() {
   return {
     mixins: [Mixin],
-    props: ['row', 'property'],
+    props: ['value'],
     render(h) {
       return (
         <div v-loading={this.loading} style='min-height:40px'>
-          {this.row[this.property].map(e => {
+          {this.value.map(e => {
             return <div>{this.getRegionName(e)}</div>
           })}
         </div>
@@ -23,11 +23,10 @@ export function Region(props) {
     render(h) {
       return (
         <div>
-          <div>{this.getRegionName(this.value)}</div>
           <div v-loading={this.loading}>
             {this.loading || (
               <el-cascader
-                style='width:60%'
+                style='width:340px'
                 v-model={this.region}
                 clearable
                 onChange={this.regionChange}
@@ -118,7 +117,13 @@ export function RegionUpload(props) {
               style='width:60%'
               v-model={this.value.region}
               clearable
-              onChange={this.regionChange}
+              onChange={val => {
+                if (val.length > 0) {
+                  this.value.region = val[val.length - 1]
+                } else {
+                  this.value.region = null
+                }
+              }}
               props={{
                 props: {
                   lazy: true,
@@ -135,15 +140,6 @@ export function RegionUpload(props) {
           )}
         </div>
       )
-    },
-    methods: {
-      regionChange(e) {
-        if (e.length > 0) {
-          this.value.region = e[e.length - 1]
-        } else {
-          this.value.region = null
-        }
-      }
     }
   }
 }

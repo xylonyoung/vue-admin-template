@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-table :data="value" v-bind="mixedProps" v-on="events">
+    <el-table :data="value" v-bind="configProps" v-on="events">
       <slot name="selection" />
 
       <el-table-column
@@ -14,9 +14,8 @@
           <div v-if="item.component">
             <component
               :is="item.component"
-              v-model="value"
-              :row="row"
-              :index="$index"
+              v-model="value[$index][propertyName(item)]"
+              :row.sync="value[$index]"
               :property="item.property"
             />
           </div>

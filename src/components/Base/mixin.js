@@ -16,10 +16,20 @@ export default {
     if (this.formData) {
       this.setConfig()
       this.getOptions()
+    } else {
+      // set id width
+      this.config.forEach((e, index) => {
+        if (e === 'id') {
+          this.$set(this.config, index, {
+            property: 'id',
+            props: { width: '100px' }
+          })
+        }
+      })
     }
   },
   computed: {
-    mixedProps() {
+    configProps() {
       return { ...this.defaultProps, ...this.props }
     }
   },

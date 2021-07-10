@@ -1,8 +1,7 @@
+import { DELIVERY_SAMPLE_STATUS, getConstantOptions } from '@/constants'
+import { Region } from '@/components/Region'
 
-import { DELIVERY_SAMPLE_STATUS } from "@/constants"
 export default {
-  disabledActions: ['delete'],
-
   querierConfig: [
     {
       type: 'input',
@@ -34,11 +33,12 @@ export default {
     {
       property: 'status',
       component: {
-        props: ['data'],
+        props: ['value'],
         render(h) {
+          console.log()
           return (
-            <el-tag type={this.data ? 'success' : 'danger'}>
-              {DELIVERY_SAMPLE_STATUS[this.data]}
+            <el-tag type={this.value > 0 ? 'success' : 'danger'}>
+              {DELIVERY_SAMPLE_STATUS[this.value]}
             </el-tag>
           )
         }
@@ -48,20 +48,22 @@ export default {
   ],
 
   formConfig: [
+    'address',
+    'business',
+    'comment',
+    'name',
+    'no',
+    'phone',
+    'price',
+    {
+      property: 'region',
+      component: Region()
+    },
     {
       property: 'status',
-      component: {
-        props: ['form'],
-        render(h) {
-          return (
-            <el-select v-model={this.form.status} placeholder='请选择'>
-              {DELIVERY_SAMPLE_STATUS.map((e, index) => (
-                <el-option label={e} value={index}></el-option>
-              ))}
-            </el-select>
-          )
-        }
-      }
-    }
+      type: 'OneToOne',
+      options: getConstantOptions(DELIVERY_SAMPLE_STATUS)
+    },
+    'user'
   ]
 }

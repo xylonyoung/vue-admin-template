@@ -1,9 +1,7 @@
+import { ROLES_LIST, getConstantOptions } from '@/constants'
+
 // import routes from '@/router/routes'
 // const routeList = routes.map(e => ({ label: e.title, value: e.path }))
-const roles = [
-  { label: '管理员', value: 'ROLE_SUPER_ADMIN' },
-  { label: '用户', value: 'ROLE_USER' }
-]
 
 const formConfig = [
   'username',
@@ -13,6 +11,32 @@ const formConfig = [
     type: 'boolean',
     default: true
   },
+  {
+    property: 'roles',
+    default: [],
+    component: {
+      props: ['value'],
+      render(h) {
+        return (
+          <el-checkbox-group
+            v-model={this.roles}
+            onChange={val => {
+              this.$emit('input', val)
+            }}
+          >
+            {getConstantOptions(ROLES_LIST).map(item => {
+              return <el-checkbox label={item.value}>{item.label}</el-checkbox>
+            })}
+          </el-checkbox-group>
+        )
+      },
+      data() {
+        return {
+          roles: []
+        }
+      }
+    }
+  }
   // {
   //   property: 'permissions',
   //   default: [],
@@ -30,22 +54,6 @@ const formConfig = [
   //     }
   //   }
   // },
-  {
-    property: 'roles',
-    default: [],
-    component: {
-      props: ['data'],
-      render(h) {
-        return (
-          <el-checkbox-group v-model={this.data.roles}>
-            {roles.map(item => {
-              return <el-checkbox label={item.value}>{item.label}</el-checkbox>
-            })}
-          </el-checkbox-group>
-        )
-      }
-    }
-  }
 ]
 
 export default {
@@ -67,6 +75,23 @@ export default {
   tableConfig: [
     'id',
     'username',
+    {
+      property: 'roles',
+      component: {
+        props: ['value'],
+        render(h) {
+          return (
+            <div>
+              {this.value?.map(e => {
+                return <el-tag type='info'>{ROLES_LIST[e]}</el-tag>
+              })}
+            </div>
+          )
+        }
+      }
+    },
+    { property: 'enabled', type: 'boolean' },
+    'createdTime'
     // {
     //   property: 'permissions',
     //   component: {
@@ -82,27 +107,6 @@ export default {
     //     }
     //   }
     // },
-    {
-      property: 'roles',
-      component: {
-        props: ['data'],
-        render(h) {
-          return (
-            <div>
-              {this.data?.roles?.map(item => {
-                return (
-                  <el-tag type='info'>
-                    {roles.find(e => e.value === item)?.label}
-                  </el-tag>
-                )
-              })}
-            </div>
-          )
-        }
-      }
-    },
-    { property: 'enabled', type: 'boolean' },
-    'createdTime'
   ],
 
   formConfig: [...formConfig, 'email'],
@@ -112,22 +116,17 @@ export default {
     {
       property: 'email',
       component: {
-        props: ['data'],
+        props: ['value', 'form'],
         render(h) {
-          return <div>{this.email}</div>
+          return <div>{this.value}</div>
         },
         watch: {
-          'data.username'(val) {
+          'form.username'(val) {
             if (val) {
-              const result = `${val}@mail.com`
-              this.data.email = result
-              this.email = result
+              this.$emit('input', `${val}@mail.com`)
+            } else {
+              this.$emit('input', '')
             }
-          }
-        },
-        data() {
-          return {
-            email: ''
           }
         }
       }

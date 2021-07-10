@@ -1,3 +1,5 @@
+import { Region } from '@/components/Region'
+
 export default {
   tableConfig: [
     'id',
@@ -14,7 +16,10 @@ export default {
     'name',
     'phone',
     'user',
-    'region',
+    {
+      property: 'region',
+      component: Region()
+    },
     'isContacted',
     'type',
     'comment'

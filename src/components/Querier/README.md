@@ -117,14 +117,14 @@ const item = {
   options: { type: Array },
 
   // 获取选项，并配置选项 (e.g., {api:'user', params, label:'name', value:'id'})
-  // formatFunc 存在时不使用 label, value 进行默认格式化  
+  // formatFunc 存在时不使用 label, value 进行默认格式化
   getOptions: {
     type: Object,
     props: ['api', 'params', 'label', 'value', 'formatFunc']
   },
 
-  // 组件化 data双向绑定，而且不再使用 formatFunc 进行格式化
-  component: { type: Object, props: ['data'] }
+  // 组件化 property双向绑定，func 是不使用 formatFunc 进行格式化
+  component: { type: Object, props: ['value', 'func'] }
 
   // 插槽 slot 的 func 是不使用 formatFunc 进行格式化
 }
