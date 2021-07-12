@@ -35,7 +35,6 @@ export default {
       component: {
         props: ['value'],
         render(h) {
-          console.log()
           return (
             <el-tag type={this.value > 0 ? 'success' : 'danger'}>
               {DELIVERY_SAMPLE_STATUS[this.value]}

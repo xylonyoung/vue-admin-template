@@ -1,12 +1,11 @@
-export default function(property) {
+export default function() {
   return {
-    props: ['data'],
+    props: ['value'],
     render(h) {
-      if (this.data?.[property]?.length < 1) return
       return (
         <el-popover placement='left' width='300' trigger='click'>
           <el-timeline>
-            {this.data[property].map(e => (
+            {this.value.map(e => (
               <el-timeline-item
                 timestamp={this.$dateFormat(e.time)}
                 placement='top'

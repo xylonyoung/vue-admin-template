@@ -120,7 +120,7 @@
       </template>
     </el-form-item>
 
-    <el-form-item v-if="save">
+    <el-form-item>
       <el-button type="primary" @click="submitForm()">保存</el-button>
     </el-form-item>
   </el-form>
@@ -138,8 +138,7 @@ export default {
   components: { Tinymce },
   mixins: [mixin],
   props: {
-    value: { type: Object, default: () => ({}) },
-    save: { type: Boolean, default: false }
+    value: { type: Object, default: () => ({}) }
   },
   data() {
     return {

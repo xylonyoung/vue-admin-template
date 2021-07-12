@@ -3,11 +3,11 @@ export default function(list) {
    * @param {{label:String, prop:String}[]} list
    */
   return {
-    props: ['row', 'property'],
+    props: ['value'],
     render(h) {
       return (
         <el-popover placement='left' width='600' trigger='click'>
-          <el-table data={this.row[this.property]}>
+          <el-table data={this.value}>
             {list.map(e => {
               return (
                 <el-table-column

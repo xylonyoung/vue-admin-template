@@ -17,6 +17,7 @@
               v-model="value[$index][propertyName(item)]"
               :row.sync="value[$index]"
               :property="item.property"
+              :entity="entity"
             />
           </div>
 
@@ -70,7 +71,7 @@
         :width="actionsWidth"
       >
         <div ref="actions" slot-scope="{ row }">
-          <slot name="actions" :data="row" />
+          <slot name="actions" :row="row" />
         </div>
       </el-table-column>
     </el-table>

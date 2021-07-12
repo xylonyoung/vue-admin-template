@@ -5,7 +5,7 @@ const adminRoutes = [
     path: 'order',
     title: '订单管理',
     icon: 'el-icon-s-order',
-    component: import('@/views/order')
+    component: import('@/views/order/admin')
   },
   {
     path: 'provider',
@@ -60,7 +60,7 @@ const adminRoutes = [
       { path: '', entity: 'AfterSale', title: '售后记录' },
       {
         path: 'after-sale-todo',
-        entity: { name: 'AfterSale', suffix: '/todo' },
+        entity: { name: 'AfterSale', suffix: 'todo' },
         title: '待处理'
       }
     ]
@@ -112,17 +112,23 @@ const baseRoutes = [
 
 const userRoutes = [
   {
-    path: 'region-special-price',
-    entity: 'RegionSpecialPrice',
-    title: '区域价钱管理',
-    icon: 'el-icon-money'
+    path: 'order',
+    title: '订单管理',
+    icon: 'el-icon-s-order',
+    component: import('@/views/order/user')
   },
-  {
-    path: 'business',
-    entity: 'Business',
-    title: '商家管理',
-    icon: 'el-icon-s-shop'
-  },
+  // {
+  //   path: 'region-special-price',
+  //   entity: 'RegionSpecialPrice',
+  //   title: '区域价钱管理',
+  //   icon: 'el-icon-money'
+  // },
+  // {
+  //   path: 'business',
+  //   entity: 'Business',
+  //   title: '商家管理',
+  //   icon: 'el-icon-s-shop'
+  // },
   {
     path: 'delivery-sample',
     entity: 'DeliverySample',
@@ -143,7 +149,7 @@ const userRoutes = [
       { path: '', entity: 'AfterSale', title: '售后记录' },
       {
         path: 'after-sale-todo',
-        entity: { name: 'AfterSale', suffix: '/todo' },
+        entity: { name: 'AfterSale', suffix: 'todo' },
         title: '待处理'
       }
     ]

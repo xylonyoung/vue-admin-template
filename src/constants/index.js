@@ -23,12 +23,14 @@ export const DELIVERY_SAMPLE_STATUS = {
 }
 
 export const ORDER_STATUS = {
+  '-1': '已取消',
   0: '待提交',
   1: '待支付',
-  2: '待指派',
-  3: '待施工',
-  4: '待验收评价',
-  5: '已完成'
+  2: '待接工',
+  3: '待完工',
+  4: '待验收',
+  5: '待完成',
+  6: '待接单'
 }
 
 export function getConstantOptions(constant) {

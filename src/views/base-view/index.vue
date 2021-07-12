@@ -77,20 +77,19 @@
           />
         </template>
 
-        <template #actions="{ data }">
+        <template #actions="{ row }">
           <div style="display: flex">
             <transition
               v-if="hasTodo"
               style="margin-right: 10px"
-              :todo-list="todoList"
-              :item-id="data.id"
-              :api-prefix="entityPath"
-              @confirm="tableUpdate"
+              :row="row"
+              :path="entityPath"
+              @confirm="getTableData()"
             />
             <el-button
               v-if="!disableActions.includes('edit')"
               size="small"
-              @click="editForm(data.id)"
+              @click="editForm(row.id)"
             >
               修改
             </el-button>
@@ -102,7 +101,7 @@
               icon="el-icon-info"
               icon-color="red"
               title="确定删除吗？"
-              @onConfirm="handleDelete(data.id)"
+              @onConfirm="handleDelete(row.id)"
             >
               <el-button slot="reference" size="small" type="danger">
                 删除
@@ -133,7 +132,6 @@
     >
       <base-form
         v-model="formData"
-        save
         :entity="entity"
         :config="formConfigProcessed"
         :props="formProps"
@@ -157,7 +155,6 @@ export default {
     return {
       entity: null,
       hasTodo: false,
-      todoList: [],
       disableActions: [],
       queryData: null,
       querierConfig: [],
@@ -216,11 +213,6 @@ export default {
           this.tableLoading = false
         })
     },
-    getTodo() {
-      this.$api.get(this.entityPath).then((res) => {
-        this.todoList = res.data
-      })
-    },
     setData() {
       this.entity = this.$route.meta.entity
       const lastPath = this.$route.path.match(/[^\/]+(?!.*\/)/)[0]
@@ -232,8 +224,6 @@ export default {
         ...this.tableEvents,
         'selection-change': this.handleSelectionChange
       }
-
-      if (this.hasTodo) this.getTodo()
 
       this.resetTableData()
     },
@@ -297,8 +287,6 @@ export default {
       })
     },
     tableUpdate(type, param) {
-      if (this.hasTodo) this.getTodo()
-
       if (type === 'post') {
         this.tableData.unshift(param)
       }
