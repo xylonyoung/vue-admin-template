@@ -35,8 +35,8 @@ export default {
   formConfig: [
     'name',
     'user',
-    'isConstructor',
-    'isMarketing',
+    { property: 'isConstructor', default: false },
+    { property: 'isMarketing', default: false },
     { property: 'regions', component: Regions() }
   ]
 }

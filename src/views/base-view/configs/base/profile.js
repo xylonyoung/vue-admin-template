@@ -20,7 +20,7 @@ export default {
 
   tableConfig: [
     'id',
-    { property: 'portraitUrl', type: 'image' },
+    { property: 'avatarUrl', type: 'image' },
     'nickname',
     'phone',
     'user'

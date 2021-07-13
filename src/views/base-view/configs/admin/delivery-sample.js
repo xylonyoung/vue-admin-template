@@ -35,10 +35,12 @@ export default {
       component: {
         props: ['value'],
         render(h) {
+          if (this.value <= 0) return
           return (
-            <el-tag type={this.value > 0 ? 'success' : 'danger'}>
-              {DELIVERY_SAMPLE_STATUS[this.value]}
-            </el-tag>
+            // <el-tag type={this.value > 0 ? 'success' : 'danger'}>
+            //   {DELIVERY_SAMPLE_STATUS[this.value]}
+            // </el-tag>
+            <el-tag type='success'>{DELIVERY_SAMPLE_STATUS[this.value]}</el-tag>
           )
         }
       }

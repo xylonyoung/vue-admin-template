@@ -9,7 +9,7 @@ const actions = {
   async getRegionList({ commit, state }) {
     if (state.isLoadingList) return
     commit('SET_IS_LOADING_LIST', true)
-    const { data } = await $api.get('/manage/uni-regions')
+    const { data } = await $api.get('/api/uni-regions')
     const result = data ?? []
     commit('SET_LIST', result)
     return result

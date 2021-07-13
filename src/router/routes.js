@@ -3,44 +3,44 @@ import { entityPrefix } from '@/settings'
 const adminRoutes = [
   {
     path: 'order',
-    title: '订单管理',
+    title: '订单',
     icon: 'el-icon-s-order',
     component: import('@/views/order/admin')
   },
   {
     path: 'provider',
     entity: 'Provider',
-    title: '服务商管理',
+    title: '服务商',
     icon: 'el-icon-s-custom'
   },
   {
     path: 'region-special-price',
     entity: 'RegionSpecialPrice',
-    title: '区域价钱管理',
+    title: '区域价钱',
     icon: 'el-icon-money'
   },
   {
     path: 'join',
     entity: 'Join',
-    title: '服务商申请管理',
+    title: '服务商申请',
     icon: 'el-icon-document-add'
   },
   {
     path: 'business',
     entity: 'Business',
-    title: '商家管理',
+    title: '商家',
     icon: 'el-icon-s-shop'
   },
   {
     path: 'delivery-sample',
     entity: 'DeliverySample',
-    title: '送样管理',
+    title: '送样',
     icon: 'el-icon-film'
   },
   {
     path: 'worker',
     entity: 'Worker',
-    title: '工人管理',
+    title: '工人',
     icon: 'el-icon-user'
   },
   {
@@ -70,7 +70,7 @@ const adminRoutes = [
 const baseRoutes = [
   {
     path: 'user',
-    title: '用户管理',
+    title: '用户',
     icon: 'el-icon-user-solid',
     children: [
       { path: '', entity: 'User', title: '用户权限' },
@@ -80,18 +80,18 @@ const baseRoutes = [
   // {
   //   path: 'feedback',
   //   entity: 'Feedback',
-  //   title: '反馈管理',
+  //   title: '反馈',
   //   icon: 'el-icon-document'
   // },
   {
     path: 'content',
     entity: 'Content',
-    title: '内容管理',
+    title: '内容',
     icon: 'el-icon-document'
   },
   {
     path: 'pictures',
-    title: '图片管理',
+    title: '图片',
     icon: 'el-icon-picture',
     children: [
       { path: 'album', entity: 'Album', title: '相册' },
@@ -113,32 +113,32 @@ const baseRoutes = [
 const userRoutes = [
   {
     path: 'order',
-    title: '订单管理',
+    title: '订单',
     icon: 'el-icon-s-order',
     component: import('@/views/order/user')
   },
   // {
   //   path: 'region-special-price',
   //   entity: 'RegionSpecialPrice',
-  //   title: '区域价钱管理',
+  //   title: '区域价钱',
   //   icon: 'el-icon-money'
   // },
   // {
   //   path: 'business',
   //   entity: 'Business',
-  //   title: '商家管理',
+  //   title: '商家',
   //   icon: 'el-icon-s-shop'
   // },
   {
     path: 'delivery-sample',
     entity: 'DeliverySample',
-    title: '送样管理',
+    title: '送样',
     icon: 'el-icon-film'
   },
   {
     path: 'worker',
     entity: 'Worker',
-    title: '工人管理',
+    title: '工人',
     icon: 'el-icon-user'
   },
   {

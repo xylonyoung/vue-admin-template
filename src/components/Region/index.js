@@ -7,11 +7,14 @@ export function RegionList() {
     render(h) {
       return (
         <div v-loading={this.loading} style='min-height:40px'>
-          {this.value.map(e => {
-            return <div>{this.getRegionName(e)}</div>
+          {this.regionNameList.map(e => {
+            return <div>{e}</div>
           })}
         </div>
       )
+    },
+    created() {
+      this.getRegionNameList()
     }
   }
 }
@@ -34,7 +37,7 @@ export function Region(props) {
                   props: {
                     lazy: true,
                     lazyLoad: (node, resolve) => {
-                      this.$store.dispatch('region/getRegions', {
+                      this.getRegionList({
                         node,
                         resolve
                       })
@@ -69,7 +72,7 @@ export function Regions(props) {
                   props: {
                     lazy: true,
                     lazyLoad: (node, resolve) => {
-                      this.$store.dispatch('region/getRegions', {
+                      this.getRegionList({
                         node,
                         resolve
                       })
@@ -128,7 +131,7 @@ export function RegionUpload(props) {
                 props: {
                   lazy: true,
                   lazyLoad: (node, resolve) => {
-                    this.$store.dispatch('region/getRegions', {
+                    this.getRegionList({
                       node,
                       resolve
                     })

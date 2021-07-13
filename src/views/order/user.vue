@@ -420,7 +420,7 @@ export default {
     },
     getStatus(value) {
       const result = this.statusList.find((e) => e.value === +value)
-      return result?.label ?? '未知状态'
+      return result?.label ?? ''
     },
     getOrders() {
       this.$api

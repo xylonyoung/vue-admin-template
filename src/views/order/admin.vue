@@ -362,7 +362,7 @@ export default {
   methods: {
     getStatus(value) {
       const result = this.statusList.find((e) => e.value === +value)
-      return result?.label ?? '未知状态'
+      return result?.label ?? ''
     },
     getOrders() {
       let filter = '1'

@@ -1,37 +1,76 @@
-import { mapGetters } from 'vuex'
+// import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
       region: [],
-      loading: true
+      loading: false,
+      regionNameList: [],
+      isDestroy: false
     }
   },
-  computed: {
-    ...mapGetters(['regionList'])
-  },
-  watch: {
-    regionList: {
-      handler(val) {
-        if (val.length === 0) {
-          this.$store.dispatch('region/getRegionList')
-          return
-        }
-        this.loading = false
-      },
-      deep: true,
-      immediate: true
-    }
+  // computed: {
+  //   ...mapGetters(['regionList'])
+  // },
+  // watch: {
+  //   regionList: {
+  //     handler(val) {
+  //       if (val.length === 0) {
+  //         this.$store.dispatch('region/getRegionList')
+  //         return
+  //       }
+  //       this.loading = false
+  //     },
+  //     deep: true,
+  //     immediate: true
+  //   }
+  // },
+  beforeDestroy() {
+    this.isDestroy = true
   },
   methods: {
-    getRegionName(id) {
-      const region = this.regionList.find(e => e.id === Number(id))
-      if (!region) return
+    getRegionNameList() {
+      this.value.forEach(e => {
+        this.getRegionName(e).then(res => {
+          this.regionNameList.push(res)
+        })
+      })
+    },
+    async getRegionName(id) {
+      if (this.isDestroy) return
 
+      const res = await this.$api.get('/api/uni-regions/' + id)
+      const region = res?.data
       let result = region.name
+
       if (region.parent?.id) {
-        result = this.getRegionName(region.parent.id) + ',' + result
+        result = (await this.getRegionName(region.parent.id)) + ',' + result
       }
       return result
+    },
+    async getRegionList({ node, resolve }) {
+      const { level, value } = node
+
+      let res
+      if (value) {
+        res = await this.$api.get('/api/uni-regions', {
+          params: { '@filter': 'entity.getParent().getId() == ' + value }
+        })
+      } else {
+        res = await this.$api.get('/api/uni-regions', {
+          params: { '@filter': 'entity.getParent() == null' }
+        })
+      }
+
+      const result = res?.data.filter(checkout).map(e => ({
+        leaf: level >= 2,
+        value: e.id,
+        label: e.name
+      }))
+
+      resolve(result)
+      function checkout(item) {
+        return value ? item.parent?.id === value : item.parent === null
+      }
     },
     regionChange(e) {
       if (e.length > 0) {

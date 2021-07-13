@@ -7,11 +7,11 @@ export default {
       property: 'name',
       props: { placeholder: '请输入名称' }
     },
-    {
-      type: 'component',
-      property: 'regions',
-      component: Region({ checkStrictly: true })
-    },
+    // {
+    //   type: 'component',
+    //   property: 'regions',
+    //   component: Region({ checkStrictly: true })
+    // },
     {
       type: 'input',
       property: 'phone',
