@@ -19,22 +19,46 @@ export const COUPON_TYPE = {
 }
 
 export const DELIVERY_SAMPLE_STATUS = {
-  // '-1': '已取消',
-  // 0: '未送',
+  '-1': '已取消',
+  0: '未送',
   1: '待送',
   2: '已送',
   3: '已签收'
 }
 
 export const ORDER_STATUS = {
-  // '-1': '已取消',
-  // 0: '待提交',
-  // 1: '待支付',
+  '-1': '已取消',
+  0: '待提交',
+  1: '待支付',
   2: '待接工',
   3: '待完工',
   4: '待验收',
   5: '待完成',
   6: '待接单'
+}
+
+export const ORDER_TYPE = {
+  construction: '施工订单',
+  measure: '测量订单'
+}
+
+export const ORDER_WALL_TYPE = {
+  0: '腻子墙面',
+  1: '乳胶漆墙面'
+}
+
+export const ORDER_HAS_SCALING = {
+  0: '无掉灰',
+  1: '有掉灰'
+}
+
+export const ORDER_HAS_FURNITURE = {
+  0: '有家具',
+  1: '无家具'
+}
+
+export const ORDER_SPECIAL_WALL = {
+  1: '特殊造型'
 }
 
 export function getConstantOptions(constant) {

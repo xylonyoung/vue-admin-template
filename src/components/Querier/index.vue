@@ -115,10 +115,15 @@ export default {
     checkConfig() {
       let haveDefault = false
       this.querierConfig.forEach((e, index) => {
-        if (e.default) {
-          this.$set(this.queryData, e.property, e.default)
+        if ('default' in e) {
           haveDefault = true
+          if (Array.isArray(e.default)) {
+            this.setComponentData(...e.default)
+          } else {
+            this.$set(this.queryData, e.property, e.default)
+          }
         }
+
         // get options data, and set data reactive!
         if (e.getOptions) {
           const { getOptions } = e

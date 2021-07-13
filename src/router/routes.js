@@ -3,6 +3,12 @@ import { entityPrefix } from '@/settings'
 const adminRoutes = [
   {
     path: 'order',
+    entity: 'Order',
+    title: '订单',
+    icon: 'el-icon-s-order'
+  },
+  {
+    path: 'order-temp',
     title: '订单',
     icon: 'el-icon-s-order',
     component: import('@/views/order/admin')
@@ -104,8 +110,8 @@ const baseRoutes = [
     icon: 'el-icon-setting',
     children: [
       { path: 'type', entity: 'Type', title: '类型' },
-      { path: 'category', entity: 'Category', title: '分类' }
-      // ,{ path: 'option', entity: 'Option', title: '配置' }
+      { path: 'category', entity: 'Category', title: '分类' },
+      { path: 'option', entity: 'Option', title: '配置' }
     ]
   }
 ]

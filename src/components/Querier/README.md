@@ -108,7 +108,8 @@ const item = {
   property: { type: String, required: true },
 
   // 默认值 default value
-  default: { type: Any },
+  // 如果是 Array[property, value] 直接赋值不使用 formatFunc 进行格式化
+  default: { type: [String, Array] },
 
   // 标签属性 element's property and attribute
   props: { type: Object },

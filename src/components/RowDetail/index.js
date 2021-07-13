@@ -32,6 +32,7 @@ export default function(config) {
                   }}
                 >
                   <div
+                    ref='label'
                     style={{
                       minWidth: '100px',
                       textAlign: 'right',
@@ -52,6 +53,8 @@ export default function(config) {
                       } else {
                         const type = this.getDataType(item)
                         switch (type) {
+                          case 'constant':
+                            return this.getConstant(item)
                           case 'image':
                             return (
                               <el-image
@@ -68,7 +71,7 @@ export default function(config) {
                               />
                             )
                           case 'array':
-                            return this.getFormItem(item).map(arrayItem => (
+                            return this.getFormItem(item)?.map(arrayItem => (
                               <el-tag type='info'>{arrayItem}</el-tag>
                             ))
                           case 'boolean':
@@ -111,9 +114,18 @@ export default function(config) {
         this.entity
       )
     },
+    mounted() {
+      setTimeout(() => {
+        
+      console.log(this.$refs)
+    }, 2222);
+    },
     methods: {
       propertyName(item) {
         return item?.property ?? item
+      },
+      getConstant(item) {
+        return item.constant[this.row[item.property]]
       },
       getFormItem(item) {
         return this.row[this.propertyName(item)]

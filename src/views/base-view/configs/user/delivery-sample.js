@@ -1,37 +1,22 @@
 import { DELIVERY_SAMPLE_STATUS, getConstantOptions } from '@/constants'
 import RowDetail from '@/components/RowDetail'
+import {
+  DeliverySampleStatus,
+  DeliverySampleQuerierConfig
+} from '../admin/delivery-sample'
 
 export default {
   disableActions: ['action', 'new'],
 
-  querierConfig: [
-    {
-      type: 'date',
-      property: 'createdTime',
-      props: { placeholder: '请选择时间' }
-    }
-  ],
+  querierConfig: DeliverySampleQuerierConfig,
 
   tableConfig: [
     'id',
     'createdTime',
     'quantity',
-    {
-      property: 'status',
-      component: {
-        props: ['value'],
-        render(h) {
-          return (
-            <el-tag type={this.value > 0 ? 'success' : 'danger'}>
-              {DELIVERY_SAMPLE_STATUS[this.value]}
-            </el-tag>
-          )
-        }
-      }
-    },
+    DeliverySampleStatus,
     {
       label: '查看',
-      property: 'status',
       component: RowDetail([
         'address',
         'business',
@@ -41,20 +26,8 @@ export default {
         'phone',
         'price',
         'region',
-        {
-          property: 'status',
-          component: {
-            props: ['value'],
-            render(h) {
-              return (
-                <el-tag type={this.value > 0 ? 'success' : 'danger'}>
-                  {DELIVERY_SAMPLE_STATUS[this.value]}
-                </el-tag>
-              )
-            }
-          }
-        },
-        'user'
+        'user',
+        DeliverySampleStatus
       ])
     }
   ],

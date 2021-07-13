@@ -29,9 +29,12 @@ export default {
   },
   methods: {
     getRegionNameList() {
-      this.value.forEach(e => {
+      if (this.value?.length > 0) this.loading = true
+
+      this.value.forEach((e, index) => {
         this.getRegionName(e).then(res => {
-          this.regionNameList.push(res)
+          if (index === this.value.length - 1) this.loading = false
+          this.regionNameList.push({ id: e, name: res })
         })
       })
     },

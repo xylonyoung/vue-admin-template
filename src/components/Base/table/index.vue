@@ -21,6 +21,9 @@
             />
           </div>
 
+          <div v-else-if="dataType(item, 'constant')">
+            {{ getConstant(row, item) }}
+          </div>
           <div v-else-if="dataType(item, 'image')">
             <el-image
               style="
@@ -45,9 +48,6 @@
           <div v-else-if="dataType(item, 'boolean')">
             <el-tag v-if="row[propertyName(item)]" type="success">是</el-tag>
             <el-tag v-else type="danger">否</el-tag>
-          </div>
-          <div v-else-if="dataType(item, 'status')">
-            {{ getStatus(row, item) }}
           </div>
           <div v-else-if="dataType(item, 'time')">
             {{ $dateFormat(getString(row, item), 'H:m') }}
@@ -106,8 +106,8 @@ export default {
       }, defaultPadding)
       this.actionsWidth = result + 'px'
     },
-    getStatus(row, item) {
-      return item.status[row[item.property]]
+    getConstant(row, item) {
+      return item.constant[row[item.property]]
     },
     getString(row, item) {
       const result = row[this.propertyName(item)]
