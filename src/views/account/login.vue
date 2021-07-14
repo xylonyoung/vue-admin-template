@@ -19,7 +19,15 @@
         />
       </el-form-item>
       <el-form-item>
-        <el-checkbox v-model="isAdmin">管理员</el-checkbox>
+        <el-radio-group v-model="role">
+          <el-radio
+            v-for="(item, index) in roles"
+            :key="index"
+            :label="item.value"
+          >
+            {{ item.label }}
+          </el-radio>
+        </el-radio-group>
       </el-form-item>
     </el-form>
     <div class="submit-btn">
@@ -33,6 +41,8 @@
 </template>
 <script>
 import { setRole } from '@/utils/auth'
+import { roles, defaultLoginRole } from '@/settings'
+
 export default {
   data() {
     return {
@@ -53,7 +63,8 @@ export default {
           }
         ]
       },
-      isAdmin: false,
+      role: defaultLoginRole,
+      roles: [{ label: '管理员', value: 'admin' }, ...roles],
       redirect: undefined
     }
   },
@@ -73,9 +84,7 @@ export default {
           this.$store
             .dispatch('user/login', this.loginForm)
             .then(() => {
-              const role = this.isAdmin ? 'admin' : 'user'
-              setRole(role)
-
+              setRole(this.role)
               this.$router.push({ path: this.redirect || '/' })
               this.loading = false
             })

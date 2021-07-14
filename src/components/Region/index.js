@@ -6,7 +6,7 @@ export function RegionList() {
     props: ['value'],
     render(h) {
       return (
-        <div style='min-height:40px'>
+        <div style='min-height:40px' v-loading={this.listLoading}>
           {this.regionNameList.map(e => {
             return <div>{e.name}</div>
           })}
@@ -25,30 +25,24 @@ export function Region(props) {
     props: ['value'],
     render(h) {
       return (
-        <div>
-          <div>
-            {this.loading || (
-              <el-cascader
-                style='width:340px'
-                v-model={this.region}
-                clearable
-                onChange={this.regionChange}
-                props={{
-                  props: {
-                    lazy: true,
-                    lazyLoad: (node, resolve) => {
-                      this.getRegionList({
-                        node,
-                        resolve
-                      })
-                    },
-                    ...props
-                  }
-                }}
-              ></el-cascader>
-            )}
-          </div>
-        </div>
+        <el-cascader
+          style='width:340px'
+          v-model={this.region}
+          clearable
+          onChange={this.regionChange}
+          props={{
+            props: {
+              lazy: true,
+              lazyLoad: (node, resolve) => {
+                this.getRegionList({
+                  node,
+                  resolve
+                })
+              },
+              ...props
+            }
+          }}
+        ></el-cascader>
       )
     }
   }

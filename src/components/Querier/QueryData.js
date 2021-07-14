@@ -4,10 +4,10 @@ export default class QueryData {
     this.querierConfig = querierConfig
     this.componentData = componentData
     this.typeFunc = {
-      comparison: 'comparisonSearch',
-      date: 'dateSearch',
-      input: 'fuzzySearch',
-      range: 'rangeSearch'
+      comparison: 'comparisonQuery',
+      date: 'dateQuery',
+      input: 'fuzzyQuery',
+      range: 'rangeQuery'
     }
   }
 
@@ -21,7 +21,7 @@ export default class QueryData {
       const { type, formatFunc } = config
       const aTempFunc = formatFunc
         ? this[formatFunc]
-        : this[this.typeFunc[type]] ?? this.equalSearch
+        : this[this.typeFunc[type]] ?? this.equalQuery
 
       result.push(aTempFunc.call(this, key, value, config))
     }
@@ -33,33 +33,17 @@ export default class QueryData {
     return result.join(' && ') || ''
   }
 
-  fuzzySearch(key, value) {
-    return `${this.keyProcess(key)} matches '/${value}/'`
+  arrayPropertyQuery(key, value) {
+    return `"${value}" in ${this.keyProcess(key)}`
   }
 
-  equalSearch(key, value) {
-    return `${this.keyProcess(key)} == ${value}`
-  }
-
-  multiSearch(key, value) {
-    return `${this.keyProcess(key)} in [${value}]`
-  }
-
-  comparisonSearch(key, value) {
+  comparisonQuery(key, value) {
     if (value[0] && value[1]) {
       return `${this.keyProcess(key)} ${value[1]} ${value[0]}`
     }
   }
 
-  rangeSearch(key, value) {
-    if (value[0] && value[1]) {
-      return `${this.keyProcess(key)} >= '${value[0]} && ${this.keyProcess(
-        key
-      )} <= '${value[1]}`
-    }
-  }
-
-  dateSearch(key, value, config) {
+  dateQuery(key, value, config) {
     if (config?.props?.['value-format']) {
       return `${this.keyProcess(key)} == ${value}`
     }
@@ -89,6 +73,26 @@ export default class QueryData {
     return `${this.keyProcess(
       key
     )} >= datetime.get('${beginDate}') && ${this.keyProcess(key)} ${endDate}`
+  }
+
+  equalQuery(key, value) {
+    return `${this.keyProcess(key)} == ${value}`
+  }
+
+  fuzzyQuery(key, value) {
+    return `${this.keyProcess(key)} matches '/${value}/'`
+  }
+
+  multiQuery(key, value) {
+    return `${this.keyProcess(key)} in [${value}]`
+  }
+
+  rangeQuery(key, value) {
+    if (value[0] && value[1]) {
+      return `${this.keyProcess(key)} >= '${value[0]} && ${this.keyProcess(
+        key
+      )} <= '${value[1]}`
+    }
   }
 
   getTomorrow(date) {

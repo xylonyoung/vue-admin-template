@@ -1,17 +1,9 @@
-import { entityPrefix } from '@/settings'
-
 const adminRoutes = [
   {
     path: 'order',
     entity: 'Order',
     title: '订单',
     icon: 'el-icon-s-order'
-  },
-  {
-    path: 'order-temp',
-    title: '订单',
-    icon: 'el-icon-s-order',
-    component: import('@/views/order/admin')
   },
   {
     path: 'provider',
@@ -73,7 +65,7 @@ const adminRoutes = [
   }
 ]
 
-const baseRoutes = [
+const commonRoutes = [
   {
     path: 'user',
     title: '用户',
@@ -116,12 +108,14 @@ const baseRoutes = [
   }
 ]
 
-const userRoutes = [
+const dynamicRoutes = {}
+// dynamicRoutes property must same as roles
+dynamicRoutes.provider = [
   {
     path: 'order',
+    entity: 'Order',
     title: '订单',
-    icon: 'el-icon-s-order',
-    component: import('@/views/order/user')
+    icon: 'el-icon-s-order'
   },
   // {
   //   path: 'region-special-price',
@@ -165,39 +159,40 @@ const userRoutes = [
 export default mergeRoutes()
 
 function mergeRoutes() {
-  const adminRoutesModify = [...adminRoutes, ...baseRoutes].map(e => ({
+  const adminRoutesModify = [...adminRoutes, ...commonRoutes].map(e => ({
     role: 'admin',
     ...e
   }))
 
-  return [...adminRoutesModify, ...userRoutesModify()]
+  return [...adminRoutesModify, ...dynamicRoutesModify()]
 }
 
-function userRoutesModify() {
-  const result = userRoutes.map(e => ({
-    role: 'user',
-    ...e,
-    path: 'user-' + e.path
-  }))
+function dynamicRoutesModify() {
+  const result = []
+  for (const key in dynamicRoutes) {
+    dynamicRoutes[key].forEach(e => {
+      result.push({
+        role: key,
+        ...addPrefix(key, e),
+        path: `${key}-` + e.path
+      })
+    })
+  }
 
-  return addPrefix(result)
+  return result
 }
 
-function addPrefix(arr) {
-  const prefix = entityPrefix || 'api'
+function addPrefix(prefix, route) {
+  const result = { ...route }
+  if (result.children) {
+    result.children = result.children.map(e => addPrefix(prefix, e))
+  }
 
-  return arr.map(e => {
-    const result = { ...e }
-    if (result.children) {
-      result.children = [...addPrefix(result.children)]
-    }
+  if (result.entity) {
+    result.entity = result.entity?.name
+      ? { prefix, ...result.entity }
+      : { name: result.entity, prefix }
+  }
 
-    if (result.entity) {
-      result.entity = result.entity?.name
-        ? { prefix, ...result.entity }
-        : { name: result.entity, prefix }
-    }
-
-    return result
-  })
+  return result
 }

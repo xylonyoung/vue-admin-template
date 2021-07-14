@@ -225,7 +225,15 @@ export default {
         'selection-change': this.handleSelectionChange
       }
 
-      this.resetTableData()
+      let hasDefault = false
+      this.querierConfig.forEach((e) => {
+        if (e?.default) {
+          hasDefault = true
+        }
+      })
+      if (!hasDefault) {
+        this.resetTableData()
+      }
     },
     mergeFilter() {
       const queryList = []

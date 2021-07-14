@@ -3,7 +3,7 @@ import { routerBuilder } from '@/router/router-builder'
 import asyncRoutes from '@/router/routes'
 import store from '@/store'
 import { getRole } from '@/utils/auth'
-import { needPermission } from '@/settings'
+import { hasPermission } from '@/settings'
 
 const state = {
   routes: []
@@ -20,7 +20,7 @@ const actions = {
     function routeFilter() {
       let result = asyncRoutes.filter(e => e.role === getRole())
 
-      if (needPermission) {
+      if (hasPermission) {
         const permissions = store.getters.user?.permissions ?? []
         result = result.filter(e => permissions.includes(e.path))
       }

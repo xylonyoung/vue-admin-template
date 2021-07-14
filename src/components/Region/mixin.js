@@ -4,8 +4,9 @@ export default {
     return {
       region: [],
       loading: false,
+      listLoading: false,
       regionNameList: [],
-      isDestroy: false
+      toStop: false
     }
   },
   // computed: {
@@ -25,21 +26,26 @@ export default {
   //   }
   // },
   beforeDestroy() {
-    this.isDestroy = true
+    this.toStop = true
   },
   methods: {
     getRegionNameList() {
-      if (this.value?.length > 0) this.loading = true
+      if (this.value?.length > 0) {
+        this.loading = true
+        this.listLoading = true
+      }
 
       this.value.forEach((e, index) => {
         this.getRegionName(e).then(res => {
           if (index === this.value.length - 1) this.loading = false
+
+          this.listLoading = false
           this.regionNameList.push({ id: e, name: res })
         })
       })
     },
     async getRegionName(id) {
-      if (this.isDestroy) return
+      if (this.toStop) return
 
       const res = await this.$api.get('/api/uni-regions/' + id)
       const region = res?.data

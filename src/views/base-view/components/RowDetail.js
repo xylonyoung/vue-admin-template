@@ -1,4 +1,4 @@
-export default function(config) {
+export default function(config, btnName) {
   return {
     props: ['row', 'entity'],
     render(h) {
@@ -10,10 +10,11 @@ export default function(config) {
               this.dialogVisible = true
             }}
           >
-            详情
+            {btnName || '详情'}
           </el-button>
           <el-dialog
-            title='查看'
+            title='查看详情'
+            append-to-body
             visible={this.dialogVisible}
             on={{
               'update:visible': val => {
@@ -32,9 +33,8 @@ export default function(config) {
                   }}
                 >
                   <div
-                    ref='label'
                     style={{
-                      minWidth: '100px',
+                      minWidth: '160px',
                       textAlign: 'right',
                       fontWeight: 'bold'
                     }}
@@ -113,12 +113,6 @@ export default function(config) {
         'entity/getEntity',
         this.entity
       )
-    },
-    mounted() {
-      setTimeout(() => {
-        
-      console.log(this.$refs)
-    }, 2222);
     },
     methods: {
       propertyName(item) {

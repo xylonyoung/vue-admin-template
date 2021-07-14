@@ -100,8 +100,8 @@ const item = {
   // 类型 input, comparison, switch, select, date, range, slot and component
   type: { type: String, required: true },
 
-  // 选择格式化函数 fuzzySearch, equalSearch, multiSearch, comparisonSearch
-  // rangeSearch and dateSearch.  详见./QueryData.js
+  // 选择格式化函数 arrayPropertyQuery, comparisonQuery, dateQuery, equalQuery,
+  // fuzzyQuery, multiQuery and rangeQuery.  详见./QueryData.js
   formatFunc: { type: String },
 
   // 查询字段 just like Object syntax (e.g., object.key.key)

@@ -1,4 +1,4 @@
-export default function(list) {
+export default function(list, btnName) {
   /**
    * @param {{label:String, prop:String}[]} list
    */
@@ -21,8 +21,8 @@ export default function(list) {
               )
             })}
           </el-table>
-          <el-button slot='reference' type='primary' size='mini' plain>
-            点击查看
+          <el-button slot='reference' type='primary' size='small' plain>
+            {btnName || '查看'}
           </el-button>
         </el-popover>
       )

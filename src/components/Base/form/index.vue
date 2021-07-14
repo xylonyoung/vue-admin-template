@@ -121,7 +121,7 @@
     </el-form-item>
 
     <el-form-item>
-      <el-button type="primary" @click="submitForm()">保存</el-button>
+      <el-button type="primary" @click="onSubmit()">保存</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -131,7 +131,6 @@ import Uploader from '@/components/Uploader'
 import buildEntityPath from '../buildEntityPath'
 import Tinymce from '@/components/Tinymce'
 import DynamicTags from '@/components/DynamicTags'
-import { entityPrefix } from '@/settings'
 import { getRole } from '@/utils/auth'
 
 export default {
@@ -230,8 +229,8 @@ export default {
         const anEntity = { name: optionName }
         let params = { '@display': 'reduce' }
 
-        if (getRole() !== 'admin' && entityPrefix) {
-          anEntity.prefix = entityPrefix
+        if (getRole() !== 'admin' && getRole()) {
+          anEntity.prefix = getRole()
         }
 
         if (filter) params = { ...params, ...filter }
@@ -250,7 +249,7 @@ export default {
         return types.includes(this.anEntity[propertyName]?.metadata?.type)
       }
     },
-    submitForm() {
+    onSubmit() {
       this.$refs.form.validate((valid) => {
         if (valid) {
           this.$emit('submit', this.formData)

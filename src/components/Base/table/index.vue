@@ -14,6 +14,7 @@
           <div v-if="item.component">
             <component
               :is="item.component"
+              v-if="!reloadData"
               v-model="value[$index][propertyName(item)]"
               :row.sync="value[$index]"
               :property="item.property"
@@ -86,7 +87,20 @@ export default {
     disableActions: { type: Boolean, default: false }
   },
   data() {
-    return { defaultProps: { stripe: true }, actionsWidth: '' }
+    return {
+      defaultProps: { stripe: true },
+      actionsWidth: '',
+      reloadData: false
+    }
+  },
+  watch: {
+    value(value) {
+      // reloadData can reset the component
+      this.reloadData = true
+      this.$nextTick(() => {
+        this.reloadData = false
+      })
+    }
   },
   updated() {
     this.calculateActionsWidth()

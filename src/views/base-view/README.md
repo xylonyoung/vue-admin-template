@@ -33,7 +33,8 @@ export default [
 
 在 Config 文件夹下创建所有 entities
 
-- 注意文件名要和 路由的 path 一致并且使用 kebab-case
+- 注意其他角色的文件夹名要和 settings.js 的 roles 一一对应。
+- 注意文件名要和 路由的 path 一致并且使用 kebab-case。
 
 ```js
 export default {
