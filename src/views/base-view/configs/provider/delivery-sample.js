@@ -1,5 +1,5 @@
 import { DELIVERY_SAMPLE_STATUS, getConstantOptions } from '@/constants'
-import RowDetail from '@/views/base-view/components/RowDetail'
+import RowDetail from '@/components/Base/Table/RowDetail'
 import {
   DeliverySampleStatus,
   DeliverySampleQuerierConfig

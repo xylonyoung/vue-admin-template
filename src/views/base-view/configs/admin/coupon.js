@@ -1,5 +1,5 @@
 import { COUPON_TYPE, getConstantOptions } from '@/constants'
-import ShowValue from '../../components/ShowValue'
+import ShowValue from '@/components/Base/Table/ShowValue'
 
 export default {
   tableConfig: [

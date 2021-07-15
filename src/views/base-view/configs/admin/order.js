@@ -7,11 +7,11 @@ import {
   ORDER_SPECIAL_WALL,
   getConstantOptions
 } from '@/constants'
-import RowDetail from '@/views/base-view/components/RowDetail'
-import ItemTable from '@/views/base-view/components/ItemTable'
+import RowDetail from '@/components/Base/Table/RowDetail'
+import ItemTable from '@/components/Base/Table/ItemTable'
 import { Region } from '@/components/Region'
 import { getRole } from '@/utils/auth'
-import ShowValue from '../../components/ShowValue'
+import ShowValue from '@/components/Base/Table/ShowValue'
 
 const RowDetailTag = RowDetail([
   {
