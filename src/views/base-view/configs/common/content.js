@@ -1,8 +1,4 @@
 export default {
-  listQuery: {
-    '@order': 'id|DESC'
-  },
-
   tableConfig: [
     'id',
     { property: 'cover', type: 'image' },
@@ -14,6 +10,7 @@ export default {
 
   formConfig: [
     'title',
+    // 'category',
     {
       property: 'category',
       filter: {

@@ -1,4 +1,5 @@
 import { ROLES_LIST, getConstantOptions } from '@/constants'
+import Checkbox from '../../components/Checkbox'
 
 // import routes from '@/router/routes'
 // const routeList = routes.map(e => ({ label: e.title, value: e.path }))
@@ -14,46 +15,8 @@ const formConfig = [
   {
     property: 'roles',
     default: [],
-    component: {
-      props: ['value'],
-      render(h) {
-        return (
-          <el-checkbox-group
-            v-model={this.roles}
-            onChange={val => {
-              this.$emit('input', val)
-            }}
-          >
-            {getConstantOptions(ROLES_LIST).map(item => {
-              return <el-checkbox label={item.value}>{item.label}</el-checkbox>
-            })}
-          </el-checkbox-group>
-        )
-      },
-      data() {
-        return {
-          roles: []
-        }
-      }
-    }
+    component: Checkbox(getConstantOptions(ROLES_LIST))
   }
-  // {
-  //   property: 'permissions',
-  //   default: [],
-  //   component: {
-  //     props: ['form'],
-  //     render(h) {
-  //       if (!this.form.permissions) return
-  //       return (
-  //         <el-checkbox-group v-model={this.form.permissions}>
-  //           {routeList.map(item => {
-  //             return <el-checkbox label={item.value}>{item.label}</el-checkbox>
-  //           })}
-  //         </el-checkbox-group>
-  //       )
-  //     }
-  //   }
-  // },
 ]
 
 export default {
@@ -68,8 +31,7 @@ export default {
   ],
 
   listQuery: {
-    '@order': 'id|DESC',
-    '@filter': 'entity.getWechatOpenId() == null'
+    '@order': 'id|DESC'
   },
 
   tableConfig: [
@@ -92,21 +54,6 @@ export default {
     },
     { property: 'enabled', type: 'boolean' },
     'createdTime'
-    // {
-    //   property: 'permissions',
-    //   component: {
-    //     props: ['data'],
-    //     render(h) {
-    //       return (
-    //         <div>
-    //           {this.data?.permissions?.map(item => {
-    //             return <div>{routeList.find(e => e.value === item)?.label}</div>
-    //           })}
-    //         </div>
-    //       )
-    //     }
-    //   }
-    // },
   ],
 
   formConfig: [...formConfig, 'email'],

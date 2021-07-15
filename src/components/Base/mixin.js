@@ -1,6 +1,6 @@
 export default {
   props: {
-    config: { type: Array, required: true },
+    config: { type: Array, default: () => [] },
     props: { type: Object, default: () => ({}) },
     events: { type: Object, default: () => ({}) },
     entity: { type: [Object, String], required: true }
@@ -12,20 +12,9 @@ export default {
   },
   async created() {
     this.anEntity = await this.$store.dispatch('entity/getEntity', this.entity)
-
-    if (this.formData) {
+    if (this.setConfig) {
       this.setConfig()
       this.getOptions()
-    } else {
-      // set id width
-      this.config.forEach((e, index) => {
-        if (e === 'id') {
-          this.$set(this.config, index, {
-            property: 'id',
-            props: { width: '100px' }
-          })
-        }
-      })
     }
   },
   computed: {
@@ -45,13 +34,29 @@ export default {
       const name = this.propertyName(item)
       return this.anEntity[name]?.metadata?.[property]
     },
-    dataType(item, type) {
+    checkDataType(item, type) {
       const name = this.propertyName(item)
       if (item.type) {
         return item.type === type
       } else {
         return this.anEntity[name]?.metadata?.type === type
       }
+    },
+    getString(row, item) {
+      const result = row[this.propertyName(item)]
+      return result?.__toString ?? result
+    },
+    imageUrl(images) {
+      return this.imageList(images)[0]
+    },
+    imageList(images) {
+      if (!images) return []
+
+      if (Array.isArray(images)) {
+        return images.map(e => this.$getImage(e))
+      }
+
+      return [this.$getImage(images)]
     }
   }
 }

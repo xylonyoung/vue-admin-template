@@ -1,5 +1,8 @@
+import BaseMixin from '@/components/Base/Mixin'
+
 export default function(config, btnName) {
   return {
+    mixins: [BaseMixin],
     props: ['row', 'entity'],
     render(h) {
       return (
@@ -54,7 +57,7 @@ export default function(config, btnName) {
                         const type = this.getDataType(item)
                         switch (type) {
                           case 'constant':
-                            return this.getConstant(item)
+                            return this.getConstant(this.row, item)
                           case 'image':
                             return (
                               <el-image
@@ -64,33 +67,42 @@ export default function(config, btnName) {
                                   border: '3px white solid',
                                   boxshadow: '1px 1px 5px #ccc'
                                 }}
-                                src={this.imageUrl(this.getFormItem(item))}
+                                src={this.imageUrl(
+                                  this.row[this.propertyName(item)]
+                                )}
                                 preview-src-list={this.imageList(
-                                  this.getFormItem(item)
+                                  this.row[this.propertyName(item)]
                                 )}
                               />
                             )
                           case 'array':
-                            return this.getFormItem(item)?.map(arrayItem => (
+                            return this.row[
+                              this.propertyName(item)
+                            ]?.map(arrayItem => (
                               <el-tag type='info'>{arrayItem}</el-tag>
                             ))
                           case 'boolean':
-                            return this.getFormItem(item) ? (
+                            return this.row[this.propertyName(item)] ? (
                               <el-tag type='success'>是</el-tag>
                             ) : (
                               <el-tag type='danger'>否</el-tag>
                             )
                           case 'time':
-                            return this.$dateFormat(this.getString(item), 'H:m')
+                            return this.$dateFormat(
+                              this.getString(this.row, item),
+                              'H:m'
+                            )
                           case 'date':
                             return this.$dateFormat(
-                              this.getString(item),
+                              this.getString(this.row, item),
                               'YYYY/M/D'
                             )
                           case 'datetime':
-                            return this.$dateFormat(this.getString(item))
+                            return this.$dateFormat(
+                              this.getString(this.row, item)
+                            )
                           default:
-                            return this.getString(item)
+                            return this.getString(this.row, item)
                         }
                       }
                     })()}
@@ -104,30 +116,10 @@ export default function(config, btnName) {
     },
     data() {
       return {
-        dialogVisible: false,
-        anEntity: {}
+        dialogVisible: false
       }
     },
-    async created() {
-      this.anEntity = await this.$store.dispatch(
-        'entity/getEntity',
-        this.entity
-      )
-    },
     methods: {
-      propertyName(item) {
-        return item?.property ?? item
-      },
-      getConstant(item) {
-        return item.constant[this.row[item.property]]
-      },
-      getFormItem(item) {
-        return this.row[this.propertyName(item)]
-      },
-      getLabel(item) {
-        const name = this.propertyName(item)
-        return item.label ?? this.anEntity[name]?.translation ?? name
-      },
       getDataType(item) {
         const name = this.propertyName(item)
         if (item.type) {
@@ -135,25 +127,6 @@ export default function(config, btnName) {
         } else {
           return this.anEntity[name]?.metadata?.type
         }
-      },
-      getString(item) {
-        const result = this.getFormItem(item)
-        return result?.__toString ?? result
-      },
-      imageUrl(images) {
-        if (!images) return
-
-        const result = Array.isArray(images) ? images[0] : images
-        return this.$getImage(result)
-      },
-      imageList(images) {
-        if (!images) return
-
-        if (Array.isArray(images)) {
-          return images.map(e => this.$getImage(e))
-        }
-
-        return [this.$getImage(images)]
       }
     }
   }

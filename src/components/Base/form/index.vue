@@ -26,7 +26,7 @@
         />
       </template>
 
-      <template v-else-if="dataType(item, 'upload')">
+      <template v-else-if="checkDataType(item, 'upload')">
         <component
           :is="Uploader(item.config)"
           v-model="formData[propertyName(item)]"
@@ -52,17 +52,17 @@
           />
         </el-select>
       </template>
-      <template v-else-if="dataType(item, 'array')">
+      <template v-else-if="checkDataType(item, 'array')">
         <component :is="DynamicTags()" v-model="formData[propertyName(item)]" />
       </template>
-      <template v-else-if="dataType(item, 'boolean')">
+      <template v-else-if="checkDataType(item, 'boolean')">
         <el-switch
           v-model="formData[propertyName(item)]"
           active-text="是"
           inactive-text="否"
         />
       </template>
-      <template v-else-if="dataType(item, 'time')">
+      <template v-else-if="checkDataType(item, 'time')">
         <el-time-picker
           v-model="formData[propertyName(item)]"
           format="HH:mm"
@@ -70,7 +70,7 @@
           placeholder="选择时间"
         />
       </template>
-      <template v-else-if="dataType(item, 'date')">
+      <template v-else-if="checkDataType(item, 'date')">
         <el-date-picker
           v-model="formData[propertyName(item)]"
           type="date"
@@ -78,7 +78,7 @@
           placeholder="选择日期"
         />
       </template>
-      <template v-else-if="dataType(item, 'datetime')">
+      <template v-else-if="checkDataType(item, 'datetime')">
         <el-date-picker
           v-model="formData[propertyName(item)]"
           type="datetime"
@@ -86,24 +86,24 @@
           placeholder="选择日期时间"
         />
       </template>
-      <template v-else-if="dataType(item, 'integer')">
+      <template v-else-if="checkDataType(item, 'integer')">
         <el-input-number
           v-model="formData[propertyName(item)]"
           :min="0"
           :precision="0"
         />
       </template>
-      <template v-else-if="dataType(item, 'float')">
+      <template v-else-if="checkDataType(item, 'float')">
         <el-input-number v-model="formData[propertyName(item)]" :min="0" />
       </template>
-      <template v-else-if="dataType(item, 'decimal')">
+      <template v-else-if="checkDataType(item, 'decimal')">
         <el-input-number
           v-model="formData[propertyName(item)]"
           :min="0"
           :precision="getEntityMetadata('scale') || 2"
         />
       </template>
-      <template v-else-if="dataType(item, 'text')">
+      <template v-else-if="checkDataType(item, 'text')">
         <el-input
           v-model="formData[propertyName(item)]"
           type="textarea"
@@ -111,7 +111,7 @@
           placeholder="请输入"
         />
       </template>
-      <template v-else-if="dataType(item, 'textarea')">
+      <template v-else-if="checkDataType(item, 'textarea')">
         <tinymce v-model="formData[propertyName(item)]" :height="300" />
       </template>
 
@@ -157,14 +157,15 @@ export default {
     DynamicTags,
     isRelational(item) {
       return (
-        this.dataType(item, 'ManyToOne') ||
-        this.dataType(item, 'OneToOne') ||
+        this.checkDataType(item, 'ManyToOne') ||
+        this.checkDataType(item, 'OneToOne') ||
         this.isToMany(item)
       )
     },
     isToMany(item) {
       return (
-        this.dataType(item, 'ManyToMany') || this.dataType(item, 'OneToMany')
+        this.checkDataType(item, 'ManyToMany') ||
+        this.checkDataType(item, 'OneToMany')
       )
     },
     setConfig() {
@@ -212,20 +213,33 @@ export default {
     getOptions() {
       this.config.forEach((e) => {
         const propertyName = this.propertyName(e)
-        if (e.options) {
-          this.$set(this.options, propertyName, e.options)
-          return
+        let entityName
+        let filter
+
+        if (needOption.call(this, propertyName)) {
+          entityName = /[^\\\\]\w+$/.exec(
+            this.anEntity[propertyName]?.metadata?.targetEntity
+          )[0]
         }
 
-        if (e.filter || needOption.call(this, propertyName)) {
-          getOptionData.call(this, propertyName, e.filter)
+        if (e.options) {
+          if (Array.isArray(e.options)) {
+            this.$set(this.options, propertyName, e.options)
+            return
+          } else if (typeof e.options === 'string') {
+            entityName = e.options
+          } else {
+            entityName = e.options?.entity
+            filter = e.options?.filter
+          }
+        }
+
+        if (entityName) {
+          getOptionData.call(this, propertyName, entityName, filter)
         }
       })
 
-      function getOptionData(propertyName, filter) {
-        const optionName = /[^\\\\]\w+$/.exec(
-          this.anEntity[propertyName]?.metadata?.targetEntity
-        )[0]
+      function getOptionData(propertyName, optionName, filter) {
         const anEntity = { name: optionName }
         let params = { '@display': 'reduce' }
 

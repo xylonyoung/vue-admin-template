@@ -22,10 +22,7 @@
             />
           </div>
 
-          <div v-else-if="dataType(item, 'constant')">
-            {{ getConstant(row, item) }}
-          </div>
-          <div v-else-if="dataType(item, 'image')">
+          <div v-else-if="checkDataType(item, 'image')">
             <el-image
               style="
                 width: 64px;
@@ -37,7 +34,7 @@
               :preview-src-list="imageList(row[propertyName(item)])"
             />
           </div>
-          <div v-else-if="dataType(item, 'array')">
+          <div v-else-if="checkDataType(item, 'array')">
             <el-tag
               v-for="(arrayItem, arrayIndex) in row[propertyName(item)]"
               :key="arrayIndex"
@@ -46,17 +43,17 @@
               {{ arrayItem }}
             </el-tag>
           </div>
-          <div v-else-if="dataType(item, 'boolean')">
+          <div v-else-if="checkDataType(item, 'boolean')">
             <el-tag v-if="row[propertyName(item)]" type="success">是</el-tag>
             <el-tag v-else type="danger">否</el-tag>
           </div>
-          <div v-else-if="dataType(item, 'time')">
+          <div v-else-if="checkDataType(item, 'time')">
             {{ $dateFormat(getString(row, item), 'H:m') }}
           </div>
-          <div v-else-if="dataType(item, 'date')">
+          <div v-else-if="checkDataType(item, 'date')">
             {{ $dateFormat(getString(row, item), 'YYYY/M/D') }}
           </div>
-          <div v-else-if="dataType(item, 'datetime')">
+          <div v-else-if="checkDataType(item, 'datetime')">
             {{ $dateFormat(getString(row, item)) }}
           </div>
           <div v-else>
@@ -102,6 +99,17 @@ export default {
       })
     }
   },
+  created() {
+    // set id width
+    this.config.forEach((e, index) => {
+      if (e === 'id') {
+        this.$set(this.config, index, {
+          property: 'id',
+          props: { width: '100px' }
+        })
+      }
+    })
+  },
   updated() {
     this.calculateActionsWidth()
   },
@@ -119,28 +127,6 @@ export default {
         }
       }, defaultPadding)
       this.actionsWidth = result + 'px'
-    },
-    getConstant(row, item) {
-      return item.constant[row[item.property]]
-    },
-    getString(row, item) {
-      const result = row[this.propertyName(item)]
-      return result?.__toString ?? result
-    },
-    imageUrl(images) {
-      if (!images) return
-
-      const result = Array.isArray(images) ? images[0] : images
-      return this.$getImage(result)
-    },
-    imageList(images) {
-      if (!images) return
-
-      if (Array.isArray(images)) {
-        return images.map((e) => this.$getImage(e))
-      }
-
-      return [this.$getImage(images)]
     }
   }
 }

@@ -6,7 +6,7 @@ export default {
       props: {
         placeholder: '请选类型'
       },
-      getOptions: { api: 'manage/types', label: 'name', value: 'id' }
+      getOptions: { api: '/manage/types', label: 'name', value: 'id' }
     }
   ],
 

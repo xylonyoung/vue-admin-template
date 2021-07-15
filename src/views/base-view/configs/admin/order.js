@@ -11,17 +11,16 @@ import RowDetail from '@/views/base-view/components/RowDetail'
 import ItemTable from '@/views/base-view/components/ItemTable'
 import { Region } from '@/components/Region'
 import { getRole } from '@/utils/auth'
+import ShowValue from '../../components/ShowValue'
 
 const RowDetailTag = RowDetail([
   {
     property: 'type',
-    type: 'constant',
-    constant: ORDER_TYPE
+    component: ShowValue(ORDER_TYPE)
   },
   {
     property: 'status',
-    type: 'constant',
-    constant: ORDER_STATUS
+    component: ShowValue(ORDER_STATUS)
   },
   'createdTime',
   'region',
@@ -38,23 +37,19 @@ const RowDetailTag = RowDetail([
   'pickupCode',
   {
     property: 'wallType',
-    type: 'constant',
-    constant: ORDER_WALL_TYPE
+    component: ShowValue(ORDER_WALL_TYPE)
   },
   {
     property: 'hasScaling',
-    type: 'constant',
-    constant: ORDER_HAS_SCALING
+    component: ShowValue(ORDER_HAS_SCALING)
   },
   {
     property: 'hasFurniture',
-    type: 'constant',
-    constant: ORDER_HAS_FURNITURE
+    component: ShowValue(ORDER_HAS_FURNITURE)
   },
   {
     property: 'specialWall',
-    type: 'constant',
-    constant: ORDER_SPECIAL_WALL
+    component: ShowValue(ORDER_SPECIAL_WALL)
   },
   'measureResult'
 ])
@@ -80,8 +75,7 @@ const RowDetailImage = RowDetail(
 const ItemTableTag = ItemTable(
   [
     { label: '服务', prop: '__toString' },
-    { label: '数量', prop: '__metadata.quantity' },
-    { label: '价钱', prop: '__metadata.price' }
+    { label: '数量', prop: '__metadata.quantity' }
   ],
   '施工内容'
 )
@@ -151,8 +145,7 @@ export default {
     'region',
     {
       property: 'type',
-      type: 'constant',
-      constant: ORDER_TYPE
+      component: ShowValue(ORDER_TYPE)
     },
     'contact',
     'phone',
@@ -177,7 +170,7 @@ export default {
         render(h) {
           return (
             <div style={{ display: 'flex' }}>
-              <ItemTableTag v-model={this.value} />
+              <ItemTableTag v-model={this.row.items} />
 
               <RowDetailTag
                 row={this.row}

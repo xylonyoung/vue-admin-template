@@ -30,14 +30,11 @@
 
     <div class="footer">Copyright © 2048 Banana Inc. All rights reserved.</div>
 
-    <snow />
   </div>
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import Snow from './snow.vue'
 export default {
-  components: { Snow },
   data() {
     return {
       background: 'video',
@@ -72,6 +69,7 @@ export default {
 .account-container {
   position: relative;
   min-height: 100vh;
+  background-color: rgba(0,0,0,0.8);
   .mobile {
     margin: 0;
     width: calc(100% - 60px);

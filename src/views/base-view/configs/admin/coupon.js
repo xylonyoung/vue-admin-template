@@ -1,4 +1,5 @@
 import { COUPON_TYPE, getConstantOptions } from '@/constants'
+import ShowValue from '../../components/ShowValue'
 
 export default {
   tableConfig: [
@@ -14,12 +15,7 @@ export default {
     'threshold',
     {
       property: 'type',
-      component: {
-        props: ['value'],
-        render(h) {
-          return <span>{COUPON_TYPE[this.value]}</span>
-        }
-      }
+      component: ShowValue(COUPON_TYPE)
     },
     'userLimit'
   ],
