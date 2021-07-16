@@ -131,6 +131,11 @@ export default function(param) {
         }
       },
       onSuccess(response) {
+        if (!response?.data?.[0]) {
+          this.$message.error('上传错误')
+          return
+        }
+
         if (config.dataType === 'array') {
           if (this.value) {
             this.$emit('input', [...this.value, response.data[0]])

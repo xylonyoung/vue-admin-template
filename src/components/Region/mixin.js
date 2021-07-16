@@ -1,4 +1,4 @@
-// import { mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
@@ -9,22 +9,9 @@ export default {
       toStop: false
     }
   },
-  // computed: {
-  //   ...mapGetters(['regionList'])
-  // },
-  // watch: {
-  //   regionList: {
-  //     handler(val) {
-  //       if (val.length === 0) {
-  //         this.$store.dispatch('region/getRegionList')
-  //         return
-  //       }
-  //       this.loading = false
-  //     },
-  //     deep: true,
-  //     immediate: true
-  //   }
-  // },
+  computed: {
+    ...mapGetters(['regionList'])
+  },
   beforeDestroy() {
     this.toStop = true
   },
@@ -47,40 +34,42 @@ export default {
     async getRegionName(id) {
       if (this.toStop) return
 
-      const res = await this.$api.get('/api/uni-regions/' + id)
-      const region = res?.data
-      let result = region.name
+      let region = this.regionList.find(e => e.id === id)
+      if (!region) {
+        region = await this.$store.dispatch('region/getRegion', id)
+      }
 
+      let result = region.name
       if (region.parent?.id) {
         result = (await this.getRegionName(region.parent.id)) + ',' + result
       }
       return result
     },
-    async getRegionList({ node, resolve }) {
-      const { level, value } = node
+    // async getRegionList({ node, resolve }) {
+    //   const { level, value } = node
 
-      let res
-      if (value) {
-        res = await this.$api.get('/api/uni-regions', {
-          params: { '@filter': 'entity.getParent().getId() == ' + value }
-        })
-      } else {
-        res = await this.$api.get('/api/uni-regions', {
-          params: { '@filter': 'entity.getParent() == null' }
-        })
-      }
+    //   let res
+    //   if (value) {
+    //     res = await this.$api.get('/api/uni-regions', {
+    //       params: { '@filter': 'entity.getParent().getId() == ' + value }
+    //     })
+    //   } else {
+    //     res = await this.$api.get('/api/uni-regions', {
+    //       params: { '@filter': 'entity.getParent() == null' }
+    //     })
+    //   }
 
-      const result = res?.data.filter(checkout).map(e => ({
-        leaf: level >= 2,
-        value: e.id,
-        label: e.name
-      }))
+    //   const result = res?.data.filter(checkout).map(e => ({
+    //     leaf: level >= 2,
+    //     value: e.id,
+    //     label: e.name
+    //   }))
 
-      resolve(result)
-      function checkout(item) {
-        return value ? item.parent?.id === value : item.parent === null
-      }
-    },
+    //   resolve(result)
+    //   function checkout(item) {
+    //     return value ? item.parent?.id === value : item.parent === null
+    //   }
+    // },
     regionChange(e) {
       if (e.length > 0) {
         this.$emit('input', e[e.length - 1])

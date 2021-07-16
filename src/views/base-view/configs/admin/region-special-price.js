@@ -148,7 +148,7 @@ export default {
       })
     },
     async downloadFunc() {
-      const region = this.$store.getters?.regionList.find(
+      const region = this.$store.getters.regionList.find(
         e => e.id === this.componentData.region
       )
       if (!region) {
@@ -172,8 +172,6 @@ export default {
         data,
         filename: region.name + this.filename
       })
-
-      return
 
       function formatFunc(filterVal, jsonData) {
         return jsonData.map(v =>

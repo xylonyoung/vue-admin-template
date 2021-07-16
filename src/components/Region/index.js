@@ -34,7 +34,7 @@ export function Region(props) {
             props: {
               lazy: true,
               lazyLoad: (node, resolve) => {
-                this.getRegionList({
+                this.$store.dispatch('region/getRegions', {
                   node,
                   resolve
                 })
@@ -65,7 +65,7 @@ export function Regions(props) {
                 props: {
                   lazy: true,
                   lazyLoad: (node, resolve) => {
-                    this.getRegionList({
+                    this.$store.dispatch('region/getRegions', {
                       node,
                       resolve
                     })
@@ -130,7 +130,7 @@ export function RegionUpload(props) {
               props: {
                 lazy: true,
                 lazyLoad: (node, resolve) => {
-                  this.getRegionList({
+                  this.$store.dispatch('region/getRegions', {
                     node,
                     resolve
                   })

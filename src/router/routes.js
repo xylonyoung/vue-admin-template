@@ -184,14 +184,16 @@ function dynamicRoutesModify() {
 
 function addPrefix(prefix, route) {
   const result = { ...route }
-  if (result.children) {
-    result.children = result.children.map(e => addPrefix(prefix, e))
-  }
+  if (result.path) result.path = `${prefix}-` + result.path
 
   if (result.entity) {
     result.entity = result.entity?.name
       ? { prefix, ...result.entity }
       : { name: result.entity, prefix }
+  }
+
+  if (result.children) {
+    result.children = result.children.map(e => addPrefix(prefix, e))
   }
 
   return result
