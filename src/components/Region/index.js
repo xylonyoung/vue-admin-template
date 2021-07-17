@@ -6,7 +6,7 @@ export function RegionList() {
     props: ['value'],
     render(h) {
       return (
-        <div style='min-height:40px' v-loading={this.listLoading}>
+        <div style='min-height:40px' v-loading={this.loading}>
           {this.regionNameList.map(e => {
             return <div>{e.name}</div>
           })}

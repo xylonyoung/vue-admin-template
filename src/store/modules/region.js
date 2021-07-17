@@ -1,16 +1,24 @@
 import $api from '@/utils/request'
 
 const state = {
-  list: []
+  list: [],
+  waiting: {}
 }
 
 const actions = {
-  async getRegion({ dispatch, state }, id) {
+  async getRegion({ commit, state }, id) {
     let result = state.list.find(e => e.id === id)
     if (!result) {
-      const { data } = await $api.get('/api/uni-regions/' + id)
-      result = data ?? {}
-      dispatch('mergeRegion', result)
+      const waiting = { ...state.waiting }
+      if (waiting[id]) {
+        const { data } = await waiting[id]
+        result = data ?? {}
+      } else {
+        waiting[id] = $api.get('/api/uni-regions/' + id)
+        commit('SET_WAITING', waiting)
+        const { data } = await waiting[id]
+        result = data ?? {}
+      }
     }
     return result
   },
@@ -25,9 +33,9 @@ const actions = {
         })
         .then(res => {
           result = res?.data ?? []
-          dispatch('mergeRegion', result)
+          dispatch('mergeRegion', { region: result })
         })
-    } else if (state.list?.[index]?.checked) {
+    } else if (state.list?.[index]?.checked || level > 2) {
       // checked just a flag means that this list was loaded.
       result = state.list.filter(e => e.parent?.id === value)
     } else {
@@ -37,7 +45,7 @@ const actions = {
         })
         .then(res => {
           result = res?.data ?? []
-          dispatch('mergeRegion', result, value)
+          dispatch('mergeRegion', { region: result, checkedId: value })
         })
     }
 
@@ -51,14 +59,12 @@ const actions = {
       }))
     }
   },
-  mergeRegion({ commit, state }, region, checkedId) {
-    console.log(checkedId);
+  mergeRegion({ commit, state }, { region, checkedId }) {
     if (Array.isArray(region)) {
       const result = [...state.list]
       if (checkedId) {
         const index = result.findIndex(e => e.id === checkedId)
         result.splice(index, 1, { ...result[index], checked: true })
-        console.log(result[index])
       }
       region.forEach(e => {
         if (!result.some(i => i.id === e.id)) {

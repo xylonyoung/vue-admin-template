@@ -4,7 +4,6 @@ export default {
     return {
       region: [],
       loading: false,
-      listLoading: false,
       regionNameList: [],
       toStop: false
     }
@@ -19,14 +18,12 @@ export default {
     getRegionNameList() {
       if (this.value?.length > 0) {
         this.loading = true
-        this.listLoading = true
       }
 
       this.value.forEach((e, index) => {
         this.getRegionName(e).then(res => {
           if (index === this.value.length - 1) this.loading = false
 
-          this.listLoading = false
           this.regionNameList.push({ id: e, name: res })
         })
       })
@@ -45,31 +42,6 @@ export default {
       }
       return result
     },
-    // async getRegionList({ node, resolve }) {
-    //   const { level, value } = node
-
-    //   let res
-    //   if (value) {
-    //     res = await this.$api.get('/api/uni-regions', {
-    //       params: { '@filter': 'entity.getParent().getId() == ' + value }
-    //     })
-    //   } else {
-    //     res = await this.$api.get('/api/uni-regions', {
-    //       params: { '@filter': 'entity.getParent() == null' }
-    //     })
-    //   }
-
-    //   const result = res?.data.filter(checkout).map(e => ({
-    //     leaf: level >= 2,
-    //     value: e.id,
-    //     label: e.name
-    //   }))
-
-    //   resolve(result)
-    //   function checkout(item) {
-    //     return value ? item.parent?.id === value : item.parent === null
-    //   }
-    // },
     regionChange(e) {
       if (e.length > 0) {
         this.$emit('input', e[e.length - 1])
