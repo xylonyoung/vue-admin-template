@@ -23,6 +23,7 @@
           :form.sync="formData"
           :options="options"
           :property="item.property"
+          :entity="entity"
         />
       </template>
 
@@ -34,7 +35,6 @@
       </template>
 
       <!-- data type -->
-      <!-- select first so other data type can use it as component -->
       <template v-else-if="isRelational(item)">
         <el-select
           v-model="formData[propertyName(item)]"

@@ -29,6 +29,8 @@ const RowDetailTag = RowDetail([
   'phone',
   'comment',
   'worker',
+  'contact2',
+  'phone2',
   'totalPrice',
   'discount',
   'shippingPrice',
@@ -139,14 +141,20 @@ export default {
     }
   ],
 
+  tableQuery: {
+    '@order': 'createdTime|DESC'
+  },
+
   tableConfig: [
     'id',
     'createdTime',
     'region',
+    'address',
     {
       property: 'type',
       component: ShowValue(ORDER_TYPE)
     },
+    'comment',
     'contact',
     'phone',
     {
@@ -170,15 +178,17 @@ export default {
         render(h) {
           return (
             <div style={{ display: 'flex' }}>
-              <ItemTableTag v-model={this.row.items} />
+              <RowDetailTag row={this.row} entity={this.entity} />
 
-              <RowDetailTag
+              <RowDetailImage
                 row={this.row}
                 entity={this.entity}
                 style={{ margin: '0 10px' }}
               />
 
-              <RowDetailImage row={this.row} entity={this.entity} />
+              {this.row.type === 'construction' && (
+                <ItemTableTag v-model={this.row.items} />
+              )}
             </div>
           )
         }
@@ -249,6 +259,16 @@ function EditHandler() {
       props: ['row', 'entity', 'value'],
       render(h) {
         const RegionTag = Region()
+        if (Number(this.row.status) === 2) {
+          return (
+            <el-button type='success' size='small' onClick={this.orderReceive}>
+              接单
+            </el-button>
+          )
+        }
+
+        if (![6, 21].includes(Number(this.row.status))) return
+
         return (
           <div>
             <div style={{ display: 'flex' }}>
@@ -345,10 +365,22 @@ function EditHandler() {
       methods: {
         onSubmit() {
           this.$api
-            .put(this.prefix + 'orders/' + this.row.id, this.formData)
+            .put(this.prefix + 'orders/' + this.row.id, {
+              ...this.formData,
+              status: 6
+            })
             .then(res => {
               this.dialogVisible = false
+              this.$emit('update:row', res.data)
               this.$message.success('保存成功')
+            })
+        },
+        orderReceive() {
+          this.$api
+            .put(this.prefix + 'orders/' + this.row.id, { status: 21 })
+            .then(res => {
+              this.$emit('update:row', res.data)
+              this.$message.success('接单成功')
             })
         }
       }

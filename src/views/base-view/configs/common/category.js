@@ -17,17 +17,75 @@ export default {
     'parent',
     'enabled',
     'sequence',
-    { property: 'icon', type: 'image' }
+    { property: 'icon', type: 'image' },
+    {
+      property: 'extraData',
+      label: '面积系数',
+      component: {
+        props: ['value'],
+        render(h) {
+          return <span>{this.value?.coefficient}</span>
+        }
+      }
+    }
   ],
 
   formConfig: [
     'name',
     'title',
     'subTitle',
-    { property: 'icon', type: 'upload', config: { dataType: 'string' }},
+    { property: 'icon', type: 'upload', config: { dataType: 'string' } },
     'type',
     'parent',
     { property: 'enabled', default: true },
-    { property: 'sequence', default: 0 }
+    { property: 'sequence', default: 0 },
+    {
+      property: 'extraData',
+      label: '面积系数',
+      component: {
+        props: ['value'],
+        render(h) {
+          return (
+            <el-input-number
+              v-model={this.coefficient}
+              onChange={this.onChange}
+              precision={2}
+              label='描述文字'
+            ></el-input-number>
+          )
+        },
+        data() {
+          return {
+            coefficient: 1
+          }
+        },
+        watch: {
+          value: {
+            handler(val) {
+              let result
+              try {
+                result = JSON.parse(val)
+              } catch (error) {
+                console.log(error)
+              }
+
+              if (!result) result = val?.coefficient
+
+              if (result) {
+                this.coefficient = result
+              } else {
+                this.coefficient = 1
+              }
+            },
+            immediate: true
+          }
+        },
+        methods: {
+          onChange(val) {
+            this.$emit('input', JSON.stringify({ coefficient: val }))
+          }
+        }
+      }
+    }
   ]
 }

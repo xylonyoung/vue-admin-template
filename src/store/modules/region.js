@@ -6,7 +6,7 @@ const state = {
 }
 
 const actions = {
-  async getRegion({ commit, state }, id) {
+  async getRegion({ commit, dispatch, state }, id) {
     let result = state.list.find(e => e.id === id)
     if (!result) {
       const waiting = { ...state.waiting }
@@ -18,6 +18,7 @@ const actions = {
         commit('SET_WAITING', waiting)
         const { data } = await waiting[id]
         result = data ?? {}
+        dispatch('mergeRegion', { region: result })
       }
     }
     return result

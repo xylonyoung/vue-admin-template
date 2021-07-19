@@ -9,7 +9,7 @@ files.keys().forEach(key => (config[keyFormat(key)] = files(key).default))
 
 function keyFormat(key) {
   let result = key.match(/[^/]+(?=\.js)/)[0]
-
+  // file name merges with folder name.
   roles.forEach(e => {
     const regex = new RegExp(`${e.value}/`)
     if (regex.test(key)) {

@@ -21,7 +21,7 @@ export default {
     'description',
     'name',
     'phone',
-    'photo',
+    { property: 'photo', type: 'image' },
     'region',
     'user'
   ],
@@ -32,7 +32,7 @@ export default {
     'description',
     'name',
     'phone',
-    { property: 'photo', type: 'upload', config: { dataType: 'string' }},
+    { property: 'photo', type: 'upload', config: { dataType: 'string' } },
     {
       property: 'region',
       component: Region()

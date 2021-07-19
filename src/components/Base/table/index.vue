@@ -105,7 +105,7 @@ export default {
       if (e === 'id') {
         this.$set(this.config, index, {
           property: 'id',
-          props: { width: '100px' }
+          props: { width: '80px' }
         })
       }
     })
