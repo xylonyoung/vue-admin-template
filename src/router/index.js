@@ -60,7 +60,6 @@ export const constantRoutes = [
     children: [
       {
         path: '',
-        name: 'Login',
         component: () => import('@/views/account/login')
       }
     ]
@@ -72,7 +71,6 @@ export const constantRoutes = [
     children: [
       {
         path: '',
-        name: 'Register',
         component: () => import('@/views/account/register')
       }
     ]
@@ -84,7 +82,6 @@ export const constantRoutes = [
     children: [
       {
         path: '',
-        name: 'Forgot',
         component: () => import('@/views/account/forgot')
       }
     ]

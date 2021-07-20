@@ -60,20 +60,44 @@ export default function(config, btnName) {
                             return this.getConstant(this.row, item)
                           case 'image':
                             return (
-                              <el-image
+                              <div
                                 style={{
                                   width: '64px',
                                   height: '64px',
-                                  border: '3px white solid',
-                                  boxshadow: '1px 1px 5px #ccc'
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  textAlign: 'center'
                                 }}
-                                src={this.imageUrl(
+                              >
+                                {this.imageUrl(
                                   this.row[this.propertyName(item)]
-                                )}
-                                preview-src-list={this.imageList(
-                                  this.row[this.propertyName(item)]
-                                )}
-                              />
+                                ) ? (
+                                    <el-image
+                                      style={{
+                                        width: '100%',
+                                        height: '100%'
+                                      }}
+                                      src={this.imageUrl(
+                                        this.row[this.propertyName(item)]
+                                      )}
+                                      preview-src-list={this.imageList(
+                                        this.row[this.propertyName(item)]
+                                      )}
+                                    />
+                                  ) : (
+                                    <div>
+                                      <i
+                                        class='el-icon-document-delete'
+                                        style={{
+                                          marginBottom: '8px',
+                                          fontSize: '32px',
+                                          color: '#bbb'
+                                        }}
+                                      />
+                                      <div>没有图片</div>
+                                    </div>
+                                  )}
+                              </div>
                             )
                           case 'array':
                             return this.row[

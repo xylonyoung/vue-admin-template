@@ -14,7 +14,7 @@
           <div v-if="item.component">
             <component
               :is="item.component"
-              v-if="!reloadData"
+              v-if="showComponent"
               v-model="value[$index][propertyName(item)]"
               :row.sync="value[$index]"
               :property="item.property"
@@ -22,17 +22,29 @@
             />
           </div>
 
-          <div v-else-if="checkDataType(item, 'image')">
+          <div
+            v-else-if="checkDataType(item, 'image')"
+            style="
+              width: 64px;
+              height: 64px;
+              display: flex;
+              align-items: center;
+              text-align: center;
+            "
+          >
             <el-image
-              style="
-                width: 64px;
-                height: 64px;
-                border: 3px white solid;
-                boxshadow: 1px 1px 5px #ccc;
-              "
+              v-if="imageUrl(row[propertyName(item)])"
+              style="width: 100%; height: 100%"
               :src="imageUrl(row[propertyName(item)])"
               :preview-src-list="imageList(row[propertyName(item)])"
             />
+            <div v-else>
+              <i
+                class="el-icon-document-delete"
+                style=" font-size: 32px; color: #bbb"
+              />
+              <div>没有图片</div>
+            </div>
           </div>
           <div v-else-if="checkDataType(item, 'array')">
             <el-tag
@@ -86,17 +98,12 @@ export default {
   data() {
     return {
       defaultProps: { stripe: true },
-      actionsWidth: '',
-      reloadData: false
+      actionsWidth: ''
     }
   },
   watch: {
-    value(value) {
-      // reloadData can reset the component
-      this.reloadData = true
-      this.$nextTick(() => {
-        this.reloadData = false
-      })
+    value() {
+      this.resetComponent()
     }
   },
   created() {

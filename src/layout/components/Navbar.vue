@@ -17,17 +17,35 @@
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
-          <router-link to="/">
-            <el-dropdown-item>
-              {{ name }}
-            </el-dropdown-item>
-          </router-link>
+          <el-dropdown-item>
+            {{ name }}
+          </el-dropdown-item>
+          <el-dropdown-item @click.native="dialogVisible = true">
+            修改密码
+          </el-dropdown-item>
           <el-dropdown-item divided @click.native="logout">
             <span style="display: block">退出</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
+
+    <el-dialog title="修改密码" :visible.sync="dialogVisible" width="400px">
+      <el-input
+        v-model="newPassword"
+        placeholder="请输入新密码"
+        show-password
+      />
+      <el-input
+        v-model="confirmPassword"
+        style="margin-top: 24px"
+        placeholder="请再次输入密码"
+        show-password
+      />
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="confirm">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -41,6 +59,13 @@ export default {
     Breadcrumb,
     Hamburger
   },
+  data() {
+    return {
+      dialogVisible: false,
+      newPassword: '',
+      confirmPassword: ''
+    }
+  },
   computed: {
     ...mapGetters(['sidebar', 'avatar', 'name'])
   },
@@ -52,6 +77,18 @@ export default {
       await this.$store.dispatch('user/logout')
       this.$router.push('/login')
       // this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+    },
+    confirm() {
+      if (this.newPassword !== this.confirmPassword) {
+        this.$message.error('密码不一致！')
+        return
+      }
+
+      this.$api
+        .put('user', { params: { password: this.newPassword }})
+        .then((res) => {
+          this.$message.success('密码修改成功！')
+        })
     }
   }
 }
@@ -133,5 +170,9 @@ export default {
       }
     }
   }
+}
+
+::v-deep .el-dropdown-menu__item {
+  text-align: center;
 }
 </style>

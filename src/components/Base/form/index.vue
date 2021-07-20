@@ -18,6 +18,7 @@
       <template v-if="item.component">
         <component
           :is="item.component"
+          v-if="showComponent"
           v-model="formData[propertyName(item)]"
           :data="value"
           :form.sync="formData"
@@ -150,6 +151,7 @@ export default {
   watch: {
     value() {
       this.setConfig()
+      this.resetComponent()
     }
   },
   methods: {

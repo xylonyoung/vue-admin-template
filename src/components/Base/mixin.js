@@ -7,7 +7,8 @@ export default {
   },
   data() {
     return {
-      anEntity: {}
+      anEntity: {},
+      showComponent: false
     }
   },
   async created() {
@@ -16,6 +17,7 @@ export default {
       this.setConfig()
       this.getOptions()
     }
+    this.resetComponent()
   },
   computed: {
     configProps() {
@@ -23,6 +25,13 @@ export default {
     }
   },
   methods: {
+    resetComponent() {
+      // reset component
+      this.showComponent = false
+      this.$nextTick(() => {
+        this.showComponent = true
+      })
+    },
     propertyName(item) {
       return item?.property ?? item
     },

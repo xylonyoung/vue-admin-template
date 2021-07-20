@@ -1,6 +1,5 @@
 import axios from 'axios'
 import store from '@/store'
-import router from '@/router'
 import { MessageBox, Message } from 'element-ui'
 import { getToken } from '@/utils/auth'
 import { baseURL } from '@/settings'
@@ -65,10 +64,7 @@ service.interceptors.response.use(
     if (error.response) {
       switch (error.response.status) {
         case 403:
-          errorMessage('账号有误，请重新登陆！')
-          store.dispatch('user/logout').then(() => {
-            router.push('/login')
-          })
+          errorMessage('没有权限！')
           break
         default:
           errorMessage('服务器繁忙!')

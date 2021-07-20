@@ -34,7 +34,7 @@ export default {
     'name',
     'title',
     'subTitle',
-    { property: 'icon', type: 'upload', config: { dataType: 'string' } },
+    { property: 'icon', type: 'upload', config: { dataType: 'string' }},
     'type',
     'parent',
     { property: 'enabled', default: true },
@@ -50,7 +50,6 @@ export default {
               v-model={this.coefficient}
               onChange={this.onChange}
               precision={2}
-              label='描述文字'
             ></el-input-number>
           )
         },
@@ -59,25 +58,12 @@ export default {
             coefficient: 1
           }
         },
-        watch: {
-          value: {
-            handler(val) {
-              let result
-              try {
-                result = JSON.parse(val)
-              } catch (error) {
-                console.log(error)
-              }
-
-              if (!result) result = val?.coefficient
-
-              if (result) {
-                this.coefficient = result
-              } else {
-                this.coefficient = 1
-              }
-            },
-            immediate: true
+        created() {
+          const result = this.value?.coefficient
+          if (result) {
+            this.coefficient = result
+          } else {
+            this.coefficient = 1
           }
         },
         methods: {

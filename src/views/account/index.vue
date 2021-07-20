@@ -6,17 +6,6 @@
         fit="contain"
         @click="$router.push('/')"
       />
-      <!-- <div v-if="token">
-        <el-button type="danger" @click="$router.push('/dashboard')">进入管理平台</el-button>
-      </div>
-      <div v-else>
-        <el-button type="primary" @click="$router.push('/login')">
-          登录
-        </el-button>
-        <el-button type="success" @click="$router.push('/register')">
-          注册
-        </el-button>
-      </div> -->
     </div>
 
     <transition name="slide" mode="out-in">
@@ -29,7 +18,6 @@
     </div>
 
     <div class="footer">Copyright © 2048 Banana Inc. All rights reserved.</div>
-
   </div>
 </template>
 <script>
@@ -69,7 +57,7 @@ export default {
 .account-container {
   position: relative;
   min-height: 100vh;
-  background-color: rgba(0,0,0,0.8);
+  background-color: rgba(0, 0, 0, 0.8);
   .mobile {
     margin: 0;
     width: calc(100% - 60px);
@@ -129,28 +117,15 @@ export default {
   }
   .submit-btn {
     width: 100%;
-    // padding: 20px 0;
     .el-button {
       width: 100%;
     }
   }
   .account {
+    margin-top: 24px;
     display: flex;
-    justify-content: center;
-    color: #999;
-    a + a {
-      position: relative;
-      margin-left: 20px;
-      &:before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 16px;
-        border-left: 2px solid#999;
-        transform: translate(-10px, 0);
-      }
-    }
+    justify-content: space-between;
+    color: #ff5c00;
   }
 }
 </style>
