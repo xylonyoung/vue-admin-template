@@ -1,4 +1,4 @@
-import { DELIVERY_SAMPLE_STATUS, getConstantOptions } from '@/constants'
+import { DELIVERY_SAMPLE_STATUS, getConstantOptions } from '@/config/constants'
 import RowDetail from '@/components/Base/Table/RowDetail'
 import {
   DeliverySampleStatus,

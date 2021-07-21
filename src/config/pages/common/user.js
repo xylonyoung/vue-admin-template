@@ -1,4 +1,4 @@
-import { ROLES_LIST, getConstantOptions } from '@/constants'
+import { ROLES_LIST, getConstantOptions } from '@/config/constants'
 import Checkbox from '@/components/Base/Form/Checkbox'
 
 // import routes from '@/router/routes'

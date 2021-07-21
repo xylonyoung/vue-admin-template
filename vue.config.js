@@ -1,6 +1,6 @@
 'use strict'
 const path = require('path')
-const defaultSettings = require('./src/settings.js')
+const defaultSettings = require('./src/config/settings.js')
 const WebpackBar = require('webpackbar')
 
 function resolve(dir) {

@@ -1,9 +1,9 @@
 import { constantRoutes } from '@/router'
 import { routerBuilder } from '@/router/router-builder'
-import asyncRoutes from '@/router/routes'
+import asyncRoutes from '@/config/routes'
 import store from '@/store'
 import { getRole } from '@/utils/auth'
-import { hasPermission } from '@/settings'
+import { hasPermission } from '@/config/settings'
 
 const state = {
   routes: []

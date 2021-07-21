@@ -1,6 +1,6 @@
 import numbro from 'numbro'
 import moment from 'moment'
-import { baseURL } from '@/settings'
+import { baseURL } from '@/config/settings'
 
 /**
  * @param {(Date|String)} date
@@ -18,7 +18,7 @@ export function dateFormat(date, token) {
  * https://numbrojs.com/format.html
  */
 export function numberFormat(num, option) {
-  if (isNaN(num) || !num) return 0
+  if (!num ?? isNaN(num)) return 0
 
   const options = {
     thousandSeparated: true,

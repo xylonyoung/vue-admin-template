@@ -1,7 +1,7 @@
-import { roles } from '@/settings'
+import { roles } from '@/config/settings'
 
 // https://webpack.js.org/guides/dependency-management/#requirecontext
-const files = require.context('./configs', true, /\.js$/)
+const files = require.context('@/config/pages', true, /\.js$/)
 
 const config = {}
 

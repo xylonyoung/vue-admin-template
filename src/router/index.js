@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import { subPath } from '@/settings'
+import { subPath } from '@/config/settings'
 
 Vue.use(Router)
 

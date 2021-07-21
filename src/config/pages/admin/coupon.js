@@ -1,4 +1,4 @@
-import { COUPON_TYPE, getConstantOptions } from '@/constants'
+import { COUPON_TYPE, getConstantOptions } from '@/config/constants'
 import ShowValue from '@/components/Base/Table/ShowValue'
 
 export default {

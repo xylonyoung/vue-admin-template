@@ -6,7 +6,7 @@ import {
   ORDER_HAS_FURNITURE,
   ORDER_SPECIAL_WALL,
   getConstantOptions
-} from '@/constants'
+} from '@/config/constants'
 import RowDetail from '@/components/Base/Table/RowDetail'
 import ItemTable from '@/components/Base/Table/ItemTable'
 import { Region } from '@/components/Region'
