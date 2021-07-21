@@ -10,14 +10,7 @@ export default {
 
   formConfig: [
     'title',
-    // 'category',
-    {
-      property: 'category',
-      filter: {
-        '@filter': 'entity.getType().getSlug() == "content"',
-        '@order': 'id|ASC'
-      }
-    },
+    'category',
     { property: 'cover', type: 'upload' },
     {
       property: 'enabled',

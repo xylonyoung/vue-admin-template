@@ -57,7 +57,6 @@ export default {
 .account-container {
   position: relative;
   min-height: 100vh;
-  background-color: rgba(0, 0, 0, 0.8);
   .mobile {
     margin: 0;
     width: calc(100% - 60px);
@@ -98,7 +97,7 @@ export default {
   width: 100%;
   min-height: 50px;
   color: #fff;
-  // background-color: #151515;
+  background-color: #151515;
 }
 
 ::v-deep .account-form {
