@@ -189,13 +189,12 @@ export default {
         }
 
         // check and set default
-        if (typeof e === 'object' && 'default' in e) {
-          // merge same type
-          if (typeof e.default === typeof value) {
-            this.formData[property] ??= e.default
-          } else {
-            this.formData[property] = e.default
-          }
+        if (
+          typeof e === 'object' &&
+          'default' in e &&
+          typeof e.default !== typeof value
+        ) {
+          this.$set(this.formData, property, e.default)
         }
 
         // set rules

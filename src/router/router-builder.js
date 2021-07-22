@@ -28,7 +28,7 @@ function childrenBuilder(children, noChildren) {
       meta: {
         entity: e.entity,
         title: e.title,
-        icon: e.icon || 'el-icon-caret-right'
+        icon: e.icon
       }
     }
     if (e.children) {

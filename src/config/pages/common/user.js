@@ -30,7 +30,7 @@ export default {
     }
   ],
 
-  listQuery: {
+  tableQuery: {
     '@order': 'id|DESC'
   },
 

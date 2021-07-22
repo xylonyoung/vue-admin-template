@@ -152,7 +152,9 @@ export default {
         const result = {}
         for (const key in this.fields) {
           const value = e[this.fields[key]]
-          if (value) result[key] = value
+          if (value !== undefined) {
+            result[key] = typeof value === 'string' ? value.trim() : value
+          }
         }
         return result
       })
@@ -212,9 +214,10 @@ export default {
     },
     checkTableTitle(header) {
       return new Promise((resolve, reject) => {
-        const titles = Object.values(this.fields)
-        titles.forEach((e) => {
-          if (!header.includes(e)) {
+        const headerList = header.map((e) => e.trim())
+        const values = Object.values(this.fields)
+        values.forEach((e) => {
+          if (!headerList.includes(e)) {
             reject()
             this.$notify.error({
               title: '数据错处',

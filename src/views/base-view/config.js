@@ -2,9 +2,7 @@ import { roles } from '@/config/settings'
 
 // https://webpack.js.org/guides/dependency-management/#requirecontext
 const files = require.context('@/config/pages', true, /\.js$/)
-
 const config = {}
-
 files.keys().forEach(key => (config[keyFormat(key)] = files(key).default))
 
 function keyFormat(key) {

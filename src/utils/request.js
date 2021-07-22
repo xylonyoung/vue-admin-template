@@ -48,11 +48,7 @@ service.interceptors.response.use(
 
     // if the custom code is not 20000, it is judged as an error.
     if (res.code !== 0) {
-      Message({
-        message: res.message || 'Error',
-        type: 'error',
-        duration: 5 * 1000
-      })
+      errorMessage(res.message)
       return Promise.reject(new Error(res.message || 'Error'))
     } else {
       return res
@@ -61,24 +57,20 @@ service.interceptors.response.use(
   error => {
     console.log('error：', error?.response ?? error) // for debug
 
-    if (error.response) {
-      switch (error.response.status) {
-        case 403:
-          errorMessage('没有权限！')
-          break
-        default:
-          errorMessage('服务器繁忙!')
-      }
-    } else {
-      errorMessage('服务器繁忙!')
+    switch (error?.response?.status) {
+      case 403:
+        errorMessage('没有权限！')
+        break
+      default:
+        errorMessage('服务器繁忙!')
     }
 
     return Promise.reject(error)
   }
 )
-function errorMessage(str) {
+function errorMessage(message) {
   Message({
-    message: str ?? '',
+    message: message ?? '',
     type: 'error',
     duration: 5 * 1000
   })
