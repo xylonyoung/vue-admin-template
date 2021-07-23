@@ -22,7 +22,7 @@
           v-model="formData[propertyName(item)]"
           :data="value"
           :form.sync="formData"
-          :options="options"
+          :options.sync="options"
           :property="item.property"
           :entity="entity"
         />
@@ -129,7 +129,7 @@
 <script>
 import mixin from '../Mixin'
 import Uploader from '@/components/Uploader'
-import buildEntityPath from '../buildEntityPath'
+import { buildEntityPath } from '@/router/path-control'
 import Tinymce from '@/components/Tinymce'
 import DynamicTags from '@/components/DynamicTags'
 import { getRole } from '@/utils/auth'

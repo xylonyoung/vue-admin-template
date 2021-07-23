@@ -1,5 +1,5 @@
 module.exports = {
-  baseURL: 'http://worker.jgj-qrcode.cn/',
+  baseURL: 'http://canteen.gdlangying.com/',
 
   /**
    * @type {Array}
@@ -7,13 +7,13 @@ module.exports = {
    * @param {string} value
    * @description role also is entity prefix for api.
    */
-  roles: [{ label: '供应商', value: 'provider' }],
+  roles: [{ label: '管理员', value: 'manage' }],
 
   /**
    * @type {string}
    * @description set default role for login.
    */
-  defaultLoginRole: 'provider',
+  defaultLoginRole: 'business',
 
   /**
    * @type {boolean}

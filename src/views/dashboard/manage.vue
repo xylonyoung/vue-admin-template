@@ -1,5 +1,5 @@
 <template>
-  <div>User</div>
+  <div>Manage</div>
 </template>
 <script>
 export default {

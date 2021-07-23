@@ -1,5 +1,20 @@
 import Layout from '@/layout'
 
+export function routeProcess(dynamicRoutes) {
+  const result = []
+  for (const key in dynamicRoutes) {
+    dynamicRoutes[key].forEach(e => {
+      result.push({
+        role: key,
+        ...addPrefix(key, e),
+        path: `${key}-` + e.path
+      })
+    })
+  }
+
+  return result
+}
+
 export function routerBuilder(list) {
   return list.map(e => {
     const result = {
@@ -36,4 +51,21 @@ function childrenBuilder(children, noChildren) {
     }
     return result
   })
+}
+
+function addPrefix(prefix, route) {
+  const result = { ...route }
+  if (result.path) result.path = `${prefix}-` + result.path
+
+  if (result.entity) {
+    result.entity = result.entity?.name
+      ? { prefix, ...result.entity }
+      : { name: result.entity, prefix }
+  }
+
+  if (result.children) {
+    result.children = result.children.map(e => addPrefix(prefix, e))
+  }
+
+  return result
 }

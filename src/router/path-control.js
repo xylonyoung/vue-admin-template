@@ -1,9 +1,11 @@
 import kebabCase from 'lodash.kebabcase'
 import pluralize from 'pluralize'
+import { roles } from '@/config/settings'
+import { getRole } from '@/utils/auth'
 
-export default function(entity) {
+export function buildEntityPath(entity) {
   // set default prefix
-  let anEntity = { prefix: 'manage' }
+  let anEntity = {}
 
   if (typeof entity === 'string') {
     anEntity.name = parseEntityName(entity)
@@ -15,6 +17,7 @@ export default function(entity) {
   const result = [anEntity.prefix, anEntity.name, anEntity.suffix].filter(
     e => e
   )
+
   return result.join('/')
 
   function parseEntityName(name) {
@@ -22,4 +25,9 @@ export default function(entity) {
     const result = /staff$/i.test(name) ? name + 's' : pluralize(name)
     return kebabCase(result)
   }
+}
+
+export function dynamicPath(path) {
+  const role = roles.find(e => e.value === getRole())
+  return buildEntityPath({ prefix: role.value, name: path })
 }

@@ -64,7 +64,7 @@ export default {
         ]
       },
       role: defaultLoginRole,
-      roles: [{ label: '管理员', value: 'admin' }, ...roles],
+      roles,
       redirect: undefined
     }
   },

@@ -1,71 +1,8 @@
-const adminRoutes = [
-  {
-    path: 'order',
-    entity: 'Order',
-    title: '订单',
-    icon: 'el-icon-s-order'
-  },
-  {
-    path: 'provider',
-    entity: 'Provider',
-    title: '服务商',
-    icon: 'el-icon-s-custom'
-  },
-  {
-    path: 'region-special-price',
-    entity: 'RegionSpecialPrice',
-    title: '区域价钱',
-    icon: 'el-icon-money'
-  },
-  {
-    path: 'join',
-    entity: 'Join',
-    title: '服务商申请',
-    icon: 'el-icon-document-add'
-  },
-  {
-    path: 'business',
-    entity: 'Business',
-    title: '商家',
-    icon: 'el-icon-s-shop'
-  },
-  {
-    path: 'delivery-sample',
-    entity: 'DeliverySample',
-    title: '送样',
-    icon: 'el-icon-film'
-  },
-  {
-    path: 'worker',
-    entity: 'Worker',
-    title: '工人',
-    icon: 'el-icon-user'
-  },
-  {
-    path: 'coupon',
-    title: '优惠券',
-    icon: 'el-icon-s-ticket',
-    children: [
-      { path: '', entity: 'Coupon', title: '优惠券' },
-      { path: 'user-coupon', entity: 'UserCoupon', title: '用户优惠券' }
-    ]
-  },
-  {
-    path: 'after-sale',
-    title: '售后',
-    icon: 'el-icon-chat-line-round',
-    children: [
-      { path: '', entity: 'AfterSale', title: '售后记录' },
-      {
-        path: 'after-sale-todo',
-        entity: { name: 'AfterSale', suffix: 'todo' },
-        title: '待处理'
-      }
-    ]
-  }
-]
+// dynamicRoutes property must same as roles
+const dynamicRoutes = {}
 
-const commonRoutes = [
+dynamicRoutes.manage = [
+  // common
   {
     path: 'user',
     title: '用户',
@@ -84,7 +21,7 @@ const commonRoutes = [
   {
     path: 'content',
     entity: 'Content',
-    title: '内容',
+    title: '公告',
     icon: 'el-icon-document'
   },
   {
@@ -108,93 +45,4 @@ const commonRoutes = [
   }
 ]
 
-const dynamicRoutes = {}
-// dynamicRoutes property must same as roles
-dynamicRoutes.provider = [
-  {
-    path: 'order',
-    entity: 'Order',
-    title: '订单',
-    icon: 'el-icon-s-order'
-  },
-  // {
-  //   path: 'region-special-price',
-  //   entity: 'RegionSpecialPrice',
-  //   title: '区域价钱',
-  //   icon: 'el-icon-money'
-  // },
-  // {
-  //   path: 'business',
-  //   entity: 'Business',
-  //   title: '商家',
-  //   icon: 'el-icon-s-shop'
-  // },
-  {
-    path: 'delivery-sample',
-    entity: 'DeliverySample',
-    title: '送样',
-    icon: 'el-icon-film'
-  },
-  {
-    path: 'worker',
-    entity: 'Worker',
-    title: '工人',
-    icon: 'el-icon-user'
-  },
-  {
-    path: 'after-sale',
-    title: '售后',
-    icon: 'el-icon-chat-line-round',
-    children: [
-      { path: '', entity: 'AfterSale', title: '售后记录' },
-      {
-        path: 'after-sale-todo',
-        entity: { name: 'AfterSale', suffix: 'todo' },
-        title: '待处理'
-      }
-    ]
-  }
-]
-
-export default mergeRoutes()
-
-function mergeRoutes() {
-  const adminRoutesModify = [...adminRoutes, ...commonRoutes].map(e => ({
-    role: 'admin',
-    ...e
-  }))
-
-  return [...adminRoutesModify, ...dynamicRoutesModify()]
-}
-
-function dynamicRoutesModify() {
-  const result = []
-  for (const key in dynamicRoutes) {
-    dynamicRoutes[key].forEach(e => {
-      result.push({
-        role: key,
-        ...addPrefix(key, e),
-        path: `${key}-` + e.path
-      })
-    })
-  }
-
-  return result
-}
-
-function addPrefix(prefix, route) {
-  const result = { ...route }
-  if (result.path) result.path = `${prefix}-` + result.path
-
-  if (result.entity) {
-    result.entity = result.entity?.name
-      ? { prefix, ...result.entity }
-      : { name: result.entity, prefix }
-  }
-
-  if (result.children) {
-    result.children = result.children.map(e => addPrefix(prefix, e))
-  }
-
-  return result
-}
+export default dynamicRoutes

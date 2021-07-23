@@ -1,6 +1,6 @@
 import { constantRoutes } from '@/router'
-import { routerBuilder } from '@/router/router-builder'
-import asyncRoutes from '@/config/routes'
+import { routerBuilder, routeProcess } from '@/router/router-control'
+import dynamicRoutes from '@/config/routes'
 import store from '@/store'
 import { getRole } from '@/utils/auth'
 import { hasPermission } from '@/config/settings'
@@ -18,7 +18,7 @@ const actions = {
       resolve(accessedRoutes)
     })
     function routeFilter() {
-      let result = asyncRoutes.filter(e => e.role === getRole())
+      let result = routeProcess(dynamicRoutes).filter(e => e.role === getRole())
 
       if (hasPermission) {
         const permissions = store.getters.user?.permissions ?? []

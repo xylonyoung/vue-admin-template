@@ -1,18 +1,16 @@
 <template>
   <div class="dashboard-container">
-    <admin v-if="role === 'admin'" />
-    <user v-else />
+    <manage-component v-if="role === 'manage'" />
   </div>
 </template>
 
 <script>
-import Admin from './admin.vue'
-import User from './user.vue'
+import ManageComponent from './manage.vue'
 import { getRole } from '@/utils/auth'
 
 export default {
   name: 'Dashboard',
-  components: { Admin, User },
+  components: { ManageComponent },
   data() {
     return {
       role: getRole()
