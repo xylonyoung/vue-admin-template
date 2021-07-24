@@ -105,8 +105,13 @@ export default {
   data() {
     return { queryData: {}, componentData: {}}
   },
-  created() {
-    this.checkConfig()
+  watch: {
+    querierConfig: {
+      handler() {
+        this.checkConfig()
+      },
+      immediate: true
+    }
   },
   methods: {
     setComponentData(property, val) {

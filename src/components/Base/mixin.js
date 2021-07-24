@@ -53,7 +53,12 @@ export default {
     },
     getString(row, item) {
       const result = row[this.propertyName(item)]
-      return result?.__toString ?? result
+
+      if (typeof result === 'object') {
+        return result?.__toString ?? ''
+      }
+
+      return result
     },
     imageUrl(images) {
       return this.imageList(images)[0]

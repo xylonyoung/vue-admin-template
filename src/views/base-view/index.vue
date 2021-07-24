@@ -148,7 +148,6 @@ import Transition from '@/components/Transition'
 import BaseTable from '@/components/Base/Table'
 import BaseForm from '@/components/Base/Form'
 import Querier from '@/components/Querier'
-import config from './config'
 
 export default {
   components: { BaseTable, BaseForm, Querier, UploadValidator, Transition },
@@ -214,12 +213,16 @@ export default {
           this.tableLoading = false
         })
     },
-    setData() {
+    async setData() {
       this.entity = this.$route.meta.entity
-      const lastPath = this.$route.path.match(/[^\/]+(?!.*\/)/)[0]
-      const keys = Object.keys(config[lastPath])
+      const lastPath = this.$route.path
+        .match(/[^\/]+(?!.*\/)/)[0]
+        .replace('-', '/')
+      const page = await import(`@/config/pages/${lastPath}`)
+      const config = page.default
+      const keys = Object.keys(config)
       keys.forEach((e) => {
-        this[e] = config[lastPath][e]
+        this[e] = config[e]
       })
       this.tableEvents = {
         ...this.tableEvents,

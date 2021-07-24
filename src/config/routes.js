@@ -2,7 +2,7 @@
 const dynamicRoutes = {}
 
 dynamicRoutes.manage = [
-  // common
+  // common pages
   {
     path: 'user',
     title: '用户',

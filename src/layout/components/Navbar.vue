@@ -32,14 +32,19 @@
 
     <el-dialog title="修改密码" :visible.sync="dialogVisible" width="400px">
       <el-input
+        v-model="oldPassword"
+        placeholder="请输入旧密码"
+        show-password
+      />
+      <el-input
         v-model="newPassword"
+        style="margin: 24px 0"
         placeholder="请输入新密码"
         show-password
       />
       <el-input
         v-model="confirmPassword"
-        style="margin-top: 24px"
-        placeholder="请再次输入密码"
+        placeholder="请再次输入新密码"
         show-password
       />
       <span slot="footer" class="dialog-footer">
@@ -62,6 +67,7 @@ export default {
   data() {
     return {
       dialogVisible: false,
+      oldPassword: '',
       newPassword: '',
       confirmPassword: ''
     }
@@ -79,14 +85,31 @@ export default {
       // this.$router.push(`/login?redirect=${this.$route.fullPath}`)
     },
     confirm() {
+      if (!this.oldPassword || !this.newPassword || !this.confirmPassword) {
+        this.$message.error('请填写所有密码')
+        return
+      }
+
+      if (this.oldPassword === this.newPassword) {
+        this.$message.error('旧密码和新密码一样！')
+        return
+      }
+
       if (this.newPassword !== this.confirmPassword) {
-        this.$message.error('密码不一致！')
+        this.$message.error('新密码不一致！')
         return
       }
 
       this.$api
-        .put('user', { params: { password: this.newPassword }})
+        .put('/api/user/change-password', {
+          oldPassword: this.oldPassword,
+          newPassword: this.newPassword
+        })
         .then((res) => {
+          this.dialogVisible = false
+          this.oldPassword = ''
+          this.newPassword = ''
+          this.confirmPassword = ''
           this.$message.success('密码修改成功！')
         })
     }

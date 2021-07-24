@@ -10,7 +10,7 @@ export function buildEntityPath(entity) {
   if (typeof entity === 'string') {
     anEntity.name = parseEntityName(entity)
   } else {
-    anEntity = { ...anEntity, ...entity }
+    anEntity = { ...entity }
     anEntity.name = parseEntityName(entity.name)
   }
 

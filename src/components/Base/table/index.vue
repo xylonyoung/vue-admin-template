@@ -19,6 +19,7 @@
               :row.sync="value[$index]"
               :property="item.property"
               :entity="entity"
+              :index="$index"
             />
           </div>
 

@@ -31,9 +31,9 @@ export default [
 
 ## 2.配置页面
 
-在 Config 文件夹下创建所有 entities
+在 Config/pages 文件夹下创建所有 entities
 
-- 注意其他角色的文件夹名要和 settings.js 的 roles 一一对应。
+- 注意其他角色的文件夹名要和 settings.js 的 roles.value 一一对应。
 - 注意文件名要和 路由的 path 一致并且使用 kebab-case。
 
 ```js
