@@ -1,3 +1,5 @@
+export const ROLES_LIST = { ROLE_SUPER_ADMIN: '管理员', ROLE_USER: '用户' }
+
 // export const ORDER_STATUS = {
 //   '-2': '失败',
 //   '-1': '已取消',
@@ -10,8 +12,6 @@
 //   6: '售后中'
 // }
 
-export const ROLES_LIST = { ROLE_SUPER_ADMIN: '管理员', ROLE_USER: '用户' }
-
 export const CANTEEN_STATUS = { 0: '未歇业', 1: '营业中' }
 
 export const STAFF_STATUS = { 0: '离职', 1: '在职' }
@@ -19,7 +19,7 @@ export const STAFF_STATUS = { 0: '离职', 1: '在职' }
 export function getConstantOptions(constant) {
   const result = []
   for (const key in constant) {
-    result.push({ label: constant[key], value: Number(key) || key })
+    result.push({ label: constant[key], value: Number(key) ?? key })
   }
   return result
 }

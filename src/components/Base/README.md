@@ -39,7 +39,7 @@
             icon="el-icon-info"
             icon-color="red"
             title="确定删除吗？"
-            @onConfirm="handleDelete(row.id)"
+            @confirm="handleDelete(row.id)"
           >
             <el-button slot="reference" size="small" type="danger">
               删除
@@ -95,8 +95,8 @@ type config = {
   default: any // 默认值
   component: object //组件 props 详细见下面 componentProps
   rules: object // el-form 校验规则 https://element.eleme.cn/#/zh-CN/component/form
-  // 表单选项，array 直接使用，object:{entity:string, filter:string 筛选} | string 会根据 entity 获取，
-  options: array | object | string
+  // 表单选项，array 直接使用，string 为 entity 获取数据，object 根据 params 筛选获取数据
+  options: array | string | { entity: string; params: object }
 }
 
 type componentProps = {

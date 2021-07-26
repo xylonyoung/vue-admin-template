@@ -76,7 +76,12 @@ export default class QueryData {
   }
 
   equalQuery(key, value) {
-    return `${this.keyProcess(key)} == ${value}`
+    let result = value
+    if (typeof value === 'string') {
+      result = `"${value}"`
+    }
+
+    return `${this.keyProcess(key)} == ${result}`
   }
 
   fuzzyQuery(key, value) {

@@ -4009,10 +4009,10 @@ electron-to-chromium@^1.3.723:
   resolved "https://registry.nlark.com/electron-to-chromium/download/electron-to-chromium-1.3.743.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.nlark.com%2Felectron-to-chromium%2Fdownload%2Felectron-to-chromium-1.3.743.tgz#fcec24d6d647cb84fd796b42caa1b4039a180894"
   integrity sha1-/Owk1tZHy4T9eWtCyqG0A5oYCJQ=
 
-element-ui@2.13.2:
-  version "2.13.2"
-  resolved "https://registry.nlark.com/element-ui/download/element-ui-2.13.2.tgz#582bf47aaaaaafe23ea1958fae217a687ad06447"
-  integrity sha1-WCv0eqqqr+I+oZWPriF6aHrQZEc=
+element-ui@2.15.3:
+  version "2.15.3"
+  resolved "https://registry.nlark.com/element-ui/download/element-ui-2.15.3.tgz#55108ab82a3bcc646e7b0570871c48ba96300652"
+  integrity sha1-VRCKuCo7zGRuewVwhxxIupYwBlI=
   dependencies:
     async-validator "~1.8.1"
     babel-helper-vue-jsx-merge-props "^2.0.0"

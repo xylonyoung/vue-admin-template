@@ -215,7 +215,6 @@ export default {
       this.config.forEach((e) => {
         const propertyName = this.propertyName(e)
         let entityName
-        let filter
 
         if (needOption.call(this, propertyName)) {
           entityName = /[^\\\\]\w+$/.exec(
@@ -231,16 +230,15 @@ export default {
             entityName = e.options
           } else {
             entityName = e.options?.entity
-            filter = e.options?.filter
           }
         }
 
         if (entityName) {
-          getOptionData.call(this, propertyName, entityName, filter)
+          getOptionData.call(this, propertyName, entityName, e?.options?.params)
         }
       })
 
-      function getOptionData(propertyName, optionName, filter) {
+      function getOptionData(propertyName, optionName, optionParams) {
         const anEntity = { name: optionName }
         let params = { '@display': 'reduce' }
 
@@ -248,7 +246,7 @@ export default {
           anEntity.prefix = getRole()
         }
 
-        if (filter) params = { ...params, ...filter }
+        if (optionParams) params = { ...params, ...optionParams }
 
         this.$api.get(buildEntityPath(anEntity), { params }).then((res) => {
           const result = res?.data?.map((e) => ({

@@ -101,7 +101,7 @@
               icon="el-icon-info"
               icon-color="red"
               title="确定删除吗？"
-              @onConfirm="handleDelete(row.id)"
+              @confirm="handleDelete(row.id)"
             >
               <el-button slot="reference" size="small" type="danger">
                 删除

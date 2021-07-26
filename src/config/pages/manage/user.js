@@ -5,15 +5,17 @@ import Checkbox from '@/components/Base/Form/Checkbox'
 // const routeList = routes.map(e => ({ label: e.title, value: e.path }))
 
 const formConfig = [
-  'username',
-  'plainPassword',
+  { property: 'username', label: '用户名' },
+  { property: 'plainPassword', label: '密码' },
   {
     property: 'enabled',
+    label: '启用',
     type: 'boolean',
     default: true
   },
   {
     property: 'roles',
+    label: '角色',
     default: [],
     component: Checkbox(getConstantOptions(ROLES_LIST))
   }
@@ -31,14 +33,16 @@ export default {
   ],
 
   tableQuery: {
-    '@order': 'id|DESC'
+    '@order': 'id|DESC',
+    '@filter': 'entity.getWechatOpenId() == null'
   },
 
   tableConfig: [
     'id',
-    'username',
+    { property: 'username', label: '用户名' },
     {
       property: 'roles',
+      label: '角色',
       component: {
         props: ['value'],
         render(h) {
@@ -52,16 +56,17 @@ export default {
         }
       }
     },
-    { property: 'enabled', type: 'boolean' },
+    { property: 'enabled', label: '启用', type: 'boolean' },
     'createdTime'
   ],
 
-  formConfig: [...formConfig, 'email'],
+  formConfig: [...formConfig, { property: 'email', label: '邮箱' }],
 
   formConfigForCreate: [
     ...formConfig,
     {
       property: 'email',
+      label: '邮箱',
       component: {
         props: ['value', 'form'],
         render(h) {

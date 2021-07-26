@@ -107,9 +107,12 @@ export default {
   },
   watch: {
     querierConfig: {
-      handler() {
-        this.checkConfig()
+      handler(val, oldVal) {
+        if (val.length > 0 && val !== oldVal) {
+          this.checkConfig()
+        }
       },
+      deep: true,
       immediate: true
     }
   },

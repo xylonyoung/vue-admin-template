@@ -84,14 +84,14 @@ export default {
       if (text) {
         const textData = JSON.parse(text)
         switch (type) {
-          case 'transition':
-            return `流程：${textData[type]}`
-          case 'reason':
-            return `理由：${textData[type]}`
-          case 'user':
-            return `用户：${textData[type]}`
-          default:
-            return ''
+        case 'transition':
+          return `流程：${textData[type]}`
+        case 'reason':
+          return `理由：${textData[type]}`
+        case 'user':
+          return `用户：${textData[type]}`
+        default:
+          return ''
         }
       } else {
         return ''
