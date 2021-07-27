@@ -3,7 +3,7 @@ import { routerBuilder, routeProcess } from '@/router/router-control'
 import dynamicRoutes from '@/config/routes'
 import store from '@/store'
 import { getRole } from '@/utils/auth'
-import { hasPermission } from '@/config/settings'
+import { hasPermission } from '@/config'
 
 const state = {
   routes: []

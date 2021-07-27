@@ -1,6 +1,6 @@
 import kebabCase from 'lodash.kebabcase'
 import pluralize from 'pluralize'
-import { roles } from '@/config/settings'
+import { roles } from '@/config'
 import { getRole } from '@/utils/auth'
 
 export function buildEntityPath(entity) {

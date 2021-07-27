@@ -2,7 +2,7 @@ import axios from 'axios'
 import store from '@/store'
 import { MessageBox, Message } from 'element-ui'
 import { getToken } from '@/utils/auth'
-import { baseURL } from '@/config/settings'
+import { baseURL } from '@/config'
 
 // create an axios instance
 const service = axios.create({

@@ -41,7 +41,7 @@
 </template>
 <script>
 import { setRole } from '@/utils/auth'
-import { roles, defaultLoginRole } from '@/config/settings'
+import { roles, defaultLoginRole } from '@/config'
 
 export default {
   data() {

@@ -1,6 +1,6 @@
 import numbro from 'numbro'
 import moment from 'moment'
-import { baseURL } from '@/config/settings'
+import { baseURL } from '@/config'
 
 /**
  * @param {(Date|String)} date
