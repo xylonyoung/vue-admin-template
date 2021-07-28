@@ -12,11 +12,7 @@ export const ROLES_LIST = { ROLE_SUPER_ADMIN: '管理员', ROLE_USER: '用户' }
 //   6: '售后中'
 // }
 
-export const CANTEEN_STATUS = { 0: '未歇业', 1: '营业中' }
-
-export const STAFF_STATUS = { 0: '离职', 1: '在职' }
-
-export function getConstantOptions(constant) {
+export function constantToOptions(constant) {
   const result = []
   for (const key in constant) {
     result.push({ label: constant[key], value: Number(key) ?? key })

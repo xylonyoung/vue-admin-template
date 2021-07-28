@@ -1,4 +1,4 @@
-import { ROLES_LIST, getConstantOptions } from '@/config/constants'
+import { ROLES_LIST, constantToOptions } from '@/config/constants'
 import Checkbox from '@/components/Base/Form/Checkbox'
 
 // import routes from '@/router/routes'
@@ -17,7 +17,7 @@ const formConfig = [
     property: 'roles',
     label: '角色',
     default: [],
-    component: Checkbox(getConstantOptions(ROLES_LIST))
+    component: Checkbox(constantToOptions(ROLES_LIST))
   }
 ]
 

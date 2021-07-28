@@ -1,5 +1,15 @@
 module.exports = {
+  /**
+   * @type {String}
+   * @description baseURL for @/utils/request.js.
+   */
   baseURL: 'http://canteen.gdlangying.com/',
+
+  /**
+   * @type {String}
+   * @description global title.
+   */
+  title: 'Vue Admin Template',
 
   /**
    * @type {Array}
@@ -7,13 +17,16 @@ module.exports = {
    * @param {string} value
    * @description role also is entity prefix for api.
    */
-  roles: [{ label: '管理员', value: 'manage' }],
+  roles: [
+    { label: '管理员', value: 'manage' },
+    { label: '用户', value: 'api' }
+  ],
 
   /**
    * @type {string}
    * @description set default role for login.
    */
-  defaultLoginRole: 'business',
+  defaultLoginRole: 'api',
 
   /**
    * @type {boolean}
@@ -23,11 +36,9 @@ module.exports = {
 
   /**
    * @type {String}
-   * @description set public sub-path.
+   * @description public sub-path, see vue.config.js -> publicPath.
    */
   subPath: 'admin',
-
-  title: 'Vue Admin Template',
 
   /**
    * @type {boolean} true | false
