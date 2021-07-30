@@ -14,11 +14,11 @@ export function dateFormat(date, token) {
 
 /**
  * @param {(Number|String)} num
- * @returns {Number}
+ * @returns {string}
  * https://numbrojs.com/format.html
  */
 export function numberFormat(num, option) {
-  if (!num ?? isNaN(num)) return 0
+  if (!num ?? isNaN(num)) return '0'
 
   const options = {
     thousandSeparated: true,
@@ -46,26 +46,4 @@ export function getImage(image) {
   if (/^http/.test(name)) return name
 
   return buildFullPath(`/uploads/images/${name}`)
-}
-
-/**
- * get the value in Object or Array
- * key include "." to separate
- * @param {(Object|Array)} param
- * @param {String} prop
- * @returns {String}
- */
-export function getValue(param, prop) {
-  if (typeof param !== 'object' || typeof prop !== 'string') return ''
-
-  const keys = prop.split('.')
-
-  let result = param
-
-  for (const key of keys) {
-    result = result?.[key]
-    if (!result) break
-  }
-
-  return result ?? ''
 }

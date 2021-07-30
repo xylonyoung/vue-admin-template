@@ -14,7 +14,7 @@ export default function(list, btnName) {
                   label={e.label}
                   scopedSlots={{
                     default: ({ row }) => {
-                      return <span>{this.$getValue(row, e.prop)}</span>
+                      return <span>{row[e.prop]}</span>
                     }
                   }}
                 ></el-table-column>
