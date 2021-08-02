@@ -1,4 +1,7 @@
 import BaseMixin from '@/components/Base/Mixin'
+import ImageRender from './ImageRender'
+
+const imageRender = ImageRender()
 
 export default function(config, btnName) {
   return {
@@ -60,44 +63,9 @@ export default function(config, btnName) {
                             return this.getConstant(this.row, item)
                           case 'image':
                             return (
-                              <div
-                                style={{
-                                  width: '64px',
-                                  height: '64px',
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  textAlign: 'center'
-                                }}
-                              >
-                                {this.imageUrl(
-                                  this.row[this.propertyName(item)]
-                                ) ? (
-                                    <el-image
-                                      style={{
-                                        width: '100%',
-                                        height: '100%'
-                                      }}
-                                      src={this.imageUrl(
-                                        this.row[this.propertyName(item)]
-                                      )}
-                                      preview-src-list={this.imageList(
-                                        this.row[this.propertyName(item)]
-                                      )}
-                                    />
-                                  ) : (
-                                    <div>
-                                      <i
-                                        class='el-icon-document-delete'
-                                        style={{
-                                          marginBottom: '8px',
-                                          fontSize: '32px',
-                                          color: '#bbb'
-                                        }}
-                                      />
-                                      <div>没有图片</div>
-                                    </div>
-                                  )}
-                              </div>
+                              <imageRender
+                                v-model={this.row[this.propertyName(item)]}
+                              />
                             )
                           case 'array':
                             return this.row[

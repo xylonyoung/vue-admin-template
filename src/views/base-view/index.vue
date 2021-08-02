@@ -188,7 +188,7 @@ export default {
     }
   },
   created() {
-    this.setData()
+    this.initConfig()
   },
   methods: {
     resetTableData() {
@@ -213,7 +213,7 @@ export default {
           this.tableLoading = false
         })
     },
-    async setData() {
+    async initConfig() {
       this.entity = this.$route.meta.entity
       const lastPath = this.$route.path
         .match(/[^\/]+(?!.*\/)/)[0]
@@ -224,10 +224,20 @@ export default {
       keys.forEach((e) => {
         this[e] = config[e]
       })
+
       this.tableEvents = {
         ...this.tableEvents,
         'selection-change': this.handleSelectionChange
       }
+
+      this.tableConfig.forEach((e, index) => {
+        if (e === 'id') {
+          this.$set(this.tableConfig, index, {
+            property: 'id',
+            props: { width: '80px' }
+          })
+        }
+      })
 
       let hasDefault = false
       this.querierConfig.forEach((e) => {

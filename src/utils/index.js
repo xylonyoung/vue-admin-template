@@ -8,7 +8,7 @@ import { baseURL } from '@/config'
  * https://momentjs.com/docs/#/displaying/format/
  */
 export function dateFormat(date, token) {
-  if (!date) return 'error date'
+  if (!date) return ''
   return moment(date).format(token ?? 'YYYY-M-D H:m')
 }
 
@@ -43,7 +43,9 @@ export function buildFullPath(relativeURL) {
  */
 export function getImage(image) {
   const name = image?.__toString ?? image
-  if (/^http/.test(name)) return name
+  if (/^http|^data:image/.test(name)) {
+    return name
+  }
 
   return buildFullPath(`/uploads/images/${name}`)
 }

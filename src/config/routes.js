@@ -21,7 +21,7 @@ dynamicRoutes.manage = [
   {
     path: 'content',
     entity: 'Content',
-    title: '公告',
+    title: '内容',
     icon: 'el-icon-document'
   },
   {

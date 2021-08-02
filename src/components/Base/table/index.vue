@@ -23,29 +23,11 @@
             />
           </div>
 
-          <div
-            v-else-if="checkDataType(item, 'image')"
-            style="
-              width: 64px;
-              height: 64px;
-              display: flex;
-              align-items: center;
-              text-align: center;
-            "
-          >
-            <el-image
-              v-if="imageUrl(row[propertyName(item)])"
-              style="width: 100%; height: 100%"
-              :src="imageUrl(row[propertyName(item)])"
-              :preview-src-list="imageList(row[propertyName(item)])"
+          <div v-else-if="checkDataType(item, 'image')">
+            <component
+              :is="ImageRender()"
+              v-model="value[$index][propertyName(item)]"
             />
-            <div v-else>
-              <i
-                class="el-icon-document-delete"
-                style=" font-size: 32px; color: #bbb"
-              />
-              <div>没有图片</div>
-            </div>
           </div>
           <div v-else-if="checkDataType(item, 'array')">
             <el-tag
@@ -90,6 +72,7 @@
 </template>
 <script>
 import mixin from '../Mixin'
+import ImageRender from './ImageRender'
 export default {
   mixins: [mixin],
   props: {
@@ -107,21 +90,11 @@ export default {
       this.resetComponent()
     }
   },
-  created() {
-    // set id width
-    this.config.forEach((e, index) => {
-      if (e === 'id') {
-        this.$set(this.config, index, {
-          property: 'id',
-          props: { width: '80px' }
-        })
-      }
-    })
-  },
   updated() {
     this.calculateActionsWidth()
   },
   methods: {
+    ImageRender,
     calculateActionsWidth() {
       const refs = { ...this.$refs.actions?.children?.[0]?.children }
       const keys = Object.keys(refs)

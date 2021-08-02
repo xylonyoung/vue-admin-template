@@ -59,18 +59,6 @@ export default {
       }
 
       return result
-    },
-    imageUrl(images) {
-      return this.imageList(images)[0]
-    },
-    imageList(images) {
-      if (!images) return []
-
-      if (Array.isArray(images)) {
-        return images.map(e => this.$getImage(e))
-      }
-
-      return [this.$getImage(images)]
     }
   }
 }
