@@ -142,7 +142,7 @@
   </div>
 </template>
 <script>
-import { buildEntityPath } from '@/router/path-control'
+import { buildEntityPath } from '@/utils/path'
 import UploadValidator from '@/components/UploadValidator'
 import Transition from '@/components/Transition'
 import BaseTable from '@/components/Base/Table'

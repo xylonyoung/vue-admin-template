@@ -129,7 +129,7 @@
 <script>
 import mixin from '../Mixin'
 import Uploader from '@/components/Uploader'
-import { buildEntityPath } from '@/router/path-control'
+import { buildEntityPath } from '@/utils/path'
 import Tinymce from '@/components/Tinymce'
 import DynamicTags from '@/components/DynamicTags'
 import { getRole } from '@/utils/auth'

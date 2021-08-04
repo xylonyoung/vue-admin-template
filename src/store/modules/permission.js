@@ -1,5 +1,5 @@
 import { constantRoutes } from '@/router'
-import { routerBuilder, routeProcess } from '@/router/router-control'
+import { routerBuilder, routeProcess } from '@/utils/router'
 import dynamicRoutes from '@/config/routes'
 import store from '@/store'
 import { getRole } from '@/utils/auth'

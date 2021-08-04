@@ -1,4 +1,4 @@
-import { dynamicPath } from '@/router/path-control'
+import { dynamicPath } from '@/utils/path'
 
 export const aBusiness = {
   type: 'select',
