@@ -69,7 +69,7 @@
         //上传成功回调
       },
       createdFunc() {
-        this.$api.get('/business/businesses').then(res => {
+        this.$request.get('/business/businesses').then(res => {
           const { data } = res
           this.rules.department.departments = data?.departments ?? []
         })
@@ -78,7 +78,7 @@
         return new Promise((resolve, reject) => {
           const waitPromise = []
           excelData.forEach(e => {
-            waitPromise.push(this.$api.post('/manage/salaries', e))
+            waitPromise.push(this.$request.post('/manage/salaries', e))
           })
           Promise.all(waitPromise)
             .then(() => {
@@ -90,7 +90,7 @@
         })
       },
       async downloadFunc() {
-        const res = await this.$api.get('/manage/staffs')
+        const res = await this.$request.get('/manage/staffs')
 
         if (res.data.length === 0) {
           this.$message.warning('公司暂无员工')

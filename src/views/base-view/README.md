@@ -144,7 +144,7 @@ export default {
       return new Promise((resolve, reject) => {
         const waitPromise = []
         excelData.forEach(e => {
-          waitPromise.push(this.$api.post('/manage/salaries', e))
+          waitPromise.push(this.$request.post('/manage/salaries', e))
         })
         Promise.all(waitPromise)
           .then(() => {

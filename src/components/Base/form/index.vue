@@ -248,7 +248,7 @@ export default {
 
         if (optionParams) params = { ...params, ...optionParams }
 
-        this.$api.get(buildEntityPath(anEntity), { params }).then((res) => {
+        this.$request.get(buildEntityPath(anEntity), { params }).then((res) => {
           const result = res?.data?.map((e) => ({
             value: e.id,
             label: e.name ?? e.title ?? e.__toString

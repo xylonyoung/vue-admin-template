@@ -136,7 +136,7 @@ export default {
         if (e.getOptions) {
           const { getOptions } = e
           const params = getOptions.params ?? ''
-          this.$api(getOptions.api, { params }).then((res) => {
+          this.$request(getOptions.api, { params }).then((res) => {
             const result = getOptions.formatFunc
               ? getOptions.formatFunc(res.data)
               : res.data.map((i) => {

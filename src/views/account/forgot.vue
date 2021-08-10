@@ -93,7 +93,7 @@ export default {
     onSubmit(form) {
       this.$refs[form].validate((valid) => {
         if (valid) {
-          this.$api.post('forgot', this.resetForm).then((res) => {
+          this.$request.post('forgot', this.resetForm).then((res) => {
             this.$router.push('/login')
             this.$message.success('成功')
           })

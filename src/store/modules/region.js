@@ -1,4 +1,4 @@
-import $api from '@/utils/request'
+import $request from '@/utils/request'
 
 const state = {
   list: [],
@@ -14,7 +14,7 @@ const actions = {
         const { data } = await waiting[id]
         result = data ?? {}
       } else {
-        waiting[id] = $api.get('/api/uni-regions/' + id)
+        waiting[id] = $request.get('/api/uni-regions/' + id)
         commit('SET_WAITING', waiting)
         const { data } = await waiting[id]
         result = data ?? {}
@@ -28,7 +28,7 @@ const actions = {
     const index = state.list.findIndex(e => e.id === value)
     let result
     if (!value) {
-      await $api
+      await $request
         .get('/api/uni-regions', {
           params: { '@filter': 'entity.getParent() == null' }
         })
@@ -40,7 +40,7 @@ const actions = {
       // checked just a flag means that this list was loaded.
       result = state.list.filter(e => e.parent?.id === value)
     } else {
-      await $api
+      await $request
         .get('/api/uni-regions', {
           params: { '@filter': 'entity.getParent().getId() == ' + value }
         })

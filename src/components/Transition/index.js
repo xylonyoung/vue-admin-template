@@ -105,7 +105,7 @@ export default {
           transition: transition
         })
       }
-      await this.$api.post(
+      await this.$request.post(
         `${this.path.replace(/todo/, this.row.id)}/do/${transition}`,
         data
       )

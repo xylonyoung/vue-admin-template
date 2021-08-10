@@ -198,7 +198,7 @@ export default {
     getTableData() {
       this.tableLoading = true
       const params = { ...this.tableQueryProcessed }
-      this.$api
+      this.$request
         .get(this.entityPath, { params })
         .then((res) => {
           this.tableLoading = false
@@ -268,7 +268,7 @@ export default {
     async handleDownload() {
       this.downloadLoading = true
       const params = this.mergeFilter()
-      const res = await this.$api.get(this.downloadConfig.api, { params })
+      const res = await this.$request.get(this.downloadConfig.api, { params })
       if (res.data.length === 0) {
         this.$message.warning('暂无数据')
         this.downloadLoading = false
@@ -303,7 +303,7 @@ export default {
       this.selected = e
     },
     handleDelete(id) {
-      this.$api.delete(this.entityPath + `/${id}`).then(() => {
+      this.$request.delete(this.entityPath + `/${id}`).then(() => {
         this.tableUpdate('delete', id)
         this.$message.success('删除成功')
       })
@@ -333,7 +333,7 @@ export default {
         url += `/${this.formData.id}`
       }
 
-      this.$api({ method, url, data }).then((res) => {
+      this.$request({ method, url, data }).then((res) => {
         this.$message.success('成功')
         this.formDialogVisible = false
         this.tableUpdate(method, res?.data)
@@ -344,7 +344,7 @@ export default {
       let formConfigProcessed = [...this.formConfig]
       if (id) {
         this.formType = 'edit'
-        const res = await this.$api.get(this.entityPath + `/${id}`)
+        const res = await this.$request.get(this.entityPath + `/${id}`)
         if (res.data) formData = { ...res.data }
       } else {
         this.formType = 'create'

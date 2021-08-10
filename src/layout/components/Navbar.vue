@@ -100,7 +100,7 @@ export default {
         return
       }
 
-      this.$api
+      this.$request
         .put('/api/user/change-password', {
           oldPassword: this.oldPassword,
           newPassword: this.newPassword

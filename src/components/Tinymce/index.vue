@@ -218,7 +218,7 @@ export default {
           const formData = new FormData()
           formData.append('file', blobInfo.blob())
           _this
-            .$api({
+            .$request({
               method: 'post',
               url: 'upload',
               data: formData,

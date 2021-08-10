@@ -1,4 +1,4 @@
-import $api from '@/utils/request'
+import $request from '@/utils/request'
 
 const state = getDefaultEntities()
 
@@ -10,14 +10,14 @@ const actions = {
     commit('SET_STRUCTURES', {})
   },
   async getEntities({ commit }) {
-    const res = await $api.get('/system/entities')
+    const res = await $request.get('/system/entities')
     const result = res?.data ?? []
     commit('SET_ENTITIES', result)
     sessionStorage.setItem('entities', JSON.stringify(result))
     return result
   },
   async getStructure({ commit, state }, entityName) {
-    const res = await $api.get('/system/entities/' + entityName)
+    const res = await $request.get('/system/entities/' + entityName)
     const result = { ...state.structures }
     result[entityName] = res?.data ?? {}
     commit('SET_STRUCTURES', result)
