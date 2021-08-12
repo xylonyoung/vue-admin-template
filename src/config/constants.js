@@ -15,7 +15,10 @@ export const ROLES_LIST = { ROLE_SUPER_ADMIN: '管理员', ROLE_USER: '用户' }
 export function constantToOptions(constant) {
   const result = []
   for (const key in constant) {
-    result.push({ label: constant[key], value: Number(key) ?? key })
+    result.push({
+      label: constant[key],
+      value: isNaN(key) ? key : Number(key)
+    })
   }
   return result
 }
