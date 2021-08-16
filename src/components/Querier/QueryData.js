@@ -51,12 +51,11 @@ export default class QueryData {
     let beginDate
     let endDate
     const type = config?.props?.type
-    if (type === 'daterange') {
+    if (/range$/.test(type)) {
+      if (!value?.[0]) return
+
       beginDate = value[0]
-      endDate = this.getTomorrow(value[1])
-    } else if (type === 'datetimerange') {
-      beginDate = value[0]
-      endDate = value[1]
+      endDate = type === 'daterange' ? this.getTomorrow(value[1]) : value[1]
     } else {
       beginDate = value
       endDate = this.getTomorrow(value)

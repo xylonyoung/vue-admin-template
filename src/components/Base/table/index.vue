@@ -97,6 +97,8 @@ export default {
     ImageRender,
     calculateActionsWidth() {
       const refs = { ...this.$refs.actions?.children?.[0]?.children }
+      if (!refs) return
+
       const keys = Object.keys(refs)
       const defaultPadding = keys.length === 0 ? 50 : 20
       const result = keys.reduce((acc, cur, index) => {
