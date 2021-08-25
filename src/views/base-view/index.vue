@@ -100,7 +100,7 @@
               cancel-button-text="取消"
               icon="el-icon-info"
               icon-color="red"
-              title="确定删除吗？"
+              :title="deleteMessage"
               @confirm="handleDelete(row.id)"
             >
               <el-button slot="reference" size="small" type="danger">
@@ -156,6 +156,7 @@ export default {
       entity: null,
       hasTodo: false,
       disableActions: [],
+      deleteMessage: '确定删除吗？',
       queryData: null,
       querierConfig: [],
       tableData: [],
