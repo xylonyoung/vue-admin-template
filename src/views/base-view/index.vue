@@ -161,7 +161,8 @@ export default {
       querierConfig: [],
       tableData: [],
       tableProps: {},
-      tableQuery: { page: 1, limit: 20 },
+      tableDefaultQuery: { page: 1, limit: 20 },
+      tableQuery: {},
       tableQueryProcessed: {},
       tableEvents: {},
       tableConfig: [],
@@ -193,7 +194,11 @@ export default {
   },
   methods: {
     resetTableData() {
-      this.tableQueryProcessed = { ...this.tableQuery, ...this.mergeFilter() }
+      this.tableQueryProcessed = {
+        ...this.tableDefaultQuery,
+        ...this.tableQuery,
+        ...this.mergeFilter()
+      }
       this.getTableData()
     },
     getTableData() {

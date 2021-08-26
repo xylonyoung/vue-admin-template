@@ -43,10 +43,10 @@
             <el-tag v-else type="danger">否</el-tag>
           </div>
           <div v-else-if="checkDataType(item, 'time')">
-            {{ $dateFormat(getString(row, item), 'H:m') }}
+            {{ $dateFormat(getString(row, item), 'HH:mm') }}
           </div>
           <div v-else-if="checkDataType(item, 'date')">
-            {{ $dateFormat(getString(row, item), 'YYYY/M/D') }}
+            {{ $dateFormat(getString(row, item), 'YYYY/MM/DD') }}
           </div>
           <div v-else-if="checkDataType(item, 'datetime')">
             {{ $dateFormat(getString(row, item)) }}
