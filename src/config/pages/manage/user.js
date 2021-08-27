@@ -1,5 +1,5 @@
 import { ROLES_LIST, constantToOptions } from '@/config/constants'
-import Checkbox from '@/components/Base/Form/Checkbox'
+import Checkbox from '../../modules/form/Checkbox'
 
 // import routes from '@/router/routes'
 // const routeList = routes.map(e => ({ label: e.title, value: e.path }))
