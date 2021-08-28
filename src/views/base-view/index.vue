@@ -45,7 +45,7 @@
 
       <querier
         v-model="queryData"
-        style="margin-left: 10px"
+        style="margin-left: 8px"
         :querier-config="querierConfig"
         @confirm="resetTableData()"
       />
@@ -81,7 +81,7 @@
           <div style="display: flex">
             <transition
               v-if="hasTodo"
-              style="margin-right: 10px"
+              style="margin-right: 8px"
               :row="row"
               :path="entityPath"
               @confirm="getTableData()"
@@ -95,7 +95,7 @@
             </el-button>
             <el-popconfirm
               v-if="!disableActions.includes('delete')"
-              style="margin-left: 10px"
+              style="margin-left: 8px"
               confirm-button-text="确认"
               cancel-button-text="取消"
               icon="el-icon-info"
@@ -112,7 +112,7 @@
       </base-table>
     </el-row>
 
-    <el-row style="margin-top: 20px">
+    <el-row style="margin-top: 16px">
       <el-pagination
         :current-page.sync="tableQueryProcessed.page"
         :page-sizes="[20, 50, 100]"
@@ -368,18 +368,18 @@ export default {
 </script>
 <style lang='scss' scoped>
 .base-container {
-  padding: 20px;
+  padding: 16px;
 }
 .top-menu {
   display: flex;
   .querier-container {
-    margin-left: 10px;
+    margin-left: 8px;
   }
 }
 .action {
   display: flex;
   .transition {
-    margin-right: 10px;
+    margin-right: 8px;
   }
 }
 </style>
